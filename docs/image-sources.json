@@ -1,0 +1,46 @@
+[
+  {
+    "file": "architecture.jpg",
+    "photographer": "John Fornander",
+    "source_page": "https://unsplash.com/photos/Id7u0EkTjBE",
+    "image_url": "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=max&w=1600&h=1600&q=85",
+    "dimensions": "1600x1067",
+    "local_path": "public/images/architecture.jpg",
+    "bytes": 246431,
+    "license_url": "https://unsplash.com/license",
+    "license_note": "Free use including commercial projects; attribution appreciated, not required. Do not imply endorsement or ownership of the depicted photography."
+  },
+  {
+    "file": "wedding.jpg",
+    "photographer": "Foto Pettine",
+    "source_page": "https://unsplash.com/photos/IfjHaIoAoqE",
+    "image_url": "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=max&w=1600&h=1600&q=85",
+    "dimensions": "1600x1067",
+    "local_path": "public/images/wedding.jpg",
+    "bytes": 129148,
+    "license_url": "https://unsplash.com/license",
+    "license_note": "Free use including commercial projects; attribution appreciated, not required. Do not imply endorsement or ownership of the depicted photography."
+  },
+  {
+    "file": "coffee.jpg",
+    "photographer": "Jocelyn Morales",
+    "source_page": "https://unsplash.com/photos/qqIj5pV48-s",
+    "image_url": "https://images.unsplash.com/photo-1599940778173-e276d4acb2bb?auto=format&fit=max&w=1600&h=1600&q=85",
+    "dimensions": "1600x1087",
+    "local_path": "public/images/coffee.jpg",
+    "bytes": 240251,
+    "license_url": "https://unsplash.com/license",
+    "license_note": "Free use including commercial projects; attribution appreciated, not required. Do not imply endorsement or ownership of the depicted photography."
+  },
+  {
+    "file": "skincare.jpg",
+    "photographer": "Mathilde Langevin",
+    "source_page": "https://unsplash.com/photos/FDRaYqiTY1k",
+    "image_url": "https://images.unsplash.com/photo-1620916297397-a4a5402a3c6c?auto=format&fit=max&w=1600&h=1600&q=85",
+    "dimensions": "1067x1600",
+    "local_path": "public/images/skincare.jpg",
+    "bytes": 172346,
+    "license_url": "https://unsplash.com/license",
+    "license_note": "Free use including commercial projects; attribution appreciated, not required. Do not imply endorsement or ownership of the depicted photography."
+  }
+]
