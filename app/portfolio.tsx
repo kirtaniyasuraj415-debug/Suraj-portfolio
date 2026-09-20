@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { ArrowDown, ArrowRight, ArrowUpRight, Code2, Menu, Monitor, Rocket, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -9,7 +10,9 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from 
 const navigation = [
   ["About", "about"], ["Projects", "projects"], ["Services", "services"], ["Process", "process"], ["Contact", "contact"],
 ];
-const email = "kirtaniyasuraj415@gmail.com";
+const WHATSAPP_GENERAL_URL = `https://wa.me/917810963278?text=${encodeURIComponent(
+  "Hi Suraj, I came across your portfolio and would like to discuss a website/project."
+)}`;
 const projects = [
   { id: "architecture", brand: "FORMA", title: "Forma — Architecture & Interiors", line: "A considered home for extraordinary spaces.", tag: "Web Design", headline: "Spaces that\nfeel like you.", detail: "An architecture studio concept with immersive project photography, a curated portfolio, and a clear route to an enquiry.", image: "/images/architecture.jpg", color: "#ddd1b8", scope: ["Editorial art direction", "Responsive project gallery", "Consultation enquiry flow"] },
   { id: "wedding", brand: "VOW", title: "Vow — Wedding Films", line: "A cinematic website for stories worth remembering.", tag: "Web Development", headline: "For the moments\nthat stay.", detail: "A wedding film studio concept built around emotional imagery, selected films, and an easy way for couples to begin a conversation.", image: "/images/wedding.jpg", color: "#e5e0d9", scope: ["Cinematic visual direction", "Film portfolio layout", "Wedding enquiry experience"] },
@@ -19,7 +22,16 @@ const projects = [
 type Project = typeof projects[number];
 
 function ProjectButton({ children = "Start a Project", className = "" }: { children?: React.ReactNode; className?: string }) {
-  return <Button asChild className={`orange-button ${className}`}><a href="#contact">{children}<span className="button-arrow"><ArrowUpRight size={16} /></span></a></Button>;
+  return (
+    <Button asChild className={`orange-button ${className}`}>
+      <Link href="/start-project">
+        {children}
+        <span className="button-arrow">
+          <ArrowUpRight size={16} />
+        </span>
+      </Link>
+    </Button>
+  );
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -82,7 +94,7 @@ export default function Portfolio() {
                 document.getElementById(id)?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
                 window.history.replaceState(null, "", `#${id}`);
               });
-            }}><SheetTitle className="wordmark">SURAJ.WEB</SheetTitle><SheetDescription>Design. Develop. Make an impression.</SheetDescription><nav aria-label="Mobile navigation">{navigation.map(([label,id]) => <a key={id} href={`#${id}`} onClick={(event) => { event.preventDefault(); mobileDestination.current = id; setMenuOpen(false); }}>{label}<ArrowUpRight size={22}/></a>)}</nav><a className="mobile-email" href={`mailto:${email}`}>Let’s make something great.</a></SheetContent>
+            }}><SheetTitle className="wordmark">SURAJ.WEB</SheetTitle><SheetDescription>Design. Develop. Make an impression.</SheetDescription><nav aria-label="Mobile navigation">{navigation.map(([label,id]) => <a key={id} href={`#${id}`} onClick={(event) => { event.preventDefault(); mobileDestination.current = id; setMenuOpen(false); }}>{label}<ArrowUpRight size={22}/></a>)}</nav><a className="mobile-email" href={WHATSAPP_GENERAL_URL} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a></SheetContent>
           </Sheet>
         </div>
       </header>
@@ -127,11 +139,11 @@ export default function Portfolio() {
 
     <section id="process" className="process-section content-width"><SectionLabel>How We Work Together</SectionLabel><h2>A clear path from<br/>idea to launch.</h2><div className="process-grid">{[{n:"01",title:"Understand",text:"We start with your business, your audience, and what your website needs to achieve."},{n:"02",title:"Design",text:"I shape the layout and visual direction. We refine the details together."},{n:"03",title:"Build & Launch",text:"I build, check the experience across screens, and bring your website online."}].map(p=><article key={p.n}><span>{p.n} <ArrowRight size={18}/></span><h3>{p.title}</h3><p>{p.text}</p></article>)}</div></section>
 
-    <section id="contact" className="contact-section"><div className="content-width"><SectionLabel>Let’s Make It Happen</SectionLabel><div className="contact-main"><h2>Have a project<br/>in <em>mind?</em></h2><a className="contact-arrow" href={`mailto:${email}?subject=Let's%20build%20a%20website`} aria-label="Email Suraj about your project"><ArrowUpRight/></a></div><div className="contact-bottom"><p>Tell me what you’re thinking.<br/>Let’s build something that feels like you.</p><a className="contact-email" href={`mailto:${email}`}>{email}<ArrowUpRight size={20}/></a></div></div></section>
+    <section id="contact" className="contact-section"><div className="content-width"><SectionLabel>Let’s Make It Happen</SectionLabel><div className="contact-main"><h2>Have a project<br/>in <em>mind?</em></h2><a className="contact-arrow" href={WHATSAPP_GENERAL_URL} aria-label="Chat with Suraj on WhatsApp" target="_blank" rel="noopener noreferrer"><ArrowUpRight/></a></div><div className="contact-bottom"><p>Tell me what you’re thinking.<br/>Let’s build something that feels like you.</p><a className="contact-email" href={WHATSAPP_GENERAL_URL} target="_blank" rel="noopener noreferrer">Chat on WhatsApp<ArrowUpRight size={20}/></a></div></div></section>
     <footer className="site-footer content-width"><a href="#top" className="wordmark">SURAJ.WEB</a><p>© 2026 Suraj Kirtaniya</p><a href="#top">Back to top <ArrowDown size={15} className="rotate-180"/></a></footer>
 
     <Dialog open={!!selectedProject} onOpenChange={(open)=>{if(!open)setSelectedProject(null);}}>
-      <DialogContent className="project-dialog">{selectedProject&&<><DialogHeader><SectionLabel>Independent Concept</SectionLabel><DialogTitle>{selectedProject.title}</DialogTitle><DialogDescription>{selectedProject.detail}</DialogDescription></DialogHeader><ProjectVisual project={selectedProject}/><ul>{selectedProject.scope.map(item=><li key={item}><Sparkles size={14}/>{item}</li>)}</ul><Button asChild className="orange-button"><a href={`mailto:${email}?subject=${encodeURIComponent(`A website like ${selectedProject.brand}`)}`}>Let’s discuss your website <span className="button-arrow"><ArrowUpRight size={16}/></span></a></Button></>}</DialogContent>
+      <DialogContent className="project-dialog">{selectedProject&&<><DialogHeader><SectionLabel>Independent Concept</SectionLabel><DialogTitle>{selectedProject.title}</DialogTitle><DialogDescription>{selectedProject.detail}</DialogDescription></DialogHeader><ProjectVisual project={selectedProject}/><ul>{selectedProject.scope.map(item=><li key={item}><Sparkles size={14}/>{item}</li>)}</ul><Button asChild className="orange-button"><a href={`https://wa.me/917810963278?text=${encodeURIComponent(`Hi Suraj, I came across your portfolio and would like to discuss a website like ${selectedProject.brand}.`)}`} target="_blank" rel="noopener noreferrer">Chat on WhatsApp <span className="button-arrow"><ArrowUpRight size={16}/></span></a></Button></>}</DialogContent>
     </Dialog>
   </main>;
 }

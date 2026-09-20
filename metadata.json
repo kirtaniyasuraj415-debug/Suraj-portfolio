@@ -1,0 +1,8 @@
+{
+  "name": "Suraj Portfolio",
+  "description": "Portfolio website for Suraj Kirtaniya, Web Developer & Designer showcasing projects and services.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
