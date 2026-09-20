@@ -4,7 +4,7 @@ import { enquirySchema, type EnquiryFormData } from "../project-enquiry.ts";
 type Fetch = typeof fetch;
 type Settings = {
   telegram: { botToken: string; chatId: string };
-  firestore: { projectId: string; apiKey: string; authorization?: () => Promise<string | undefined> };
+  firestore: { projectId: string; apiKey: string; databaseId?: string; authorization?: () => Promise<string | undefined> };
   fetch?: Fetch;
   timeoutMs?: number;
   log?: (provider: string, code: string, requestId: string) => void;
@@ -91,7 +91,8 @@ export async function handleEnquiryRequest(request: Request, settings: Settings)
   const timeout = settings.timeoutMs ?? 8000;
   const log = settings.log ?? ((provider, code, id) => console.warn(`[Enquiry ${id}] ${provider}: ${code}`));
   const report = (provider: string, code: string) => log(provider, code, requestId);
-  const firestoreUrl = `https://firestore.googleapis.com/v1/projects/${encodeURIComponent(settings.firestore.projectId)}/databases/(default)/documents/projectEnquiries`;
+  const databaseId = settings.firestore.databaseId || "(default)";
+  const firestoreUrl = `https://firestore.googleapis.com/v1/projects/${encodeURIComponent(settings.firestore.projectId)}/databases/${encodeURIComponent(databaseId)}/documents/projectEnquiries`;
   const fields = Object.fromEntries(Object.entries(lead).map(([key, value]) => [key, value ? { stringValue: value } : { nullValue: null }]));
   let authorization: string | undefined;
 

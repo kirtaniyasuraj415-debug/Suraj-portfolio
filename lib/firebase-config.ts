@@ -1,10 +1,27 @@
-// Public Firebase web configuration. Server credentials never belong here.
+import appletConfig from "../firebase-applet-config.json";
+
+export interface FirebaseAppConfig {
+  projectId: string;
+  appId: string;
+  apiKey: string;
+  authDomain: string;
+  firestoreDatabaseId?: string;
+  databaseId?: string;
+  storageBucket?: string;
+  messagingSenderId?: string;
+  measurementId?: string;
+  oAuthClientId?: string;
+}
+
 export const firebaseConfig = {
-  apiKey: "AIzaSyDSEcOjftkJOPmuh1NHzzMXXLEVnxOj240",
-  authDomain: "suraj-portfolio-b90e6.firebaseapp.com",
-  projectId: "suraj-portfolio-b90e6",
-  storageBucket: "suraj-portfolio-b90e6.firebasestorage.app",
-  messagingSenderId: "230275143027",
-  appId: "1:230275143027:web:fb745df1f4b6cca9d8e106",
-  measurementId: "G-K5908D2950",
+  projectId: appletConfig.projectId,
+  appId: appletConfig.appId,
+  apiKey: appletConfig.apiKey,
+  authDomain: appletConfig.authDomain,
+  firestoreDatabaseId: appletConfig.firestoreDatabaseId || "(default)",
+  databaseId: appletConfig.firestoreDatabaseId || "(default)",
+  storageBucket: appletConfig.storageBucket,
+  messagingSenderId: appletConfig.messagingSenderId,
+  measurementId: appletConfig.measurementId,
+  oAuthClientId: appletConfig.oAuthClientId,
 };

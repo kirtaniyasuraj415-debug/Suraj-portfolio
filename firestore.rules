@@ -1,0 +1,89 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Default Deny Catch-All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function isValidProjectEnquiry(data) {
+      return data.keys().hasAll(['name', 'phone', 'projectType', 'budget']) &&
+        data.keys().hasOnly([
+          'name', 'businessName', 'phone', 'preferredContactMethod',
+          'businessType', 'projectType', 'currentWebsite', 'budget',
+          'timeline', 'projectGoal', 'reference', 'preferredContactTime',
+          'whatsappNumber', 'whatsappLink', 'source', 'status',
+          'telegramNotificationStatus', 'createdAt'
+        ]) &&
+        data.name is string && data.name.size() >= 2 && data.name.size() <= 100 &&
+        data.phone is string && data.phone.size() >= 7 && data.phone.size() <= 32 &&
+        data.projectType is string && data.projectType.size() <= 100 &&
+        data.budget is string && data.budget.size() <= 100 &&
+        (!('businessName' in data) || (data.businessName is string && data.businessName.size() <= 120)) &&
+        (!('preferredContactMethod' in data) || data.preferredContactMethod in ['whatsapp', 'phone']) &&
+        (!('businessType' in data) || (data.businessType is string && data.businessType.size() <= 100)) &&
+        (!('currentWebsite' in data) || (data.currentWebsite is string && data.currentWebsite.size() <= 240)) &&
+        (!('timeline' in data) || (data.timeline is string && data.timeline.size() <= 100)) &&
+        (!('projectGoal' in data) || (data.projectGoal is string && data.projectGoal.size() <= 2500)) &&
+        (!('reference' in data) || (data.reference is string && data.reference.size() <= 240)) &&
+        (!('preferredContactTime' in data) || data.preferredContactTime in ['', 'morning', 'afternoon', 'evening', 'anytime']) &&
+        (!('whatsappNumber' in data) || (data.whatsappNumber is string && data.whatsappNumber.size() <= 32)) &&
+        (!('whatsappLink' in data) || (data.whatsappLink is string && data.whatsappLink.size() <= 200)) &&
+        (!('source' in data) || (data.source is string && data.source.size() <= 100)) &&
+        (!('status' in data) || data.status in ['new', 'contacted', 'qualified', 'in-progress', 'closed']) &&
+        (!('telegramNotificationStatus' in data) || data.telegramNotificationStatus in ['pending', 'sent', 'unconfirmed']) &&
+        (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 50));
+    }
+
+    // Admins collection for role checks
+    match /admins/{adminId} {
+      allow get: if isSignedIn() && request.auth.uid == adminId;
+      allow list, write: if false;
+    }
+
+    // Client project enquiries collection (PII Protected)
+    match /projectEnquiries/{enquiryId} {
+      // PII Protection: Only authenticated administrators can read or list client enquiries
+      allow get, list: if isAdmin();
+
+      // Creation allows incoming leads conforming to strict validation schema
+      allow create: if isValidId(enquiryId) && isValidProjectEnquiry(incoming());
+
+      // Updates restricted to administrators (pipeline state updates, archiving)
+      allow update: if isValidId(enquiryId) &&
+        isAdmin() &&
+        isValidProjectEnquiry(incoming()) &&
+        (!('createdAt' in existing()) || incoming().createdAt == existing().createdAt);
+
+      allow delete: if isValidId(enquiryId) && isAdmin();
+    }
+
+    // Connection testing heartbeat document (read-only probe)
+    match /test/{testId} {
+      allow get: if isValidId(testId);
+      allow list, write: if false;
+    }
+  }
+}
