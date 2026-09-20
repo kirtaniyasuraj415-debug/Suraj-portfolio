@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   ArrowUpRight,
   CheckCircle2,
@@ -11,34 +11,8 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { getClientAnalytics } from "@/lib/firebase";
-
-const PROJECT_TYPES = [
-  "New Website",
-  "Website Redesign",
-  "E-commerce Store",
-  "Landing Page",
-  "Portfolio / Brand",
-  "AI & Automation",
-  "Other",
-];
-
-const BUDGET_RANGES = [
-  "Under ₹15,000",
-  "₹15,000 – ₹30,000",
-  "₹30,000 – ₹60,000",
-  "₹60,000 – ₹1,00,000",
-  "₹1,00,000+",
-  "Flexible / To Discuss",
-];
-
-export interface EnquiryFormData {
-  name: string;
-  phone: string;
-  businessName: string;
-  projectType: string;
-  budget: string;
-  projectGoal: string;
-}
+import { PROJECT_TYPES, BUDGET_RANGES, ENQUIRY_LIMITS, enquirySchema, type EnquiryFormData, type EnquiryResponse } from "@/lib/project-enquiry";
+export type { EnquiryFormData } from "@/lib/project-enquiry";
 
 const initialFormData: EnquiryFormData = {
   name: "",
@@ -47,6 +21,12 @@ const initialFormData: EnquiryFormData = {
   projectType: "New Website",
   budget: "₹15,000 – ₹30,000",
   projectGoal: "",
+  preferredContactMethod: "whatsapp",
+  preferredContactTime: "",
+  businessType: "",
+  timeline: "",
+  currentWebsite: "",
+  reference: "",
 };
 
 const WHATSAPP_DIRECT_URL = `https://wa.me/917810963278?text=${encodeURIComponent(
@@ -65,6 +45,25 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const submissionInFlight = useRef(false);
+  const submitController = useRef<AbortController | null>(null);
+  const successDialogRef = useRef<HTMLDialogElement | null>(null);
+  const [delivery, setDelivery] = useState<"sent" | "saved">("sent");
+
+  useEffect(() => () => submitController.current?.abort(), []);
+  useEffect(() => {
+    if (showSuccessModal) successDialogRef.current?.showModal();
+  }, [showSuccessModal]);
+
+  const closeSuccess = () => {
+    setShowSuccessModal(false);
+    if (delivery === "sent") {
+      setFormData(initialFormData);
+      formRef.current?.reset();
+    }
+  };
+
 
   const handleWhatsAppClick = () => {
     getClientAnalytics().then((analytics) => {
@@ -95,84 +94,72 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
     }
   };
 
-  const validateForm = () => {
-    const errors: Record<string, string> = {};
-
-    if (!formData.name.trim() || formData.name.trim().length < 2) {
-      errors.name = "Please enter your name (at least 2 characters).";
+  const focusField = (name: string) => {
+    const field = formRef.current?.elements.namedItem(name);
+    if (field instanceof HTMLElement) {
+      field.scrollIntoView({ behavior: "smooth", block: "center" });
+      field.focus();
     }
-
-    const cleanPhone = formData.phone.trim();
-    const digitsOnly = cleanPhone.replace(/\D/g, "");
-    if (!cleanPhone || digitsOnly.length < 6) {
-      errors.phone = "Please enter a valid WhatsApp or phone number.";
-    }
-
-    setFieldErrors(errors);
-    return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (submitting) return;
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (submissionInFlight.current || showSuccessModal || !formRef.current) return;
     setErrorMessage(null);
 
-    if (!validateForm()) {
-      setErrorMessage("Please fill in your name and WhatsApp/phone number below.");
+    // Read real form controls as well as React state. Native radio selections also
+    // survive slow hydration, touch input and browser autofill.
+    const values = { ...formData, ...Object.fromEntries(new window.FormData(formRef.current)) };
+    const parsed = enquirySchema.safeParse(values);
+    if (!parsed.success) {
+      const errors = Object.fromEntries(parsed.error.issues.map(issue => [issue.path[0], issue.message]));
+      setFieldErrors(errors);
+      setErrorMessage(parsed.error.issues[0].message);
+      focusField(String(parsed.error.issues[0].path[0]));
       return;
     }
-
+    setFieldErrors({});
+    submissionInFlight.current = true;
     setSubmitting(true);
-
+    const controller = new AbortController();
+    submitController.current = controller;
+    const timeout = setTimeout(() => controller.abort(), 20000);
     try {
       const response = await fetch("/api/project-enquiry", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed.data),
+        signal: controller.signal,
       });
-
-      const data = (await response.json()) as {
-        success?: boolean;
-        error?: string;
-        lead?: EnquiryFormData;
-      };
-
-      if (!response.ok || !data.success) {
-        setErrorMessage(
-          data.error ||
-            "Unable to send your enquiry right now. Please try again or chat directly on WhatsApp."
-        );
-        setSubmitting(false);
+      const data = await response.json().catch(() => null) as EnquiryResponse | null;
+      if (!response.ok || !data?.success || (!data.telegramDelivered && !data.firestoreStored)) {
+        setFieldErrors(data?.fieldErrors ?? {});
+        setErrorMessage(data?.error || "We couldn’t confirm delivery. Your details are still here. Please try again or contact me on WhatsApp.");
+        if (data?.fieldErrors) focusField(Object.keys(data.fieldErrors)[0]);
         return;
       }
-
-      // Track lead in Firebase Analytics (Client-side, non-PII only)
-      getClientAnalytics().then((analytics) => {
-        if (analytics) {
-          import("firebase/analytics").then(({ logEvent }) => {
-            logEvent(analytics, "project_enquiry_submitted", {
-              project_type: formData.projectType,
-              budget: formData.budget,
-              source: embedded ? "homepage" : "dedicated_page",
-            });
-          }).catch(() => {});
-        }
+      getClientAnalytics().then(async analytics => {
+        if (!analytics) return;
+        const { logEvent } = await import("firebase/analytics");
+        logEvent(analytics, "project_enquiry_submitted", {
+          preferred_contact_method: parsed.data.preferredContactMethod,
+          preferred_contact_time: parsed.data.preferredContactTime || "not_specified",
+          project_type: parsed.data.projectType,
+          delivery: data.telegramDelivered ? "sent" : "saved",
+        });
       }).catch(() => {});
-
-      // Keep submitted copy for the success popup modal
-      setSubmittedData({ ...formData });
-      // Reset active form
-      setFormData(initialFormData);
-      setFieldErrors({});
-      setSubmitting(false);
+      setDelivery(data.telegramDelivered ? "sent" : "saved");
+      setSubmittedData(parsed.data);
       setShowSuccessModal(true);
-      if (onSuccess) onSuccess();
+      onSuccess?.();
     } catch {
-      setErrorMessage(
-        "Network connection issue. Your details have not been lost. Please retry or message Suraj on WhatsApp."
-      );
+      setErrorMessage(controller.signal.aborted
+        ? "Delivery is taking longer than expected. Your details are still here. Please contact me on WhatsApp to confirm your enquiry."
+        : "We couldn’t connect. Your details are still here. Please try again or contact me on WhatsApp.");
+    } finally {
+      clearTimeout(timeout);
+      submitController.current = null;
+      submissionInFlight.current = false;
       setSubmitting(false);
     }
   };
@@ -186,6 +173,8 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
   return (
     <>
       <form
+        ref={formRef}
+        aria-busy={submitting}
         onSubmit={handleSubmit}
         noValidate
         className="bg-[#160d07] border border-[#4a2e1c] rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 shadow-2xl space-y-6 text-left"
@@ -202,7 +191,7 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
             </span>
           </div>
           <p className="text-xs text-[#a99585] mt-1">
-            Fill in your project brief below. I receive it immediately on Telegram and will reach out to you on WhatsApp.
+            Share your project brief and choose how you’d like me to contact you.
           </p>
         </div>
 
@@ -229,6 +218,8 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
             type="text"
             id="enquiry-name"
             name="name"
+            maxLength={ENQUIRY_LIMITS.name}
+            disabled={submitting}
             value={formData.name}
             onChange={handleChange}
             placeholder="e.g. Rahul Sharma"
@@ -258,6 +249,8 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
             type="tel"
             id="enquiry-phone"
             name="phone"
+            maxLength={ENQUIRY_LIMITS.phone}
+            disabled={submitting}
             value={formData.phone}
             onChange={handleChange}
             placeholder="e.g. +91 98765 43210"
@@ -278,6 +271,18 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
           )}
         </div>
 
+        <fieldset disabled={submitting} className="min-w-0">
+          <legend className="block text-xs uppercase tracking-wider font-semibold text-[#d8c9bd] mb-2">Preferred Contact Method</legend>
+          <div className="grid grid-cols-2 gap-2 h-12">
+            {[{ value: "whatsapp", label: "WhatsApp" }, { value: "phone", label: "Phone Call" }].map(option => (
+              <label key={option.value} className="enquiry-choice relative block cursor-pointer">
+                <input type="radio" name="preferredContactMethod" value={option.value} defaultChecked={option.value === "whatsapp"} onChange={handleChange} className="enquiry-radio" />
+                <span className="enquiry-choice-content flex h-full items-center justify-center rounded-xl border text-xs font-medium transition-colors">{option.label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
         {/* FIELD 3: Business / Brand Name (Optional) */}
         <div>
           <label
@@ -290,6 +295,8 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
             type="text"
             id="enquiry-businessName"
             name="businessName"
+            maxLength={ENQUIRY_LIMITS.businessName}
+            disabled={submitting}
             value={formData.businessName}
             onChange={handleChange}
             placeholder="e.g. Sharma Studio, Aura Clinic, etc."
@@ -377,6 +384,8 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
           <textarea
             id="enquiry-projectGoal"
             name="projectGoal"
+            maxLength={ENQUIRY_LIMITS.projectGoal}
+            disabled={submitting}
             rows={3}
             value={formData.projectGoal}
             onChange={handleChange}
@@ -385,6 +394,21 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
           />
         </div>
 
+        <fieldset disabled={submitting} className="min-w-0">
+          <legend className="block text-xs uppercase tracking-wider font-semibold text-[#d8c9bd] mb-2">Best Time to Contact You <span className="lowercase font-normal text-[#8d7c71]">(optional · IST)</span></legend>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {[{ value: "morning", label: "Morning", time: "9 AM – 12 PM" }, { value: "afternoon", label: "Afternoon", time: "12 PM – 5 PM" }, { value: "evening", label: "Evening", time: "5 PM – 9 PM" }, { value: "anytime", label: "Anytime", time: "Flexible" }].map(option => (
+              <label key={option.value} className="enquiry-choice relative block cursor-pointer">
+                <input type="radio" name="preferredContactTime" value={option.value} onChange={handleChange} className="enquiry-radio" />
+                <span className="enquiry-choice-content flex min-h-[56px] flex-col items-center justify-center rounded-xl border p-2 text-xs transition-colors">
+                  <span className="font-medium">{option.label}</span>
+                  <span className="text-[10px] text-[#8d7c71] mt-1">{option.time}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
         {/* Submit Button */}
         <div className="pt-2">
           <button
@@ -392,7 +416,7 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
             disabled={submitting}
             className="orange-button w-full sm:w-auto inline-flex items-center justify-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed text-sm font-semibold"
           >
-            {submitting ? "Delivering to Telegram..." : "Send Project Enquiry"}
+            {submitting ? "Sending Enquiry..." : "Send Project Enquiry"}
             <span className="button-arrow">
               {submitting ? (
                 <span className="inline-block w-4 h-4 border-2 border-[#d66a31] border-t-transparent rounded-full animate-spin" />
@@ -402,24 +426,25 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
             </span>
           </button>
           <p className="text-[11px] text-[#8d7c71] mt-2.5">
-            ⚡ Direct alert sends to Suraj’s personal Telegram bot instantly.
+            Your details are sent directly to Suraj. Confirmation appears after delivery.
           </p>
         </div>
       </form>
 
       {/* SUCCESS CONFIRMATION POPUP MODAL */}
       {showSuccessModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
-          role="dialog"
-          aria-modal="true"
+        <dialog
+          ref={successDialogRef}
+          onCancel={event => { event.preventDefault(); closeSuccess(); }}
+          className="fixed inset-0 z-50 m-auto w-[calc(100%-2rem)] max-w-lg max-h-[90dvh] overflow-y-auto border-0 p-0 bg-transparent text-[#f6f0e9] backdrop:bg-black/85 backdrop:backdrop-blur-md"
           aria-labelledby="enquiry-modal-heading"
+          aria-describedby="enquiry-modal-description"
         >
           <div className="bg-[#180e08] border border-[#f87b38]/50 rounded-2xl sm:rounded-3xl p-6 sm:p-9 max-w-lg w-full text-center shadow-[0_0_50px_rgba(248,123,56,0.15)] relative overflow-hidden animate-in zoom-in-95 duration-200">
             {/* Close button */}
             <button
               type="button"
-              onClick={() => setShowSuccessModal(false)}
+              onClick={closeSuccess}
               className="absolute top-4 right-4 text-[#a99585] hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
               aria-label="Close popup"
             >
@@ -428,11 +453,11 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
 
             {/* Glowing checkmark badge */}
             <div className="w-16 h-16 rounded-full bg-[#f87b38]/20 border border-[#f87b38] text-[#f87b38] flex items-center justify-center mx-auto mb-4 shadow-[0_0_25px_rgba(248,123,56,0.3)]">
-              <CheckCircle2 size={36} className="stroke-[2.5]" />
+              {delivery === "sent" ? <CheckCircle2 size={36} className="stroke-[2.5]" /> : <AlertCircle size={36} />}
             </div>
 
             <div className="section-label justify-center mb-1 text-xs text-[#f87b38] font-bold tracking-wider uppercase">
-              <span aria-hidden="true">✦</span> ENQUIRY DELIVERED SUCCESSFULLY!
+              <span aria-hidden="true">✦</span> {delivery === "sent" ? "ENQUIRY DELIVERED SUCCESSFULLY!" : "DETAILS SAVED · NOTIFICATION UNCONFIRMED"}
             </div>
 
             <h2
@@ -442,8 +467,10 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
               Thank you, {submittedData?.name || "there"}!
             </h2>
 
-            <p className="text-sm text-[#d8c9bd] leading-relaxed mb-5 max-w-md mx-auto">
-              Your project details have been delivered directly to Suraj via Telegram bot. I review every project brief personally and will reach out to you on WhatsApp within 2–4 hours.
+            <p id="enquiry-modal-description" className="text-sm text-[#d8c9bd] leading-relaxed mb-5 max-w-md mx-auto">
+              {delivery === "sent"
+                ? "Your enquiry has reached Suraj. I’ll review the details and contact you using your selected preference."
+                : "Your details were saved, but I couldn’t confirm the notification. Please use WhatsApp below to make sure I see your enquiry."}
             </p>
 
             {/* Submitted Summary Card */}
@@ -484,14 +511,14 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
 
               <button
                 type="button"
-                onClick={() => setShowSuccessModal(false)}
+                onClick={closeSuccess}
                 className="w-full sm:w-auto inline-flex items-center justify-center py-3 px-5 rounded-full border border-white/[0.14] text-sm text-[#e4d5cb] hover:border-white/[0.3] hover:text-white transition-colors cursor-pointer"
               >
                 Done
               </button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </>
   );

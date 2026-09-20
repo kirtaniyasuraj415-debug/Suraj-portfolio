@@ -44,3 +44,7 @@ next-env.d.ts
 /.codex/
 /outputs/
 /work/
+
+# Incremental TypeScript build output
+*.tsbuildinfo
+!/.env.example
