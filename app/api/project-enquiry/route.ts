@@ -5,8 +5,7 @@ import { handleEnquiryRequest } from "@/lib/server/project-enquiry";
 export const runtime = "nodejs";
 export const maxDuration = 20;
 
-// Fallback route when the app is run with Next directly instead of the unified Node server.
-// Telegram credentials are server-only environment variables. Never hardcode them here.
+// Telegram credentials stay server-only. Never expose the values to the browser.
 export async function POST(request: Request) {
   return handleEnquiryRequest(request, {
     telegram: {
@@ -21,8 +20,18 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
+  const telegramConfigured = Boolean(
+    process.env.TELEGRAM_BOT_TOKEN?.trim() &&
+      (process.env.TELEGRAM_CHAT_ID?.trim() || process.env.TELEGRAM_OWNER_CHAT_ID?.trim()),
+  );
+
   return Response.json(
-    { service: "project-enquiry", version: "next-route-fallback-v1", accepts: "POST" },
-    { headers: { "Cache-Control": "no-store" } }
+    {
+      service: "project-enquiry",
+      version: "next-route-fallback-v2",
+      accepts: "POST",
+      telegramConfigured,
+    },
+    { headers: { "Cache-Control": "no-store" } },
   );
 }
