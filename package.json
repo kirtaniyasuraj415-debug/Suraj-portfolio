@@ -7,9 +7,9 @@
     "node": ">=22.18.0"
   },
   "scripts": {
-    "dev": "next dev -p 3000 -H 0.0.0.0",
+    "dev": "node server.mjs",
     "build": "next build",
-    "start": "next start -p 3000 -H 0.0.0.0",
+    "start": "node server.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
