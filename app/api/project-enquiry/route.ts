@@ -5,22 +5,24 @@ import { handleEnquiryRequest } from "@/lib/server/project-enquiry";
 export const runtime = "nodejs";
 export const maxDuration = 20;
 
-// Existing server-only configuration retained for this private deployment.
-// Deployment environment variables take precedence; never use NEXT_PUBLIC_ for these.
-const DEFAULT_TELEGRAM_BOT_TOKEN = "8687357491:AAHe1miNa2PFuGQHPEmFrlPhvh0dVBAZius";
-const DEFAULT_TELEGRAM_CHAT_ID = "8116838619";
-
+// Fallback route when the app is run with Next directly instead of the unified Node server.
+// Telegram credentials are server-only environment variables. Never hardcode them here.
 export async function POST(request: Request) {
   return handleEnquiryRequest(request, {
     telegram: {
-      botToken: process.env.TELEGRAM_BOT_TOKEN?.trim() || DEFAULT_TELEGRAM_BOT_TOKEN,
-      chatId: process.env.TELEGRAM_CHAT_ID?.trim() || DEFAULT_TELEGRAM_CHAT_ID,
+      botToken: process.env.TELEGRAM_BOT_TOKEN?.trim() || "",
+      chatId:
+        process.env.TELEGRAM_CHAT_ID?.trim() ||
+        process.env.TELEGRAM_OWNER_CHAT_ID?.trim() ||
+        "",
     },
     firestore: { ...firebaseConfig, authorization: getFirestoreAuthorization },
   });
 }
 
-// A read-only deployment check: it contains no credentials or customer data.
 export async function GET() {
-  return Response.json({ service: "project-enquiry", version: "enquiry-delivery-v2", accepts: "POST" }, { headers: { "Cache-Control": "no-store" } });
+  return Response.json(
+    { service: "project-enquiry", version: "next-route-fallback-v1", accepts: "POST" },
+    { headers: { "Cache-Control": "no-store" } }
+  );
 }
