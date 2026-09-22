@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import EnquiryForm from "@/components/enquiry-form";
+import { DEFAULT_PORTFOLIO_PROJECTS, type PortfolioProject } from "@/lib/portfolio-projects";
 
 const navigation = [
   ["About", "about"],
   ["Projects", "projects"],
   ["Services", "services"],
   ["Process", "process"],
-  ["Get Started", "enquiry"],
   ["Contact", "contact"],
 ];
 
@@ -20,23 +20,21 @@ const WHATSAPP_GENERAL_URL = `https://wa.me/917810963278?text=${encodeURICompone
   "Hi Suraj, I came across your portfolio and would like to discuss a website/project."
 )}`;
 
-const projects = [
-  { id: "architecture", brand: "FORMA", title: "Forma — Architecture & Interiors", line: "A considered home for extraordinary spaces.", tag: "Web Design", headline: "Spaces that\nfeel like you.", detail: "An architecture studio concept with immersive project photography, a curated portfolio, and a clear route to an enquiry.", image: "/images/architecture.jpg", color: "#ddd1b8", scope: ["Editorial art direction", "Responsive project gallery", "Consultation enquiry flow"] },
-  { id: "wedding", brand: "VOW", title: "Vow — Wedding Films", line: "A cinematic website for stories worth remembering.", tag: "Web Development", headline: "For the moments\nthat stay.", detail: "A wedding film studio concept built around emotional imagery, selected films, and an easy way for couples to begin a conversation.", image: "/images/wedding.jpg", color: "#e5e0d9", scope: ["Cinematic visual direction", "Film portfolio layout", "Wedding enquiry experience"] },
-  { id: "coffee", brand: "DAYBREAK", title: "Daybreak — Coffee & Bakehouse", line: "A warm first impression, before the first sip.", tag: "Web Design", headline: "A little slower.\nA little better.", detail: "A local café concept with an inviting menu, a strong sense of place, and practical information customers can find quickly on their phone.", image: "/images/coffee.jpg", color: "#d3d899", scope: ["Distinctive café identity", "Mobile-friendly menu", "Location and contact details"] },
-  { id: "skincare", brand: "AURA", title: "Aura — Skin & Aesthetics", line: "A calm, confident experience for a modern clinic.", tag: "Web Development", headline: "Care, beautifully\nconsidered.", detail: "A skincare studio concept with clear treatment information, a calm visual language, and a focused consultation journey.", image: "/images/skincare.jpg", color: "#dae6e1", scope: ["Refined visual identity", "Treatment information", "Client consultation journey"] },
-];
-type Project = typeof projects[number];
-
-function GetStartedButton({ children = "Get Started", className = "" }: { children?: React.ReactNode; className?: string }) {
+function GetStartedButton({
+  children = "Get Started",
+  className = "",
+  onClick,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+  onClick: () => void;
+}) {
   return (
-    <Button asChild className={`orange-button ${className}`}>
-      <a href="#enquiry">
-        {children}
-        <span className="button-arrow">
-          <ArrowUpRight size={16} />
-        </span>
-      </a>
+    <Button type="button" className={`orange-button ${className}`} onClick={onClick}>
+      {children}
+      <span className="button-arrow">
+        <ArrowUpRight size={16} />
+      </span>
     </Button>
   );
 }
@@ -45,28 +43,34 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return <div className="section-label"><span aria-hidden="true">✦</span>{children}</div>;
 }
 
-function ProjectVisual({ project }: { project: Project }) {
-  return <div className={`project-visual visual-${project.id}`} style={{ backgroundColor: project.color }}>
-    <span className="project-backword" aria-hidden="true">{project.id === "architecture" ? "Spaces." : project.id === "wedding" ? "Forever." : project.id === "coffee" ? "Daybreak." : "Naturally."}</span>
-    <div className="website-mockup" aria-hidden="true">
-      <div className="mockup-bar"><b>{project.brand}<span>®</span></b><span>About &nbsp; Work &nbsp; Contact</span><i>LET’S TALK ↗</i></div>
-      <div className="mockup-hero">
-        {/* Native images are intentional for art-directed concept previews. */}
+function ProjectVisual({ project }: { project: PortfolioProject }) {
+  return (
+    <div className={`project-visual visual-${project.id}`} style={{ backgroundColor: project.color }}>
+      <span className="project-backword" aria-hidden="true">{project.backword}</span>
+      <div className="website-mockup" aria-hidden="true">
+        {/* Native screenshots are intentional portfolio previews. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={project.image} alt="" loading="lazy" width="1200" height="900" />
-        <div className="mockup-copy"><small>{project.id === "architecture" ? "ARCHITECTURE WITH INTENTION" : project.id === "wedding" ? "WEDDING FILMS & PHOTOGRAPHY" : project.id === "coffee" ? "COFFEE. CONVERSATION. COMMUNITY." : "YOUR SKIN, YOUR STORY."}</small><strong>{project.headline}</strong><span>{project.id === "coffee" ? "EXPLORE THE MENU" : "DISCOVER MORE"} <ArrowUpRight size={11} /></span></div>
-        <div className="mockup-bottom"><span>THOUGHTFULLY MADE.</span><span>SCROLL TO EXPLORE ↓</span></div>
+        <img
+          src={project.image}
+          alt=""
+          loading="lazy"
+          width="900"
+          height="540"
+          className="h-full w-full object-cover"
+        />
       </div>
+      <span className="project-open"><ArrowUpRight size={23} /></span>
     </div>
-    <span className="project-open"><ArrowUpRight size={23} /></span>
-  </div>;
+  );
 }
 
 export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
   const mobileDestination = useRef<string | null>(null);
   const [active, setActive] = useState("about");
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null);
+  const [projects, setProjects] = useState<PortfolioProject[]>(DEFAULT_PORTFOLIO_PROJECTS);
+  const [enquiryOpen, setEnquiryOpen] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -76,7 +80,20 @@ export default function Portfolio() {
     return () => observer.disconnect();
   }, []);
 
-  const card = (project: Project) => <article className="project-card" key={project.id}>
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/portfolio-projects", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : null)
+      .then((data) => {
+        if (!cancelled && Array.isArray(data?.projects) && data.projects.length === 4) {
+          setProjects(data.projects);
+        }
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
+  const card = (project: PortfolioProject) => <article className="project-card" key={project.id}>
     <Button variant="ghost" className="project-trigger" aria-label={`View ${project.title} concept`} onClick={() => setSelectedProject(project)}><ProjectVisual project={project} /></Button>
     <div className="project-caption"><h3>{project.title}</h3><ArrowUpRight size={20} /></div>
     <p>{project.line}</p>
@@ -90,7 +107,7 @@ export default function Portfolio() {
         <a href="#top" className="wordmark" aria-label="Suraj Web, back to top">SURAJ.WEB</a>
         <nav className="desktop-nav" aria-label="Main navigation">{navigation.map(([label, id]) => <a key={id} href={`#${id}`} className={active === id ? "active" : ""}>{label}</a>)}</nav>
         <div className="header-actions">
-          <GetStartedButton>Get Started</GetStartedButton>
+          <GetStartedButton onClick={() => setEnquiryOpen(true)}>Get Started</GetStartedButton>
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger asChild><Button variant="ghost" size="icon" className="menu-trigger" aria-label="Open menu"><Menu /></Button></SheetTrigger>
             <SheetContent className="mobile-menu" onCloseAutoFocus={(event) => {
@@ -117,7 +134,7 @@ export default function Portfolio() {
         <p className="hero-eyebrow"><span>✦</span> Independent web developer</p>
         <h2>Websites that turn<br/>visitors into clients.</h2>
         <div className="hero-links">
-          <GetStartedButton>Get Started</GetStartedButton>
+          <GetStartedButton onClick={() => setEnquiryOpen(true)}>Get Started</GetStartedButton>
           <a className="text-link" href="#projects">View My Work <ArrowUpRight size={15}/></a>
         </div>
       </div>
@@ -135,7 +152,7 @@ export default function Portfolio() {
       <div className="about-copy">
         <h2>Hey there, I’m Suraj Kirtaniya — a web developer with an eye for design and a focus on what works. I turn ideas into distinctive websites that feel effortless to use and help your business take its next step.</h2>
         <div className="section-actions">
-          <GetStartedButton>Get Started</GetStartedButton>
+          <GetStartedButton onClick={() => setEnquiryOpen(true)}>Get Started</GetStartedButton>
           <a href="#projects" className="text-link">View My Work <ArrowUpRight size={15}/></a>
         </div>
       </div>
@@ -165,64 +182,7 @@ export default function Portfolio() {
           <h3 className="text-xl font-medium text-[#f6f0e9]">Have an idea ready to build?</h3>
           <p className="text-xs text-[#a99585] mt-1">Get an estimate and project plan directly from Suraj.</p>
         </div>
-        <GetStartedButton>Get Started</GetStartedButton>
-      </div>
-    </section>
-
-    {/* Dedicated Form Section */}
-    <section id="enquiry" className="enquiry-section content-width py-16 md:py-24 border-t border-white/[0.08]" aria-labelledby="enquiry-heading">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-        <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
-          <SectionLabel>Start a Project</SectionLabel>
-          <h2 id="enquiry-heading" className="font-['Antonio',sans-serif] text-4xl sm:text-5xl lg:text-[56px] font-thin leading-[1.08] tracking-[-1.5px] text-[#f6f0e9]">
-            Let’s build something extraordinary.
-          </h2>
-          <p className="text-base text-[#b5a597] leading-relaxed">
-            Tell me about your business and website goals. Every enquiry lands straight in my personal Telegram bot, and I respond on WhatsApp within 2–4 hours.
-          </p>
-
-          <div className="space-y-4 pt-4 border-t border-white/[0.08]">
-            <div className="flex items-start gap-3.5">
-              <div className="w-8 h-8 rounded-full bg-[#2c1c14] text-[#f87b38] flex items-center justify-center shrink-0 border border-white/[0.08]">
-                <Sparkles size={16} />
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-[#f6f0e9]">Direct Developer Collaboration</h3>
-                <p className="text-xs text-[#a99585] mt-0.5">
-                  No account managers or middlemen. Work directly with me from concept to launch.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3.5">
-              <div className="w-8 h-8 rounded-full bg-[#2c1c14] text-[#f87b38] flex items-center justify-center shrink-0 border border-white/[0.08]">
-                <Rocket size={16} />
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-[#f6f0e9]">Instant Telegram Notification</h3>
-                <p className="text-xs text-[#a99585] mt-0.5">
-                  The second you submit this form, a priority ping hits my phone so we can start talking.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-[#180e08] border border-white/[0.1] space-y-2">
-            <p className="text-xs text-[#d8c9bd] font-medium">Prefer an immediate chat?</p>
-            <a
-              href={WHATSAPP_GENERAL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#f87b38] hover:text-[#ff985c] transition-colors"
-            >
-              Chat on WhatsApp (+91 7810963278) <ArrowUpRight size={13} />
-            </a>
-          </div>
-        </div>
-
-        <div className="lg:col-span-7">
-          <EnquiryForm embedded={true} />
-        </div>
+        <GetStartedButton onClick={() => setEnquiryOpen(true)}>Get Started</GetStartedButton>
       </div>
     </section>
 
@@ -231,12 +191,12 @@ export default function Portfolio() {
         <SectionLabel>Let’s Make It Happen</SectionLabel>
         <div className="contact-main">
           <h2>Have a project<br/>in <em>mind?</em></h2>
-          <a className="contact-arrow" href="#enquiry" aria-label="Go to project enquiry form"><ArrowUpRight/></a>
+          <button type="button" className="contact-arrow" aria-label="Open project enquiry form" onClick={() => setEnquiryOpen(true)}><ArrowUpRight/></button>
         </div>
         <div className="contact-bottom">
           <p>Tell me what you’re thinking.<br/>Let’s build something that feels like you.</p>
           <div className="flex items-center gap-4 flex-wrap">
-            <GetStartedButton>Get Started</GetStartedButton>
+            <GetStartedButton onClick={() => setEnquiryOpen(true)}>Get Started</GetStartedButton>
             <a className="contact-email" href={WHATSAPP_GENERAL_URL} target="_blank" rel="noopener noreferrer">Chat on WhatsApp<ArrowUpRight size={20}/></a>
           </div>
         </div>
@@ -245,7 +205,24 @@ export default function Portfolio() {
     <footer className="site-footer content-width"><a href="#top" className="wordmark">SURAJ.WEB</a><p>© 2026 Suraj Kirtaniya</p><a href="#top">Back to top <ArrowDown size={15} className="rotate-180"/></a></footer>
 
     <Dialog open={!!selectedProject} onOpenChange={(open)=>{if(!open)setSelectedProject(null);}}>
-      <DialogContent className="project-dialog">{selectedProject&&<><DialogHeader><SectionLabel>Independent Concept</SectionLabel><DialogTitle>{selectedProject.title}</DialogTitle><DialogDescription>{selectedProject.detail}</DialogDescription></DialogHeader><ProjectVisual project={selectedProject}/><ul>{selectedProject.scope.map(item=><li key={item}><Sparkles size={14}/>{item}</li>)}</ul><div className="flex flex-wrap gap-3 items-center"><Button asChild className="orange-button"><a href="#enquiry" onClick={() => setSelectedProject(null)}>Get Started on this Project <span className="button-arrow"><ArrowUpRight size={16} /></span></a></Button><Button asChild variant="outline" className="rounded-full border-white/20 text-[#e4d5cb] hover:bg-white/10"><a href={`https://wa.me/917810963278?text=${encodeURIComponent(`Hi Suraj, I came across your portfolio and would like to discuss a website like ${selectedProject.brand}.`)}`} target="_blank" rel="noopener noreferrer">WhatsApp</a></Button></div></>}</DialogContent>
+      <DialogContent className="project-dialog">{selectedProject&&<><DialogHeader><SectionLabel>Independent Concept</SectionLabel><DialogTitle>{selectedProject.title}</DialogTitle><DialogDescription>{selectedProject.detail}</DialogDescription></DialogHeader><ProjectVisual project={selectedProject}/><ul>{selectedProject.scope.map(item=><li key={item}><Sparkles size={14}/>{item}</li>)}</ul><div className="flex flex-wrap gap-3 items-center"><Button type="button" className="orange-button" onClick={() => { setSelectedProject(null); setEnquiryOpen(true); }}>Get Started on this Project <span className="button-arrow"><ArrowUpRight size={16} /></span></Button><Button asChild variant="outline" className="rounded-full border-white/20 text-[#e4d5cb] hover:bg-white/10"><a href={`https://wa.me/917810963278?text=${encodeURIComponent(`Hi Suraj, I came across your portfolio and would like to discuss a website like ${selectedProject.brand}.`)}`} target="_blank" rel="noopener noreferrer">WhatsApp</a></Button></div></>}</DialogContent>
+    </Dialog>
+
+    <Dialog open={enquiryOpen} onOpenChange={setEnquiryOpen}>
+      <DialogContent className="w-[calc(100vw-20px)] max-w-[760px]! max-h-[92svh] overflow-y-auto gap-0 rounded-2xl border-[#68462e] bg-[#100702] p-0 text-[#f6f0e9] sm:rounded-3xl">
+        <DialogHeader className="px-5 pt-6 pb-4 text-left sm:px-8 sm:pt-8">
+          <SectionLabel>Start a Project</SectionLabel>
+          <DialogTitle className="font-['Antonio',sans-serif] text-3xl font-thin tracking-[-1px] text-[#f6f0e9] sm:text-4xl">
+            Let’s build something that works.
+          </DialogTitle>
+          <DialogDescription className="text-sm leading-relaxed text-[#b5a597]">
+            Share your project details. The enquiry is sent directly to Suraj and you can continue the conversation on WhatsApp.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="px-3 pb-4 sm:px-6 sm:pb-6">
+          <EnquiryForm embedded />
+        </div>
+      </DialogContent>
     </Dialog>
   </main>;
 }
