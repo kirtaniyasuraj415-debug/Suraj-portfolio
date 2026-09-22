@@ -1,5 +1,8 @@
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 export function GET(request) {
-  return Response.redirect(new URL("/demo.html", request.url), 307);
+  const url = new URL(request.url);
+  url.pathname = "/demo.html";
+  url.search = "";
+  return Response.redirect(url, 307);
 }
