@@ -1,4 +1,5 @@
 import { handleTelegramProjectUpdate, verifyTelegramWebhookSecret } from "@/lib/server/telegram-project-store";
+import { handleTelegramRatingUpdate } from "@/lib/server/telegram-rating-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -10,7 +11,10 @@ export async function POST(request: Request) {
 
   try {
     const update = await request.json();
-    await handleTelegramProjectUpdate(update);
+    const handledRating = await handleTelegramRatingUpdate(update);
+    if (!handledRating) {
+      await handleTelegramProjectUpdate(update);
+    }
     return Response.json({ ok: true });
   } catch {
     return Response.json({ ok: false }, { status: 500 });
