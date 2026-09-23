@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowRight, ArrowUpRight, Code2, Menu, Monitor, Rocket, Sparkles } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight, Code2, Gauge, Menu, MessageCircle, Monitor, Rocket, ShieldCheck, Smartphone, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -19,6 +19,15 @@ const navigation = [
 const WHATSAPP_GENERAL_URL = `https://wa.me/917810963278?text=${encodeURIComponent(
   "Hi Suraj, I came across your portfolio and would like to discuss a website/project."
 )}`;
+
+type PortfolioRating = {
+  id: number;
+  name: string;
+  business: string;
+  rating: number;
+  message: string;
+  createdAt: string;
+};
 
 function GetStartedButton({
   children = "Get Started",
@@ -71,6 +80,13 @@ export default function Portfolio() {
   const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null);
   const [projects, setProjects] = useState<PortfolioProject[]>(DEFAULT_PORTFOLIO_PROJECTS);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
+  const [ratings, setRatings] = useState<PortfolioRating[]>([]);
+  const [ratingValue, setRatingValue] = useState(5);
+  const [ratingName, setRatingName] = useState("");
+  const [ratingBusiness, setRatingBusiness] = useState("");
+  const [ratingMessage, setRatingMessage] = useState("");
+  const [ratingSubmitting, setRatingSubmitting] = useState(false);
+  const [ratingStatus, setRatingStatus] = useState<string | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -93,11 +109,60 @@ export default function Portfolio() {
     return () => { cancelled = true; };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/ratings", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : null)
+      .then((data) => {
+        if (!cancelled && Array.isArray(data?.ratings)) setRatings(data.ratings);
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
+  const submitRating = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (ratingSubmitting) return;
+    setRatingStatus(null);
+    setRatingSubmitting(true);
+    const form = new FormData(event.currentTarget);
+    try {
+      const response = await fetch("/api/ratings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: ratingName,
+          business: ratingBusiness,
+          rating: ratingValue,
+          message: ratingMessage,
+          website: form.get("website") || "",
+        }),
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok || !data?.success) {
+        setRatingStatus(data?.error || "Unable to submit your rating right now.");
+        return;
+      }
+      setRatingStatus("Thanks — your rating was received and will appear after a quick review.");
+      setRatingName("");
+      setRatingBusiness("");
+      setRatingMessage("");
+      setRatingValue(5);
+    } catch {
+      setRatingStatus("Unable to submit your rating right now.");
+    } finally {
+      setRatingSubmitting(false);
+    }
+  };
+
   const card = (project: PortfolioProject) => <article className="project-card" key={project.id}>
     <Button variant="ghost" className="project-trigger" aria-label={`View ${project.title} concept`} onClick={() => setSelectedProject(project)}><ProjectVisual project={project} /></Button>
     <div className="project-caption"><h3>{project.title}</h3><ArrowUpRight size={20} /></div>
     <p>{project.line}</p>
     <div className="project-tags"><span>{project.tag}</span><span>Concept Project</span></div>
+    <a className="text-link mt-4 w-fit" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+      Live Preview <ArrowUpRight size={15} />
+    </a>
   </article>;
 
   return <main id="top">
@@ -164,6 +229,27 @@ export default function Portfolio() {
       <div className="project-column offset-column"><div className="projects-heading"><SectionLabel>Selected Concepts</SectionLabel><h2 id="projects-heading">Thoughtful design.<br/>Purposeful websites.</h2><p>A selection of independent website concepts.</p></div>{card(projects[1])}{card(projects[3])}</div>
     </section>
 
+    <section className="content-width pt-28 sm:pt-36" aria-labelledby="why-heading">
+      <div className="section-heading">
+        <SectionLabel>Why Work With Me</SectionLabel>
+        <h2 id="why-heading">Built around your business,<br/>not a template.</h2>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-10">
+        {[
+          { icon: Sparkles, title: "Custom Direction", copy: "Layouts and visual decisions shaped around your brand instead of a one-size-fits-all template." },
+          { icon: Smartphone, title: "Mobile First", copy: "Every page is considered for the phone experience, not treated as a desktop afterthought." },
+          { icon: Gauge, title: "Performance Minded", copy: "Lean interfaces, responsive assets, and practical implementation choices that keep the experience focused." },
+          { icon: MessageCircle, title: "Direct Collaboration", copy: "You work directly with me from the first idea through design, development, and launch." },
+        ].map(({ icon: Icon, title, copy }) => (
+          <article key={title} className="rounded-2xl border border-white/[0.1] bg-[#160d07] p-5 sm:p-6 min-h-[220px] flex flex-col">
+            <span className="w-11 h-11 rounded-full border border-[#f87b38]/35 bg-[#f87b38]/10 text-[#f87b38] grid place-items-center"><Icon size={20}/></span>
+            <h3 className="font-['Antonio',sans-serif] text-2xl font-light mt-7">{title}</h3>
+            <p className="text-sm leading-6 text-[#a99585] mt-2">{copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
     <section id="services" className="services-section content-width">
       <div className="section-heading"><SectionLabel>What I Do</SectionLabel><h2>Good design.<br/>Real-world function.</h2></div>
       <div className="service-list">
@@ -186,6 +272,116 @@ export default function Portfolio() {
       </div>
     </section>
 
+    <section id="feedback" className="content-width pb-28 sm:pb-36" aria-labelledby="feedback-heading">
+      <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 items-start">
+        <div>
+          <SectionLabel>Portfolio Feedback</SectionLabel>
+          <h2 id="feedback-heading" className="font-['Antonio',sans-serif] text-5xl sm:text-6xl font-thin tracking-[-2px] leading-[1.05] mt-5">
+            Seen the work?<br/>Rate the experience.
+          </h2>
+          <p className="text-[#a99585] text-sm leading-6 mt-5 max-w-md">
+            Reviews shown here come from real portfolio visitors and are published only after moderation. No fabricated testimonials.
+          </p>
+
+          {ratings.length > 0 && (
+            <div className="flex items-center gap-3 mt-7">
+              <div className="flex text-[#f87b38]">
+                {[1,2,3,4,5].map((star) => <Star key={star} size={17} fill="currentColor" />)}
+              </div>
+              <span className="text-sm text-[#d8c9bd]">
+                {(ratings.reduce((sum, item) => sum + item.rating, 0) / ratings.length).toFixed(1)} average · {ratings.length} published {ratings.length === 1 ? "review" : "reviews"}
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div className="grid gap-3">
+          {ratings.length ? ratings.slice(0, 4).map((review) => (
+            <article key={review.id} className="rounded-2xl border border-white/[0.1] bg-[#160d07] p-5 sm:p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="font-medium text-[#f6f0e9]">{review.name}</h3>
+                  <p className="text-xs text-[#8d7c71] mt-1">{review.business || "Portfolio visitor"}</p>
+                </div>
+                <div className="flex text-[#f87b38]" aria-label={`${review.rating} out of 5 stars`}>
+                  {[1,2,3,4,5].map((star) => <Star key={star} size={15} fill={star <= review.rating ? "currentColor" : "none"} className={star <= review.rating ? "" : "text-[#5f493d]"} />)}
+                </div>
+              </div>
+              <p className="text-sm leading-6 text-[#c8bcb0] mt-4">“{review.message}”</p>
+            </article>
+          )) : (
+            <div className="rounded-2xl border border-dashed border-[#f87b38]/35 bg-[#f87b38]/[0.04] p-6 sm:p-8">
+              <div className="flex text-[#f87b38] gap-1">{[1,2,3,4,5].map((star) => <Star key={star} size={18} />)}</div>
+              <h3 className="font-['Antonio',sans-serif] text-2xl mt-5">Be the first published review.</h3>
+              <p className="text-sm text-[#a99585] mt-2 leading-6">I’m keeping this section genuine. Visitor ratings appear here only after they are actually submitted and approved.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <form onSubmit={submitRating} className="mt-8 rounded-2xl sm:rounded-3xl border border-[#68462e] bg-[#160d07] p-5 sm:p-7">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 pb-5 border-b border-white/[0.08]">
+          <div>
+            <h3 className="font-['Antonio',sans-serif] text-3xl font-thin">Rate my portfolio work</h3>
+            <p className="text-xs text-[#8d7c71] mt-1">Your review is moderated before it becomes public.</p>
+          </div>
+          <div className="flex gap-1" role="radiogroup" aria-label="Rating out of 5">
+            {[1,2,3,4,5].map((star) => (
+              <button key={star} type="button" onClick={() => setRatingValue(star)} aria-label={`${star} star rating`}
+                className="p-1.5 rounded-lg hover:bg-white/[0.06] transition-colors">
+                <Star size={25} fill={star <= ratingValue ? "currentColor" : "none"} className={star <= ratingValue ? "text-[#f87b38]" : "text-[#6a5549]"} />
+              </button>
+            ))}
+          </div>
+        </div>
+        <input name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+          <label className="text-xs text-[#d8c9bd]">Your Name
+            <input required maxLength={30} value={ratingName} onChange={(e) => setRatingName(e.target.value)}
+              className="mt-2 w-full h-11 rounded-xl border border-white/[0.14] bg-[#0e0501] px-3 text-sm text-[#f6f0e9] outline-none focus:border-[#f87b38]" placeholder="Your name" />
+          </label>
+          <label className="text-xs text-[#d8c9bd]">Business / Brand <span className="text-[#8d7c71]">(optional)</span>
+            <input maxLength={30} value={ratingBusiness} onChange={(e) => setRatingBusiness(e.target.value)}
+              className="mt-2 w-full h-11 rounded-xl border border-white/[0.14] bg-[#0e0501] px-3 text-sm text-[#f6f0e9] outline-none focus:border-[#f87b38]" placeholder="Business or brand" />
+          </label>
+        </div>
+        <label className="block text-xs text-[#d8c9bd] mt-4">Your Review
+          <textarea required minLength={8} maxLength={100} rows={3} value={ratingMessage} onChange={(e) => setRatingMessage(e.target.value)}
+            className="mt-2 w-full rounded-xl border border-white/[0.14] bg-[#0e0501] p-3 text-sm text-[#f6f0e9] outline-none focus:border-[#f87b38] resize-none" placeholder="What stood out to you about the work?" />
+        </label>
+        <div className="mt-5 flex flex-wrap items-center gap-4">
+          <button type="submit" disabled={ratingSubmitting} className="orange-button inline-flex items-center disabled:opacity-60">
+            {ratingSubmitting ? "Submitting..." : "Submit Rating"}
+            <span className="button-arrow"><ArrowUpRight size={16}/></span>
+          </button>
+          {ratingStatus && <p className="text-xs text-[#c8bcb0]" role="status">{ratingStatus}</p>}
+        </div>
+      </form>
+    </section>
+
+    <section className="content-width pb-28 sm:pb-36" aria-labelledby="faq-heading">
+      <div className="section-heading">
+        <SectionLabel>FAQ</SectionLabel>
+        <h2 id="faq-heading">A few things clients<br/>usually ask.</h2>
+      </div>
+      <div className="mt-10 border-t border-white/[0.12]">
+        {[
+          ["What kind of websites do you build?", "Business websites, landing pages, portfolios, redesigns, e-commerce experiences, and selected AI or automation workflows."],
+          ["Will the website work properly on mobile?", "Yes. Responsive behaviour is considered throughout the build so the experience works across common phone, tablet, and desktop sizes."],
+          ["How long will my project take?", "The timeline depends on scope, content, revisions, and integrations. I confirm the expected schedule after understanding the project rather than promising a generic deadline."],
+          ["Can you handle deployment too?", "Yes. I can prepare and deploy the finished web project and help connect the final hosting setup where it fits the project."],
+          ["Can you add enquiry or automation flows?", "Yes. Where useful, I can connect forms, Telegram or WhatsApp follow-ups, and practical automation flows instead of adding automation just for the sake of it."],
+        ].map(([question, answer]) => (
+          <details key={question} className="group border-b border-white/[0.12] py-5">
+            <summary className="list-none cursor-pointer flex items-center justify-between gap-6 font-['Antonio',sans-serif] text-2xl font-thin">
+              {question}<span className="text-[#f87b38] text-2xl transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p className="text-sm leading-7 text-[#a99585] max-w-2xl pt-3 pr-8">{answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
     <section id="contact" className="contact-section">
       <div className="content-width">
         <SectionLabel>Let’s Make It Happen</SectionLabel>
@@ -205,7 +401,7 @@ export default function Portfolio() {
     <footer className="site-footer content-width"><a href="#top" className="wordmark">SURAJ.WEB</a><p>© 2026 Suraj Kirtaniya</p><a href="#top">Back to top <ArrowDown size={15} className="rotate-180"/></a></footer>
 
     <Dialog open={!!selectedProject} onOpenChange={(open)=>{if(!open)setSelectedProject(null);}}>
-      <DialogContent className="project-dialog">{selectedProject&&<><DialogHeader><SectionLabel>Independent Concept</SectionLabel><DialogTitle>{selectedProject.title}</DialogTitle><DialogDescription>{selectedProject.detail}</DialogDescription></DialogHeader><ProjectVisual project={selectedProject}/><ul>{selectedProject.scope.map(item=><li key={item}><Sparkles size={14}/>{item}</li>)}</ul><div className="flex flex-wrap gap-3 items-center"><Button type="button" className="orange-button" onClick={() => { setSelectedProject(null); setEnquiryOpen(true); }}>Get Started on this Project <span className="button-arrow"><ArrowUpRight size={16} /></span></Button><Button asChild variant="outline" className="rounded-full border-white/20 text-[#e4d5cb] hover:bg-white/10"><a href={`https://wa.me/917810963278?text=${encodeURIComponent(`Hi Suraj, I came across your portfolio and would like to discuss a website like ${selectedProject.brand}.`)}`} target="_blank" rel="noopener noreferrer">WhatsApp</a></Button></div></>}</DialogContent>
+      <DialogContent className="project-dialog">{selectedProject&&<><DialogHeader><SectionLabel>Independent Concept</SectionLabel><DialogTitle>{selectedProject.title}</DialogTitle><DialogDescription>{selectedProject.detail}</DialogDescription></DialogHeader><ProjectVisual project={selectedProject}/><ul>{selectedProject.scope.map(item=><li key={item}><Sparkles size={14}/>{item}</li>)}</ul><div className="flex flex-wrap gap-3 items-center"><Button asChild className="orange-button"><a href={selectedProject.liveUrl} target="_blank" rel="noopener noreferrer">View Live Website <span className="button-arrow"><ArrowUpRight size={16} /></span></a></Button><Button type="button" variant="outline" className="rounded-full border-white/20 text-[#e4d5cb] hover:bg-white/10" onClick={() => { setSelectedProject(null); setEnquiryOpen(true); }}>Start a Project</Button><Button asChild variant="outline" className="rounded-full border-white/20 text-[#e4d5cb] hover:bg-white/10"><a href={`https://wa.me/917810963278?text=${encodeURIComponent(`Hi Suraj, I came across your portfolio and would like to discuss a website like ${selectedProject.brand}.`)}`} target="_blank" rel="noopener noreferrer">WhatsApp</a></Button></div></>}</DialogContent>
     </Dialog>
 
     <Dialog open={enquiryOpen} onOpenChange={setEnquiryOpen}>
