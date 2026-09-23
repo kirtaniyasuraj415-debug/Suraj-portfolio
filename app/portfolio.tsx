@@ -203,7 +203,7 @@ export default function Portfolio() {
           <a className="text-link" href="#projects">View My Work <ArrowUpRight size={15}/></a>
         </div>
       </div>
-      <aside className="hero-promise" aria-label="Design, development and launch">
+      <aside className="hero-promise premium-glow-card" aria-label="Design, development and launch">
         <div className="promise-icons"><span><Monitor size={18}/></span><span><Code2 size={19}/></span><span><Rocket size={18}/></span><b>↗</b></div>
         <p>From your first idea<br/>to your next big launch.</p>
         <div className="promise-tags"><span>Custom Design</span><span>Built to Perform</span></div>
@@ -241,10 +241,10 @@ export default function Portfolio() {
           { icon: Gauge, title: "Performance Minded", copy: "Lean interfaces, responsive assets, and practical implementation choices that keep the experience focused." },
           { icon: MessageCircle, title: "Direct Collaboration", copy: "You work directly with me from the first idea through design, development, and launch." },
         ].map(({ icon: Icon, title, copy }) => (
-          <article key={title} className="rounded-2xl border border-white/[0.1] bg-[#160d07] p-5 sm:p-6 min-h-[220px] flex flex-col">
-            <span className="w-11 h-11 rounded-full border border-[#f87b38]/35 bg-[#f87b38]/10 text-[#f87b38] grid place-items-center"><Icon size={20}/></span>
-            <h3 className="font-['Antonio',sans-serif] text-2xl font-light mt-7">{title}</h3>
-            <p className="text-sm leading-6 text-[#a99585] mt-2">{copy}</p>
+          <article key={title} className="why-card premium-glow-card">
+            <span className="why-card-icon"><Icon size={20}/></span>
+            <h3 className="why-card-title">{title}</h3>
+            <p className="why-card-copy">{copy}</p>
           </article>
         ))}
       </div>
