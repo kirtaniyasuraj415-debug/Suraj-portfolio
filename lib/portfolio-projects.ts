@@ -10,6 +10,7 @@ export type PortfolioProject = {
   color: string;
   backword: string;
   scope: string[];
+  liveUrl: string;
 };
 
 export const DEFAULT_PORTFOLIO_PROJECTS: PortfolioProject[] = [
@@ -25,6 +26,7 @@ export const DEFAULT_PORTFOLIO_PROJECTS: PortfolioProject[] = [
     color: "#2a1d16",
     backword: "Spaces.",
     scope: ["Luxury visual direction", "Responsive project showcase", "Project enquiry experience"],
+    liveUrl: "https://suraj-portfolio-phi-six.vercel.app/ceebee/index.html",
   },
   {
     slot: 2,
@@ -38,6 +40,7 @@ export const DEFAULT_PORTFOLIO_PROJECTS: PortfolioProject[] = [
     color: "#211c1a",
     backword: "Forever.",
     scope: ["Editorial storytelling", "Photography and film showcase", "Availability enquiry flow"],
+    liveUrl: "https://teamshadow.ai.studio/",
   },
   {
     slot: 3,
@@ -51,6 +54,7 @@ export const DEFAULT_PORTFOLIO_PROJECTS: PortfolioProject[] = [
     color: "#4b1712",
     backword: "Tradition.",
     scope: ["Premium product presentation", "Festive gifting collections", "Mobile-first ordering journey"],
+    liveUrl: "https://parmanand-sweets.ai.studio/",
   },
   {
     slot: 4,
@@ -64,6 +68,7 @@ export const DEFAULT_PORTFOLIO_PROJECTS: PortfolioProject[] = [
     color: "#24100d",
     backword: "Cinematic.",
     scope: ["Cinematic art direction", "Wedding portfolio collections", "Shoot booking journey"],
+    liveUrl: "https://rc-weddings-films.ai.studio/",
   },
 ];
 
