@@ -234,7 +234,7 @@ export default function Portfolio() {
         <SectionLabel>Why Work With Me</SectionLabel>
         <h2 id="why-heading">Built around your business,<br/>not a template.</h2>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-10">
+      <div className="why-grid">
         {[
           { icon: Sparkles, title: "Custom Direction", copy: "Layouts and visual decisions shaped around your brand instead of a one-size-fits-all template." },
           { icon: Smartphone, title: "Mobile First", copy: "Every page is considered for the phone experience, not treated as a desktop afterthought." },
