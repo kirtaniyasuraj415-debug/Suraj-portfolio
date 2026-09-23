@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowRight, ArrowUpRight, Code2, Gauge, Menu, MessageCircle, Monitor, Rocket, ShieldCheck, Smartphone, Sparkles, Star } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight, Code2, Gauge, Menu, MessageCircle, Monitor, Rocket, Smartphone, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -283,16 +283,21 @@ export default function Portfolio() {
             Reviews shown here come from real portfolio visitors and are published only after moderation. No fabricated testimonials.
           </p>
 
-          {ratings.length > 0 && (
-            <div className="flex items-center gap-3 mt-7">
-              <div className="flex text-[#f87b38]">
-                {[1,2,3,4,5].map((star) => <Star key={star} size={17} fill="currentColor" />)}
+          {ratings.length > 0 && (() => {
+            const average = ratings.reduce((sum, item) => sum + item.rating, 0) / ratings.length;
+            return (
+              <div className="flex items-center gap-3 mt-7">
+                <div className="flex text-[#f87b38]" aria-label={`${average.toFixed(1)} out of 5 average rating`}>
+                  {[1,2,3,4,5].map((star) => (
+                    <Star key={star} size={17} fill={star <= Math.round(average) ? "currentColor" : "none"} className={star <= Math.round(average) ? "" : "text-[#5f493d]"} />
+                  ))}
+                </div>
+                <span className="text-sm text-[#d8c9bd]">
+                  {average.toFixed(1)} average · {ratings.length} published {ratings.length === 1 ? "review" : "reviews"}
+                </span>
               </div>
-              <span className="text-sm text-[#d8c9bd]">
-                {(ratings.reduce((sum, item) => sum + item.rating, 0) / ratings.length).toFixed(1)} average · {ratings.length} published {ratings.length === 1 ? "review" : "reviews"}
-              </span>
-            </div>
-          )}
+            );
+          })()}
         </div>
 
         <div className="grid gap-3">
