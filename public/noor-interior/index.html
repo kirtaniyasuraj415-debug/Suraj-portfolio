@@ -219,6 +219,164 @@ main{overflow:hidden;background:#050505}
     .scene-reveal{opacity:1!important;transform:none!important;clip-path:none!important;transition:none!important}
     .scene-media img{transform:none!important;transition:none!important}
   }
+</style>
+<style id="noor-premium-sections">
+  .section-head{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+  .section-head .eyebrow{padding:34px var(--pad)}
+  .section-head h2{grid-column:2/4;margin:0;padding:30px var(--pad) 50px;font-size:clamp(42px,5.6vw,86px);font-weight:350;line-height:.98;letter-spacing:-.055em}
+  .section-note{color:#7f7f79;font-size:12px;line-height:1.65}
+
+  /* Why choose us */
+  .why-us{border-bottom:1px solid var(--line)}
+  .why-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+  .why-card{min-height:300px;padding:30px;position:relative;border-top:1px solid var(--line);border-right:1px solid var(--line);overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,0))}
+  .why-card:last-child{border-right:0}
+  .why-card .index{font-size:10px;letter-spacing:.16em;color:#686864}
+  .why-card h3{font-size:clamp(25px,2.3vw,38px);font-weight:350;line-height:1.02;letter-spacing:-.04em;margin:95px 0 14px}
+  .why-card p{margin:0;color:#7f7f79;font-size:12px;line-height:1.65;max-width:280px}
+  .why-card:after{content:"";position:absolute;left:30px;right:30px;bottom:24px;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.18),transparent)}
+
+  /* Process */
+  .process{border-bottom:1px solid var(--line)}
+  .process-track{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line)}
+  .process-step{min-height:300px;padding:28px;position:relative;border-right:1px solid var(--line)}
+  .process-step:last-child{border-right:0}
+  .process-step .num{font-size:10px;color:#6c6c68;letter-spacing:.16em}
+  .process-step h3{font-size:23px;font-weight:400;letter-spacing:-.03em;margin:110px 0 12px}
+  .process-step p{margin:0;color:#7f7f7a;font-size:12px;line-height:1.6}
+  .process-step:before{content:"";position:absolute;left:28px;top:62px;width:8px;height:8px;border:1px solid rgba(255,255,255,.38);border-radius:50%;background:#050505}
+  .process-step:after{content:"";position:absolute;left:36px;right:-1px;top:66px;height:1px;background:rgba(255,255,255,.13)}
+  .process-step:last-child:after{display:none}
+
+  /* Transformation */
+  .transformation{border-bottom:1px solid var(--line)}
+  .transform-wrap{display:grid;grid-template-columns:1fr 2fr;min-height:700px}
+  .transform-copy{padding:42px var(--pad);display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--line)}
+  .transform-copy h3{font-size:clamp(34px,4vw,58px);font-weight:350;line-height:1;letter-spacing:-.05em;margin:0}
+  .transform-copy p{color:#81817c;font-size:12px;line-height:1.7;max-width:330px}
+  .compare-frame{position:relative;min-height:700px;overflow:hidden;background:#0b0b0b}
+  .compare-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.66) contrast(1.06) brightness(.68)}
+  .compare-after{clip-path:inset(0 50% 0 0)}
+  .compare-divider{position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(255,255,255,.88);pointer-events:none}
+  .compare-knob{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:#f3f1eb;color:#080808;display:grid;place-items:center;font-size:16px;box-shadow:0 18px 50px rgba(0,0,0,.35);pointer-events:none}
+  .compare-label{position:absolute;top:22px;padding:9px 12px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.52);font-size:9px;text-transform:uppercase;letter-spacing:.16em}
+  .compare-label.before{left:22px}.compare-label.after{right:22px}
+  .compare-range{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize}
+
+  /* Case studies */
+  .case-studies{border-bottom:1px solid var(--line)}
+  .case-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+  .case-card{min-height:580px;border-right:1px solid var(--line);display:flex;flex-direction:column}
+  .case-card:last-child{border-right:0}
+  .case-image{height:340px;overflow:hidden}
+  .case-image img{filter:saturate(.67) contrast(1.04) brightness(.68);transition:transform .8s cubic-bezier(.16,1,.3,1)}
+  .case-card:hover .case-image img{transform:scale(1.035)}
+  .case-body{padding:26px 28px 34px;display:flex;flex:1;flex-direction:column}
+  .case-type{font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:#6d6d68}
+  .case-body h3{font-size:27px;font-weight:380;letter-spacing:-.035em;margin:34px 0 16px}
+  .case-meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:auto;padding-top:22px;border-top:1px solid var(--line)}
+  .case-meta span{font-size:10px;color:#81817b;line-height:1.45}.case-meta b{display:block;color:#e5e4df;font-weight:500;text-transform:uppercase;letter-spacing:.1em;font-size:8px;margin-bottom:5px}
+
+  /* Testimonials */
+  .testimonials{border-bottom:1px solid var(--line)}
+  .testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+  .quote-card{min-height:430px;padding:32px;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,0))}
+  .quote-card:last-child{border-right:0}
+  .quote-stars{font-size:12px;letter-spacing:.24em;color:#e6e4df}
+  .quote-text{font-size:clamp(20px,2vw,30px);font-weight:350;line-height:1.15;letter-spacing:-.03em;margin:42px 0;color:#deddd8}
+  .quote-person{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:#74746f}
+  .quote-person strong{display:block;color:#eeeeea;font-weight:500;margin-bottom:7px}
+
+  /* Service areas */
+  .areas{border-bottom:1px solid var(--line)}
+  .areas-layout{display:grid;grid-template-columns:1fr 2fr;min-height:560px}
+  .areas-copy{padding:40px var(--pad);border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between}
+  .areas-copy h3{font-size:clamp(38px,4vw,64px);font-weight:350;line-height:.98;letter-spacing:-.05em;margin:0}
+  .areas-map{position:relative;min-height:560px;background:
+    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:72px 72px;overflow:hidden}
+  .areas-map:before{content:"";position:absolute;inset:14%;border:1px solid rgba(255,255,255,.08);border-radius:50%;transform:rotate(-9deg)}
+  .areas-map:after{content:"";position:absolute;inset:25% 20%;border:1px solid rgba(255,255,255,.06);border-radius:50%;transform:rotate(16deg)}
+  .area-point{position:absolute;display:flex;align-items:center;gap:10px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#c8c7c2;z-index:2}
+  .area-point i{width:10px;height:10px;border-radius:50%;border:1px solid rgba(255,255,255,.55);background:#050505;box-shadow:0 0 0 5px rgba(255,255,255,.035)}
+  .area-point.kolkata{left:46%;top:44%}.area-point.med{left:25%;top:67%}.area-point.bard{left:37%;top:28%}.area-point.dur{left:20%;top:20%}
+  .area-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .area-chips span{border:1px solid var(--line);padding:9px 11px;border-radius:999px;font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:#8b8b86}
+
+  /* Founder */
+  .founder{border-bottom:1px solid var(--line)}
+  .founder-layout{display:grid;grid-template-columns:1.05fr 1.95fr;min-height:720px}
+  .founder-photo{min-height:720px;overflow:hidden;border-right:1px solid var(--line)}
+  .founder-photo img{filter:saturate(.58) contrast(1.05) brightness(.7)}
+  .founder-copy{padding:48px var(--pad);display:flex;flex-direction:column;justify-content:space-between}
+  .founder-copy h3{font-size:clamp(50px,6.4vw,98px);font-weight:330;line-height:.9;letter-spacing:-.065em;margin:0;max-width:760px}
+  .founder-copy-bottom{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+  .founder-copy p{margin:0;color:#85857f;font-size:13px;line-height:1.7}
+  .founder-stats{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+  .founder-stats div{padding:20px 0;border-bottom:1px solid var(--line)}
+  .founder-stats div:nth-child(odd){border-right:1px solid var(--line);padding-right:20px}.founder-stats div:nth-child(even){padding-left:20px}
+  .founder-stats strong{font-size:28px;font-weight:350;letter-spacing:-.04em}.founder-stats span{display:block;color:#73736e;font-size:9px;text-transform:uppercase;letter-spacing:.12em;margin-top:6px}
+
+  /* Budget */
+  .budget{border-bottom:1px solid var(--line)}
+  .budget-wrap{display:grid;grid-template-columns:1fr 2fr;min-height:520px}
+  .budget-intro{padding:40px var(--pad);border-right:1px solid var(--line)}
+  .budget-intro h3{font-size:clamp(42px,4.5vw,68px);font-weight:350;line-height:.98;letter-spacing:-.05em;margin:40px 0 22px}
+  .budget-intro p{color:#7e7e79;font-size:12px;line-height:1.65}
+  .budget-panel{margin:42px var(--pad);border:1px solid rgba(255,255,255,.13);padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:30px;background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.01))}
+  .budget-value{font-size:clamp(80px,10vw,150px);font-weight:300;line-height:.8;letter-spacing:-.08em}
+  .budget-value small{display:block;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#7b7b76;margin-top:20px}
+  .budget-types{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .budget-types span{border:1px solid var(--line);padding:18px 16px;font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:#a3a39d;display:flex;align-items:center;justify-content:space-between}
+  .budget-types span:after{content:"↗";color:#e9e8e2}
+
+  /* FAQ */
+  .faq{border-bottom:1px solid var(--line)}
+  .faq-list{border-top:1px solid var(--line)}
+  .faq-item{border-bottom:1px solid var(--line)}
+  .faq-q{width:100%;background:none;border:0;color:inherit;text-align:left;padding:24px var(--pad);display:grid;grid-template-columns:70px 1fr auto;gap:20px;align-items:center;cursor:pointer;font:inherit}
+  .faq-q .faq-num{font-size:9px;color:#686864;letter-spacing:.15em}.faq-q strong{font-size:clamp(18px,2vw,28px);font-weight:380;letter-spacing:-.025em}.faq-q .plus{font-size:24px;font-weight:300;transition:transform .35s ease}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.16,1,.3,1)}
+  .faq-a p{margin:0;padding:0 var(--pad) 28px calc(var(--pad) + 90px);max-width:920px;color:#7f7f79;font-size:13px;line-height:1.7}
+  .faq-item.open .faq-a{max-height:220px}.faq-item.open .plus{transform:rotate(45deg)}
+
+  /* Final CTA */
+  .final-cta{min-height:500px;border-bottom:1px solid var(--line);position:relative;display:flex;align-items:flex-end;overflow:hidden}
+  .final-cta:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.018),transparent 50%),radial-gradient(circle at 80% 20%,rgba(255,255,255,.055),transparent 34%)}
+  .final-cta-inner{position:relative;width:100%;padding:58px var(--pad);display:grid;grid-template-columns:2fr 1fr;gap:40px;align-items:end}
+  .final-cta h2{margin:0;font-size:clamp(58px,8.5vw,132px);font-weight:300;line-height:.82;letter-spacing:-.075em;max-width:1050px}
+  .final-cta-actions{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+  .cta-primary,.cta-secondary{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:14px 18px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;border:1px solid var(--line-strong)}
+  .cta-primary{background:#f1f0eb;color:#080808}.cta-secondary{background:transparent;color:#eee}
+  .cta-primary:hover,.cta-secondary:hover{transform:translateY(-2px)}
+
+  .auto-reveal{opacity:0;transform:translate3d(0,38px,0);clip-path:inset(10% 0 0 0);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .92s cubic-bezier(.16,1,.3,1),clip-path .92s cubic-bezier(.16,1,.3,1);transition-delay:var(--auto-delay,0ms)}
+  .auto-reveal.is-in{opacity:1;transform:none;clip-path:inset(0 0 0 0)}
+  .auto-media{overflow:hidden}.auto-media img{transform:scale(1.04);transition:transform 1.2s cubic-bezier(.16,1,.3,1)}.auto-media.is-in img{transform:scale(1)}
+
+  @media(max-width:1000px){
+    .why-grid{grid-template-columns:1fr 1fr}.why-card:nth-child(2){border-right:0}.why-card:nth-child(-n+2){border-bottom:1px solid var(--line)}
+    .process-track{grid-template-columns:1fr 1fr}.process-step:nth-child(even){border-right:0}.process-step:last-child{grid-column:1/3}
+    .case-grid,.testimonial-grid{grid-template-columns:1fr}.case-card,.quote-card{border-right:0;border-bottom:1px solid var(--line)}
+    .case-card:last-child,.quote-card:last-child{border-bottom:0}
+    .founder-layout{grid-template-columns:1fr 1fr}.founder-copy-bottom{grid-template-columns:1fr}
+  }
+  @media(max-width:760px){
+    .section-head{grid-template-columns:1fr}.section-head h2{grid-column:1}
+    .why-grid{grid-template-columns:1fr}.why-card{border-right:0!important;border-bottom:1px solid var(--line)}
+    .process-track{grid-template-columns:1fr}.process-step{border-right:0;border-bottom:1px solid var(--line)}.process-step:last-child{grid-column:auto}
+    .transform-wrap,.areas-layout,.founder-layout,.budget-wrap{grid-template-columns:1fr}.transform-copy,.areas-copy,.founder-photo,.budget-intro{border-right:0;border-bottom:1px solid var(--line)}
+    .compare-frame{min-height:520px}.founder-photo{min-height:520px}.founder-copy-bottom{grid-template-columns:1fr}.budget-panel{grid-template-columns:1fr;margin:24px 18px}.budget-types{grid-template-columns:1fr}
+    .final-cta-inner{grid-template-columns:1fr}.final-cta h2{font-size:clamp(58px,17vw,98px)}
+  }
+  @media(max-width:620px){
+    .why-card,.process-step,.quote-card{padding:24px}.why-card h3{margin-top:70px}
+    .case-image{height:62vw;min-height:280px}.transform-copy{min-height:360px}.areas-map{min-height:480px}
+    .founder-stats{grid-template-columns:1fr}.founder-stats div:nth-child(odd),.founder-stats div:nth-child(even){border-right:0;padding-left:0;padding-right:0}
+    .faq-q{grid-template-columns:44px 1fr auto;padding:22px 18px}.faq-a p{padding:0 18px 26px 62px}
+  }
+  @media(prefers-reduced-motion:reduce){.auto-reveal{opacity:1!important;transform:none!important;clip-path:none!important;transition:none!important}.auto-media img{transform:none!important;transition:none!important}}
 </style></head>
 <body><main>
 <section class="hero grid-shell" id="home">
@@ -278,6 +436,18 @@ main{overflow:hidden;background:#050505}
     </div>
   </div>
 </section>
+<section class="why-us grid-shell" id="why-us">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">Why Noor</div>
+    <h2 class="auto-reveal">Built around trust, planning and complete execution.</h2>
+  </div>
+  <div class="why-grid">
+    <article class="why-card auto-reveal"><span class="index">01</span><h3>25+ Years Experience</h3><p>Deep execution experience across Mumbai, Kolkata and interior projects for residential and commercial spaces.</p></article>
+    <article class="why-card auto-reveal"><span class="index">02</span><h3>Vastu-Certified Planning</h3><p>Layouts and design decisions can be aligned with vastu principles without compromising modern functionality.</p></article>
+    <article class="why-card auto-reveal"><span class="index">03</span><h3>Turnkey Execution</h3><p>From space planning and material coordination to site execution and final handover under one workflow.</p></article>
+    <article class="why-card auto-reveal"><span class="index">04</span><h3>Transparent Approach</h3><p>Clear scope discussion, consultation-first planning and project decisions shaped around the client’s actual space.</p></article>
+  </div>
+</section>
 
 <section class="projects grid-shell" id="projects">
   <div class="eyebrow">02 / Featured work</div>
@@ -305,13 +475,141 @@ main{overflow:hidden;background:#050505}
     <article class="service-card"><span>06</span><h3>Renovation & Turnkey</h3><p>End-to-end renovation with planning, material coordination, execution and handover.</p></article>
   </div>
 </section>
+<section class="process grid-shell" id="process">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">04 / Process</div>
+    <h2 class="auto-reveal">A clear path from first conversation to final handover.</h2>
+  </div>
+  <div class="process-track">
+    <article class="process-step auto-reveal"><span class="num">01</span><h3>Consultation</h3><p>Understand the space, lifestyle, priorities and preferred design direction.</p></article>
+    <article class="process-step auto-reveal"><span class="num">02</span><h3>Site Visit</h3><p>Measure, inspect and understand practical site conditions before planning begins.</p></article>
+    <article class="process-step auto-reveal"><span class="num">03</span><h3>Design & 3D</h3><p>Build the spatial plan, design language, materials and visual direction for the project.</p></article>
+    <article class="process-step auto-reveal"><span class="num">04</span><h3>Execution</h3><p>Coordinate workmanship, materials, installations and on-site implementation.</p></article>
+    <article class="process-step auto-reveal"><span class="num">05</span><h3>Handover</h3><p>Finish, inspect and hand over a space that is ready to live or work in.</p></article>
+  </div>
+</section>
 
-<section class="testimonial grid-shell">
-  <figure class="wide-image"><img src="https://noorinteriorkolkata.in/img/n5.jpg" alt="Noor Interior Kolkata home project"></figure>
-  <div class="review-copy">
-    <div class="eyebrow">04 / Reputation</div>
-    <h2>4.8 / 5 on Google from 166 reviews.</h2>
-    <p>Google reviewers highlight professional execution, service quality, workmanship and a design process that stays attentive to client expectations.</p>
+<section class="transformation grid-shell" id="transformation">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">05 / Transformation</div>
+    <h2 class="auto-reveal">See the difference a considered interior can make.</h2>
+  </div>
+  <div class="transform-wrap">
+    <div class="transform-copy auto-reveal">
+      <h3>Before / After experience.</h3>
+      <div>
+        <p>Drag across the image to explore a transformation-style comparison using Noor Interior’s published project imagery.</p>
+        <p class="section-note">This interactive treatment is part of the redesign presentation.</p>
+      </div>
+    </div>
+    <div class="compare-frame auto-reveal auto-media" id="compare-frame">
+      <img src="https://noorinteriorkolkata.in/img/n6.jpg" alt="Noor Interior comparison view one">
+      <img class="compare-after" id="compare-after" src="https://noorinteriorkolkata.in/img/n7.jpg" alt="Noor Interior comparison view two">
+      <div class="compare-divider" id="compare-divider"></div>
+      <div class="compare-knob" id="compare-knob">↔</div>
+      <span class="compare-label before">Before</span>
+      <span class="compare-label after">After</span>
+      <input class="compare-range" id="compare-range" type="range" min="0" max="100" value="50" aria-label="Before and after comparison">
+    </div>
+  </div>
+</section>
+
+<section class="case-studies grid-shell" id="case-studies">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">06 / Case Studies</div>
+    <h2 class="auto-reveal">Selected work, presented with more context.</h2>
+  </div>
+  <div class="case-grid">
+    <article class="case-card auto-reveal">
+      <div class="case-image auto-media"><img src="https://noorinteriorkolkata.in/img/n8.jpg" alt="Noor Interior residential project"></div>
+      <div class="case-body"><span class="case-type">Residential</span><h3>Full-home interior direction</h3><p class="section-note">A complete-home approach balancing storage, visual warmth and practical everyday use.</p><div class="case-meta"><span><b>Scope</b>Space planning + execution</span><span><b>Focus</b>Function + finish</span></div></div>
+    </article>
+    <article class="case-card auto-reveal">
+      <div class="case-image auto-media"><img src="https://noorinteriorkolkata.in/img/gl10.jpeg" alt="Noor Interior modern project"></div>
+      <div class="case-body"><span class="case-type">Modern Living</span><h3>Refined residential styling</h3><p class="section-note">Layered finishes, integrated storage and a clean modern language designed around the room.</p><div class="case-meta"><span><b>Scope</b>Interiors + furniture</span><span><b>Focus</b>Material balance</span></div></div>
+    </article>
+    <article class="case-card auto-reveal">
+      <div class="case-image auto-media"><img src="https://noorinteriorkolkata.in/img/gl13.jpeg" alt="Noor Interior office or commercial project"></div>
+      <div class="case-body"><span class="case-type">Office / Commercial</span><h3>Efficient professional spaces</h3><p class="section-note">Planning that combines movement, usability and a more polished visual identity for workspaces.</p><div class="case-meta"><span><b>Scope</b>Planning + fit-out</span><span><b>Focus</b>Efficiency + identity</span></div></div>
+    </article>
+  </div>
+</section>
+
+
+<section class="testimonials grid-shell" id="testimonials">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">07 / Testimonials</div>
+    <h2 class="auto-reveal">What clients say after the work is done.</h2>
+  </div>
+  <div class="testimonial-grid">
+    <article class="quote-card auto-reveal"><div><div class="quote-stars">★★★★★</div><p class="quote-text">“They were cooperative and professional, and turned the idea of my dream home into a reality.”</p></div><div class="quote-person"><strong>Ehtesham Ehsan</strong>Home renovation client</div></article>
+    <article class="quote-card auto-reveal"><div><div class="quote-stars">★★★★★</div><p class="quote-text">“Reliable, reassuring and reasonably priced — I was comfortable trusting the team even while living outside India.”</p></div><div class="quote-person"><strong>Emma Miller</strong>Modular kitchen renovation client</div></article>
+    <article class="quote-card auto-reveal"><div><div class="quote-stars">★★★★★</div><p class="quote-text">“Service, behaviour and workmanship are repeatedly highlighted in their Google reviews.”</p></div><div class="quote-person"><strong>Google Reviews</strong>4.8 / 5 from 166 reviews</div></article>
+  </div>
+</section>
+
+<section class="areas grid-shell" id="areas">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">08 / Service Areas</div>
+    <h2 class="auto-reveal">Interior work across Kolkata and key cities in West Bengal.</h2>
+  </div>
+  <div class="areas-layout">
+    <div class="areas-copy auto-reveal">
+      <h3>Serving homes and businesses beyond one neighbourhood.</h3>
+      <div><p class="section-note">Noor Interior currently highlights work across Kolkata, Medinipur, Bardhaman and Durgapur.</p><div class="area-chips"><span>Kolkata</span><span>Medinipur</span><span>Bardhaman</span><span>Durgapur</span></div></div>
+    </div>
+    <div class="areas-map auto-reveal">
+      <span class="area-point kolkata"><i></i>Kolkata</span>
+      <span class="area-point med"><i></i>Medinipur</span>
+      <span class="area-point bard"><i></i>Bardhaman</span>
+      <span class="area-point dur"><i></i>Durgapur</span>
+    </div>
+  </div>
+</section>
+
+<section class="founder grid-shell" id="founder">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">09 / Founder</div>
+    <h2 class="auto-reveal">Experience behind the name.</h2>
+  </div>
+  <div class="founder-layout">
+    <div class="founder-photo auto-reveal auto-media"><img src="https://noorinteriorkolkata.in/img/sknoooo.jpg" alt="Sheikh Noor Amin, founder of Noor Interior Kolkata"></div>
+    <div class="founder-copy auto-reveal">
+      <h3>Sheikh Noor Amin</h3>
+      <div class="founder-copy-bottom">
+        <p>Founder of Noor Interior Kolkata OPC Private Limited, with long-term interior execution experience across Mumbai and Kolkata. The company also states experience completing around 100 branch projects as a subcontractor for ICICI Prudential Mutual Fund.</p>
+        <div class="founder-stats"><div><strong>25+</strong><span>Years experience</span></div><div><strong>100</strong><span>Branch projects stated</span></div><div><strong>4</strong><span>Primary service regions</span></div><div><strong>4.8</strong><span>Google rating</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="budget grid-shell" id="budget">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">10 / Project Fit</div>
+    <h2 class="auto-reveal">Start with the right scope, budget and expectations.</h2>
+  </div>
+  <div class="budget-wrap">
+    <div class="budget-intro auto-reveal"><div class="eyebrow">Project qualification</div><h3>Projects from ₹5 lakh.</h3><p>Noor Interior states a minimum project value of ₹5 lakh. A consultation and site discussion help define the actual scope before execution.</p></div>
+    <div class="budget-panel auto-reveal">
+      <div class="budget-value">₹5L+<small>Minimum project value stated by the studio</small></div>
+      <div class="budget-types"><span>2BHK / 3BHK</span><span>Villa</span><span>Office</span><span>Commercial</span><span>Renovation</span><span>Turnkey</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="faq grid-shell" id="faq">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">11 / FAQ</div>
+    <h2 class="auto-reveal">Questions clients usually ask before starting.</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item auto-reveal"><button class="faq-q" type="button"><span class="faq-num">01</span><strong>Do you handle complete turnkey interiors?</strong><span class="plus">+</span></button><div class="faq-a"><p>Yes. Noor Interior presents full-home and turnkey interior work covering planning, materials, custom elements, execution and handover.</p></div></div>
+    <div class="faq-item auto-reveal"><button class="faq-q" type="button"><span class="faq-num">02</span><strong>Do you work on 2BHK, 3BHK and villas?</strong><span class="plus">+</span></button><div class="faq-a"><p>Yes. The studio highlights 2BHK, 3BHK, villa and full-home interior projects, alongside office and commercial work.</p></div></div>
+    <div class="faq-item auto-reveal"><button class="faq-q" type="button"><span class="faq-num">03</span><strong>Can the design follow Vastu?</strong><span class="plus">+</span></button><div class="faq-a"><p>Yes. Vastu-certified planning is one of the studio’s stated specialisations.</p></div></div>
+    <div class="faq-item auto-reveal"><button class="faq-q" type="button"><span class="faq-num">04</span><strong>How long will the project take?</strong><span class="plus">+</span></button><div class="faq-a"><p>Timeline depends on the size, scope, design complexity and site condition. The practical schedule should be confirmed after consultation and site assessment.</p></div></div>
+    <div class="faq-item auto-reveal"><button class="faq-q" type="button"><span class="faq-num">05</span><strong>Is consultation available before we commit?</strong><span class="plus">+</span></button><div class="faq-a"><p>Yes. The company promotes consultation and site discussion before the final scope is planned.</p></div></div>
+    <div class="faq-item auto-reveal"><button class="faq-q" type="button"><span class="faq-num">06</span><strong>Which areas do you serve?</strong><span class="plus">+</span></button><div class="faq-a"><p>The studio currently highlights Kolkata, Medinipur, Bardhaman and Durgapur as service areas.</p></div></div>
   </div>
 </section>
 
@@ -329,6 +627,17 @@ main{overflow:hidden;background:#050505}
     <label class="message">Tell us about your space<textarea name="message" rows="5" required></textarea></label>
     <button type="submit">Request consultation ↗</button>
   </form>
+</section>
+
+<section class="final-cta grid-shell" id="final-cta">
+  <div class="final-cta-inner">
+    <h2 class="auto-reveal">Have a space in mind? Let’s plan it.</h2>
+    <div class="final-cta-actions auto-reveal">
+      <a class="cta-primary" href="tel:+918910196865">Book a free site visit ↗</a>
+      <a class="cta-secondary" href="https://wa.me/8910196865" target="_blank" rel="noopener">Talk on WhatsApp ↗</a>
+      <p class="section-note">Noor Interior Kolkata · Residential · Commercial · Turnkey</p>
+    </div>
+  </div>
 </section>
 
 <footer class="footer grid-shell">
@@ -404,5 +713,43 @@ main{overflow:hidden;background:#050505}
   addEventListener('scroll', onScroll, {passive:true});
   addEventListener('resize', onScroll);
   updateMedia();
+})();
+</script>
+<script id="noor-premium-sections-js">
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const els = [...document.querySelectorAll('.auto-reveal')];
+  els.forEach((el,i)=>el.style.setProperty('--auto-delay',((i%5)*55)+'ms'));
+  if (reduce) els.forEach(el=>el.classList.add('is-in'));
+  else {
+    const io = new IntersectionObserver(entries => entries.forEach(entry => {
+      if(entry.isIntersecting){ entry.target.classList.add('is-in'); io.unobserve(entry.target); }
+    }), {threshold:.12, rootMargin:'0px 0px -6% 0px'});
+    els.forEach(el=>io.observe(el));
+  }
+
+  const range = document.getElementById('compare-range');
+  const after = document.getElementById('compare-after');
+  const divider = document.getElementById('compare-divider');
+  const knob = document.getElementById('compare-knob');
+  if(range && after && divider && knob){
+    const paint = v => {
+      const n = Math.max(0,Math.min(100,Number(v)));
+      after.style.clipPath = 'inset(0 ' + (100-n) + '% 0 0)';
+      divider.style.left = n + '%';
+      knob.style.left = n + '%';
+    };
+    range.addEventListener('input',e=>paint(e.target.value));
+    paint(range.value);
+  }
+
+  document.querySelectorAll('.faq-q').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const item = btn.closest('.faq-item');
+      const open = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(x=>x.classList.remove('open'));
+      if(!open) item.classList.add('open');
+    });
+  });
 })();
 </script></body></html>
