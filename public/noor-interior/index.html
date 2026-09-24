@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Noor Interior Kolkata — Redesign Demo</title><style>:root {
+  --bg: #050505;
+  --panel: #090909;
+  --text: #f4f2ee;
+  --muted: #8c8c88;
+  --line: rgba(255,255,255,.10);
+  --line-strong: rgba(255,255,255,.16);
+  --pad: clamp(18px, 3vw, 48px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{display:block;width:100%;height:100%;object-fit:cover}
+main{overflow:hidden;background:#050505}
+.grid-shell{width:min(1520px,100%);margin:auto;border-left:1px solid var(--line);border-right:1px solid var(--line);position:relative}
+.grid-shell:before,.grid-shell:after{content:"";position:absolute;top:0;bottom:0;width:1px;background:var(--line);pointer-events:none;z-index:5}
+.grid-shell:before{left:33.333%}.grid-shell:after{left:66.666%}
+.shell-row{position:relative;z-index:10}
+.nav{height:76px;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;border-bottom:1px solid var(--line);padding:0 var(--pad);font-size:12px;text-transform:uppercase;letter-spacing:.11em;background:rgba(4,4,4,.88);backdrop-filter:blur(14px)}
+.brand{display:flex;gap:8px;font-weight:700}.brand span:last-child{color:#808080}
+.nav-links{justify-self:center;display:flex;gap:26px;color:#a8a8a3}.nav-links a:hover{color:#fff}
+.pill{justify-self:end;border:1px solid var(--line-strong);border-radius:999px;padding:11px 15px;display:flex;gap:9px;align-items:center}
+.hero-media{height:min(78vh,920px);min-height:650px;position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+.hero-media img{filter:saturate(.72) contrast(1.06) brightness(.62);transform:scale(1.01)}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(0,0,0,.05) 46%,rgba(0,0,0,.52) 100%)}
+.hero-title{position:absolute;left:var(--pad);right:var(--pad);top:8%;display:flex;justify-content:space-between;align-items:flex-start;font-size:clamp(68px,11vw,186px);font-weight:300;letter-spacing:-.075em;line-height:.82;white-space:nowrap}
+.hero-title span:last-child{margin-top:1.1em}
+.hero-card{position:absolute;right:var(--pad);bottom:var(--pad);width:min(340px,42vw);padding:20px 0 0;border-top:1px solid rgba(255,255,255,.4);font-size:14px;line-height:1.45}.hero-card p{margin:0 0 18px}.hero-card a{font-size:12px;text-transform:uppercase;letter-spacing:.1em}
+.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:#7e7e79}
+.intro{display:grid;grid-template-columns:repeat(3,1fr);min-height:760px;border-bottom:1px solid var(--line)}
+.intro>.eyebrow{padding:36px var(--pad);grid-column:1/2;border-right:0}
+.intro h2{grid-column:1/3;margin:0;padding:24px var(--pad) 50px;font-size:clamp(40px,5.1vw,82px);font-weight:350;line-height:1.02;letter-spacing:-.055em;align-self:end}
+.stat-block{grid-column:3/4;grid-row:1/3;padding:36px var(--pad);display:flex;flex-direction:column;justify-content:flex-end;gap:7px}.stat{font-size:clamp(66px,7vw,110px);font-weight:300;letter-spacing:-.07em}.stat-label{color:#8e8e88;font-size:12px;text-transform:uppercase;letter-spacing:.11em}
+.intro-copy{grid-column:1/2;margin:0;padding:36px var(--pad) 80px;color:#8f8f89;line-height:1.65;font-size:13px}
+.intro-image{grid-column:2/4;margin:0;min-height:390px;position:relative;border-top:1px solid var(--line);overflow:hidden}.intro-image img{filter:saturate(.75) brightness(.72)}.intro-image figcaption,.project-main figcaption{position:absolute;left:18px;bottom:16px;background:rgba(0,0,0,.68);padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.11em}
+.proof{display:grid;grid-template-columns:repeat(3,1fr);min-height:720px;border-bottom:1px solid var(--line)}
+.proof-score{padding:36px var(--pad);display:flex;flex-direction:column;gap:7px;color:#8b8b86;font-size:11px;text-transform:uppercase;letter-spacing:.1em}.big-number{font-size:clamp(72px,8vw,128px);line-height:.9;color:#f4f2ee;letter-spacing:-.07em;text-transform:none}.proof-image{grid-column:2/3;grid-row:1/3;margin:0;min-height:510px}.proof-image img{filter:saturate(.55) contrast(1.08) brightness(.68)}
+.proof-list{grid-column:3/4;display:flex;flex-direction:column;padding:34px var(--pad);gap:18px;color:#aaa9a4;font-size:12px}.proof-quote{grid-column:1/2;align-self:end;padding:40px var(--pad);font-size:clamp(24px,3vw,44px);line-height:1.08;letter-spacing:-.035em}.proof:after{content:"";grid-column:3/4;grid-row:2/3;background:linear-gradient(180deg,transparent,rgba(255,255,255,.02))}
+.projects{display:grid;grid-template-columns:repeat(3,1fr);min-height:850px;border-bottom:1px solid var(--line)}.projects>.eyebrow{padding:36px var(--pad)}.projects h2{grid-column:2/4;margin:0;padding:34px var(--pad);font-size:clamp(46px,6vw,92px);font-weight:350;letter-spacing:-.06em;line-height:.98}.project-index{grid-column:1/2;display:flex;flex-direction:column;padding:42px var(--pad);gap:18px;color:#7c7c77;font-size:12px}.project-index span:first-child{color:#f2f1ec}.project-main{grid-column:2/4;margin:0;min-height:560px;position:relative;overflow:hidden}.project-main img{filter:saturate(.62) contrast(1.06) brightness(.62)}
+.services{border-bottom:1px solid var(--line);padding-bottom:80px}.services>.eyebrow{padding:36px var(--pad)}.services>h2{margin:0;padding:18px var(--pad) 56px;font-size:clamp(48px,6.2vw,96px);font-weight:350;line-height:.96;letter-spacing:-.06em;max-width:980px}.service-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}.service-card{min-height:260px;padding:28px var(--pad);border-bottom:1px solid var(--line);position:relative}.service-card:nth-child(3n+1),.service-card:nth-child(3n+2){border-right:1px solid var(--line)}.service-card>span{color:#676763;font-size:10px;letter-spacing:.16em}.service-card h3{font-size:24px;font-weight:400;letter-spacing:-.03em;margin:78px 0 12px}.service-card p{margin:0;color:#7f7f7a;font-size:12px;line-height:1.6;max-width:300px}
+.testimonial{display:grid;grid-template-columns:repeat(3,1fr);min-height:700px;border-bottom:1px solid var(--line)}.wide-image{margin:0;grid-column:1/3;min-height:700px}.wide-image img{filter:saturate(.6) contrast(1.06) brightness(.58)}.review-copy{grid-column:3/4;padding:36px var(--pad);display:flex;flex-direction:column;justify-content:flex-end}.review-copy h2{font-size:clamp(31px,3.3vw,52px);font-weight:350;letter-spacing:-.05em;line-height:1.02;margin:34px 0 24px}.review-copy p{font-size:13px;color:#858580;line-height:1.6}
+.contact{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}.contact-head{grid-column:1/2;padding:36px var(--pad)}.contact-head h2{font-size:clamp(40px,5vw,72px);font-weight:350;line-height:.98;letter-spacing:-.055em;margin:46px 0}.contact-form{grid-column:2/4;padding:36px var(--pad) 70px;display:grid;grid-template-columns:1fr 1fr;gap:22px 28px}.contact-form label{display:flex;flex-direction:column;gap:10px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#787873}.contact-form input,.contact-form select,.contact-form textarea{width:100%;background:transparent;border:0;border-bottom:1px solid var(--line-strong);color:#f3f2ed;border-radius:0;padding:13px 0;font:inherit;font-size:15px;outline:none}.contact-form textarea{resize:vertical}.contact-form select option{background:#111}.contact-form .message{grid-column:1/-1}.contact-form button{grid-column:2/3;justify-self:end;margin-top:12px;border:1px solid var(--line-strong);background:#f1f0eb;color:#070707;border-radius:999px;padding:13px 18px;font-size:11px;text-transform:uppercase;letter-spacing:.11em;cursor:pointer}
+.footer{display:grid;grid-template-columns:repeat(4,1fr);padding:48px var(--pad) 70px;gap:28px;font-size:11px;color:#777771}.footer-brand{font-weight:700;color:#f1f0eb;display:flex;flex-direction:column}.footer strong{display:block;color:#eee;font-weight:500;text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}.footer p{margin:0 0 7px;line-height:1.55}.footer a{display:block;margin-bottom:7px}.footer-site{align-self:end;color:#f2f1ed!important;text-transform:uppercase;letter-spacing:.1em}
+@media(max-width:900px){.grid-shell:before{left:50%}.grid-shell:after{display:none}.nav{grid-template-columns:1fr auto}.nav-links{display:none}.pill{font-size:9px}.hero-media{min-height:630px}.hero-title{top:11%;font-size:clamp(56px,16vw,110px);white-space:normal;display:block}.hero-title span{display:block}.hero-title span:last-child{margin-top:0}.hero-card{width:58vw}.intro,.proof,.projects,.contact,.testimonial{grid-template-columns:1fr 1fr}.intro>.eyebrow{grid-column:1/2}.intro h2{grid-column:1/3}.stat-block{grid-column:2/3;grid-row:1/2}.intro-copy{grid-column:1/2}.intro-image{grid-column:2/3}.proof-image{grid-column:2/3}.proof-list{gtrid-column:1/2;grid-row:2/3}.proof-quote{grid-column:1/2;grid-row:3/4}.projects h2{grid-column:1/3}.project-index{grid-column:1/2}.project-main{grid-column:2/3}.service-grid{grid-template-columns:1fr 1fr}.service-card:nth-child(3N+1),.service-card:nth-child(3N+2){border-right:0}.service-card:nth-child(odd){border-right:1px solid var(--line)}.wide-image{grid-column:1/2}.review-copy{grid-column:2/3}.contact-head{grid-column:1/2}.contact-form{grid-column:2/3;grid-template-columns:1fr}.contact-form .message,.contact-form button{grid-column:1}.footer{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){:root{--pad:18px}.grid-shell:before,.grid-shell:after{display:none}.nav{height:64px}.brand{font-size:9px;flex-direction:column;gap:1px}.pill{padding:9px 11px}.hero-media{min-height:610px;height:78svh}.hero-title{top:10%;font-size:clamp(58px,20vw,90px);line-height:.88}.hero-card{left:18px;right:18px;width:auto}.intro,.proof,.projects,.contact,.testimonial{display:block;min-height:0}.intro>.eyebrow,.intro h2,.stat-block,.intro-copy,.intro-image,.proof-score,.proof-image,.proof-list,.proof-quote,.projects>.eyebrow,.projects h2,.project-index,.project-main,.wide-image,.review-copy,.contact-head,.contact-form{display:block;width:auto;min-height:0}.intro h2,.projects h2,.services>h2{padding-top:22px;padding-bottom:44px}.stat-block{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.stat{font-size:76px}.intro-image,.proof-image,.project-main,.wide-image{height:66vw;min-height:310px}.proof-list{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.project-index{border-bottom:1px solid var(--line)}.service-grid{grid-template-columns:1fr}.service-card,.service-card:nth-child(odd){border-right:0}.service-card{min-height:220px}.review-copy{min-height:430px}.contact-form{padding-bottom:52px}.contact-form button{margin-top:18px}.footer{grid-template-columns:1fr;padding-bottom:50px}.footer-site{margin-top:16px}}
+</style><style>.preview-note{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:99;background:#f1f0eb;color:#070707;padding:10px 14px;border-radius:999px;font:600 10px/1 ui-sans-serif,sans-serif;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 8px 30px rgba(0,0,0,.35)}@media(max-width:620px){.preview-note{width:calc(100% - 28px);text-align:center}}</style></head>
+<body><main>
+<section class="hero grid-shell" id="home">
+  <nav class="nav shell-row">
+    <a class="brand" href="#home"><span>NOOR INTERIOR</span><span>KOLKATA</span></a>
+    <div class="nav-links"><a href="#studio">Studio</a><a href="#projects">Projects</a><a href="#services">Services</a><a href="#contact">Contact</a></div>
+    <a class="pill" href="#contact">Book a site visit ↗</a>
+  </nav>
+  <div class="hero-media">
+    <img src="https://noorinteriorkolkata.in/img/n1.jpg" alt="Noor Interior Kolkata project">
+    <div class="hero-shade"></div>
+    <div class="hero-title"><span>Noor</span><span>Interiors</span></div>
+    <div class="hero-card">
+      <p>Luxury, modern and vastu-conscious interiors designed for homes, offices and commercial spaces across Kolkata and beyond.</p>
+      <a href="#projects">View selected work ↗</a>
+    </div>
+  </div>
+</section>
+
+<section class="intro grid-shell" id="studio">
+  <div class="eyebrow">01 / Studio</div>
+  <h2>25+ years of interior experience, shaped around practical living and refined design.</h2>
+  <div class="stat-block"><span class="stat">25+</span><span class="stat-label">Years of experience</span></div>
+  <p class="intro-copy">Noor Interior Kolkata OPC Private Limited works across luxury, modern and classic interiors. Founder Sheikh Noor Amin brings experience from Mumbai and Kolkata, including branch-project execution work for ICICI Prudential Mutual Fund. The studio handles residential, commercial and office interiors with planning, craftsmanship and end-to-end execution.</p>
+  <figure class="intro-image"><img src="https://noorinteriorkolkata.in/img/n2.jpg" alt="Noor Interior residential interior"><figcaption>Residential interior / Noor Interior Kolkata</figcaption></figure>
+</section>
+
+<section class="proof grid-shell">
+  <div class="proof-score"><span class="big-number">4.8</span><span>Google rating</span><span>166 reviews</span></div>
+  <figure class="proof-image"><img src="https://noorinteriorkolkata.in/img/n3.jpg" alt="Noor Interior Kolkata interior work"></figure>
+  <div class="proof-list">
+    <span>01 — Full home interiors</span>
+    <span>02 — Turnkey execution</span>
+    <span>03 — Vastu-certified planning</span>
+    <span>04 — Residential + commercial</span>
+    <span>05 — Kolkata | Medinipur | Bardhaman | Durgapur</span>
+  </div>
+  <div class="proof-quote">“Design that balances beauty, function and positive energy.”</div>
+</section>
+
+<section class="projects grid-shell" id="projects">
+  <div class="eyebrow">02 / Featured work</div>
+  <h2>Spaces built for real living.</h2>
+  <div class="project-index">
+    <span>Living Room Interiors</span>
+    <span>2BHK & 3BHK Homes</span>
+    <span>Modular Kitchens</span>
+    <span>Office Interiors</span>
+    <span>Commercial Spaces</span>
+    <span>Renovation & Turnkey</span>
+  </div>
+  <figure class="project-main"><img src="https://noorinteriorkolkata.in/img/n4.jpg" alt="Noor Interior Kolkata recent project"><figcaption>Noor Interior Kolkata — modern residential project.</figcaption></figure>
+</section>
+
+<section class="services grid-shell" id="services">
+  <div class="eyebrow">03 / Services</div>
+  <h2>From planning and 3D concepts to complete execution.</h2>
+  <div class="service-grid">
+    <article class="service-card"><span>01</span><h3>Full Home Interior</h3><p>Complete space planning and execution for 2BHK, 3BHK, villas and apartments.</p></article>
+    <article class="service-card"><span>02</span><h3>Modular Kitchens</h3><p>Functional kitchens planned around storage, movement, materials and daily use.</p></article>
+    <article class="service-card"><span>03</span><h3>Wardrobes & Custom Furniture</h3><p>Custom storage, display units and furniture designed for the space and lifestyle.</p></article>
+    <article class="service-card"><span>04</span><h3>False Ceiling & Lighting</h3><p>Ceiling, wall panelling and lighting concepts that add depth and visual structure.</p></article>
+    <article class="service-card"><span>05</span><h3>Office & Commercial Interiors</h3><p>Smart, efficient and professional spaces for offices and commercial environments.</p></article>
+    <article class="service-card"><span>06</span><h3>Renovation & Turnkey</h3><p>End-to-end renovation with planning, material coordination, execution and handover.</p></article>
+  </div>
+</section>
+
+<section class="testimonial grid-shell">
+  <figure class="wide-image"><img src="https://noorinteriorkolkata.in/img/n5.jpg" alt="Noor Interior Kolkata home project"></figure>
+  <div class="review-copy">
+    <div class="eyebrow">04 / Reputation</div>
+    <h2>4.8 / 5 on Google from 166 reviews.</h2>
+    <p>Google reviewers highlight professional execution, service quality, workmanship and a design process that stays attentive to client expectations.</p>
+  </div>
+</section>
+
+<section class="contact grid-shell" id="contact">
+  <div class="contact-head">
+    <div class="eyebrow">05 / Start a project</div>
+    <h2>Ready to plan your space?</h2>
+    <p style="color:#858580;line-height:1.7;font-size:13px;margin-top:30px">Primary Google Maps contact: +91 89101 96865<br>Free consultation line on website: +91 95470 75554<br>Email: Noorji855@gmail.com<br>Minimum project value stated by the studio: ₹5 lakh.</p>
+  </div>
+  <form class="contact-form" id="preview-form">
+    <label>Name<input name="name" required></label>
+    <label>Phone<input name="phone" required></label>
+    <label>Email<input type="email" name="email"></label>
+    <label>Project type<select name="projectType"><option>2BHK / 3BHK Home</option><option>Villa</option><option>Office</option><option>Commercial</option><option>Renovation</option></select></label>
+    <label class="message">Tell us about your space<textarea name="message" rows="5" required></textarea></label>
+    <button type="submit">Request consultation ↗</button>
+  </form>
+</section>
+
+<footer class="footer grid-shell">
+  <div class="footer-brand"><span>NOOR INTERIOR</span><span>KOLKATA</span></div>
+  <div><strong>Kolkata studio</strong><p>21/A, Martin Para Rd, Martin Para, VIP Nagar, Kolkata, West Bengal 700100</p><p>Mon–Sat / 06:00–21:00<br>Sunday / Closed</p></div>
+  <div><strong>Contact</strong><a href="tel:+918910196865">+91 89101 96865</a><a href="mailto:noorji855@gmail.com">Noorji855@gmail.com</a><a href="https://wa.me/8910196865" target="_blank">WhatsApp ↗</a></div>
+  <div><strong>Social</strong><a href="https://www.facebook.com/NoorInterior" target="_blank">Facebook ↗</a><a href="https://www.instagram.com/InteriorNoor/" target="_blank">Instagram ↗</a><a href="https://www.youtube.com/channel/UC5sQHBxuk3XQdlr79fkqRZQ" target="_blank">YouTube ↗</a></div>
+  <a class="footer-site" href="https://noorinteriorkolkata.in/" target="_blank">Official website ↗</a>
+</footer>
+</main>
+<div class="preview-note" id="note">Noor Interior Kolkata — redesign concept</div>
+<script>document.getElementById('preview-form').addEventListener('submit',e=>{e.preventDefault();const n=document.getElementById('note');n.textContent='Demo form only — backend can be connected after approval.';setTimeout(()=>n.textContent='Noor Interior Kolkata — redesign concept',5000)});</script>
+</body></html>
