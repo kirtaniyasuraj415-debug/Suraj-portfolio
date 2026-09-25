@@ -93,7 +93,6 @@ export default function ScrollMotion() {
           el.style.setProperty("--motion-x", "0px");
           el.style.setProperty("--motion-y", "0px");
           el.style.setProperty("--motion-scale", "1");
-          el.style.setProperty("--motion-blur", "0px");
           return;
         }
 
@@ -121,7 +120,6 @@ export default function ScrollMotion() {
         el.style.setProperty("--motion-x", `${x.toFixed(2)}px`);
         el.style.setProperty("--motion-y", `${(y + parallax).toFixed(2)}px`);
         el.style.setProperty("--motion-scale", scale.toFixed(4));
-        el.style.setProperty("--motion-blur", `${((1 - progress) * 2.4).toFixed(2)}px`);
 
         if (el.classList.contains("project-card")) {
           el.style.setProperty("--project-progress", progress.toFixed(4));
