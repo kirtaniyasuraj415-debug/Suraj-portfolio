@@ -709,7 +709,7 @@ html.cinematic-intro-done .site-header{animation:introHeaderSettle .72s cubic-be
   will-change:translate,scale;
 }
 .cinematic-project-visual .project-backword{
-  translate:0 calc(var(--visual-shift,0px) * -.25);
+  translate:0 var(--visual-word-shift,0px);
 }
 .why-card.cinematic-scroll-item:nth-child(2),
 .process-grid article.cinematic-scroll-item:nth-child(2){
@@ -775,7 +775,7 @@ html.cinematic-intro-done .site-header{animation:introHeaderSettle .72s cubic-be
   }
   .project-card.cinematic-scroll-item{rotate:0deg!important}
   .cinematic-project-visual .website-mockup{
-    translate:0 calc(var(--visual-shift,0px) * .65);
+    translate:0 var(--visual-shift,0px);
   }
 }
 
