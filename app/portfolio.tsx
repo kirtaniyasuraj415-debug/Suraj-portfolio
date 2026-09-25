@@ -248,7 +248,15 @@ export default function Portfolio() {
           <article
             key={title}
             className={`why-card ${index === 0 || index === 3 ? "why-card-large" : "why-card-small"}`}
+            onPointerDown={(event) => {
+              const card = event.currentTarget;
+              card.classList.remove("why-card-pulse");
+              void card.offsetWidth;
+              card.classList.add("why-card-pulse");
+              window.setTimeout(() => card.classList.remove("why-card-pulse"), 1400);
+            }}
           >
+            <span className="why-card-live-bg" aria-hidden="true" />
             <div className="why-card-topline">
               <span className="why-card-index">0{index + 1}</span>
               <span className="why-card-icon"><Icon size={18}/></span>
