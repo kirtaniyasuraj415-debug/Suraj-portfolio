@@ -74,6 +74,17 @@ export default function ScrollMotion() {
         const rect = hero.getBoundingClientRect();
         const heroProgress = clamp(-rect.top / Math.max(rect.height * 0.92, 1));
         hero.style.setProperty("--hero-scroll", heroProgress.toFixed(4));
+        hero.style.setProperty("--hero-name-y", `${(-heroProgress * 118).toFixed(2)}px`);
+        hero.style.setProperty("--hero-name-scale", (1 - heroProgress * 0.055).toFixed(4));
+        hero.style.setProperty("--hero-name-opacity", (1 - heroProgress * 0.82).toFixed(4));
+        hero.style.setProperty("--hero-portrait-y", `${(-heroProgress * 86).toFixed(2)}px`);
+        hero.style.setProperty("--hero-portrait-scale", (1 - heroProgress * 0.19).toFixed(4));
+        hero.style.setProperty("--hero-intro-y", `${(-heroProgress * 46).toFixed(2)}px`);
+        hero.style.setProperty("--hero-intro-opacity", (1 - heroProgress * 1.05).toFixed(4));
+        hero.style.setProperty("--hero-card-y", `${(-heroProgress * 72).toFixed(2)}px`);
+        hero.style.setProperty("--hero-card-scale", (1 - heroProgress * 0.12).toFixed(4));
+        hero.style.setProperty("--hero-card-opacity", (1 - heroProgress * 0.92).toFixed(4));
+        hero.style.setProperty("--hero-atmosphere-y", `${(heroProgress * 34).toFixed(2)}px`);
       }
 
       items.forEach(({ el, index, direction }) => {
