@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import EnquiryForm from "@/components/enquiry-form";
+import PortfolioChatbot from "@/components/portfolio-chatbot";
 import { DEFAULT_PORTFOLIO_PROJECTS, type PortfolioProject } from "@/lib/portfolio-projects";
 
 const navigation = [
@@ -240,11 +241,19 @@ export default function Portfolio() {
           { icon: Smartphone, title: "Mobile First", copy: "Every page is considered for the phone experience, not treated as a desktop afterthought." },
           { icon: Gauge, title: "Performance Minded", copy: "Lean interfaces, responsive assets, and practical implementation choices that keep the experience focused." },
           { icon: MessageCircle, title: "Direct Collaboration", copy: "You work directly with me from the first idea through design, development, and launch." },
-        ].map(({ icon: Icon, title, copy }) => (
-          <article key={title} className="why-card premium-glow-card">
-            <span className="why-card-icon"><Icon size={20}/></span>
-            <h3 className="why-card-title">{title}</h3>
-            <p className="why-card-copy">{copy}</p>
+        ].map(({ icon: Icon, title, copy }, index) => (
+          <article
+            key={title}
+            className={`why-card ${index === 0 || index === 3 ? "why-card-large" : "why-card-small"}`}
+          >
+            <div className="why-card-topline">
+              <span className="why-card-index">0{index + 1}</span>
+              <span className="why-card-icon"><Icon size={18}/></span>
+            </div>
+            <div className="why-card-body">
+              <h3 className="why-card-title">{title}</h3>
+              <p className="why-card-copy">{copy}</p>
+            </div>
           </article>
         ))}
       </div>
@@ -425,5 +434,7 @@ export default function Portfolio() {
         </div>
       </DialogContent>
     </Dialog>
+
+    <PortfolioChatbot />
   </main>;
 }
