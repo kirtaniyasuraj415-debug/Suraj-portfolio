@@ -131,13 +131,16 @@ export default function ScrollMotion() {
       projectVisuals.forEach((visual) => {
         if (reduceMotion) {
           visual.style.setProperty("--visual-shift", "0px");
+          visual.style.setProperty("--visual-word-shift", "0px");
           visual.style.setProperty("--visual-scale", "1");
           return;
         }
         const rect = visual.getBoundingClientRect();
         const center = rect.top + rect.height / 2;
         const normalized = clamp((center - vh / 2) / vh, -1, 1);
-        visual.style.setProperty("--visual-shift", `${(-normalized * 24).toFixed(2)}px`);
+        const visualShift = -normalized * 24;
+        visual.style.setProperty("--visual-shift", `${visualShift.toFixed(2)}px`);
+        visual.style.setProperty("--visual-word-shift", `${(-visualShift * 0.25).toFixed(2)}px`);
         visual.style.setProperty("--visual-scale", (1.045 - Math.abs(normalized) * 0.025).toFixed(4));
       });
     };
