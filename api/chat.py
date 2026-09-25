@@ -6,7 +6,7 @@ import urllib.error
 
 NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "").strip()
 NVIDIA_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
-MODEL = "z-ai/glm-5-3-flash"
+MODEL = "z-ai/glm-5.1"
 
 SYSTEM_PROMPT = """You are the official SURAJ.WEB portfolio assistant for Suraj Kirtaniya, an independent web developer.
 
