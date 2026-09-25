@@ -134,9 +134,16 @@ export async function submitRating(input: unknown) {
       `Rating: ${rating}/5`,
       `Review: ${message}`,
       "",
-      `Approve: /rating_approve ${nextId}`,
-      `Reject: /rating_reject ${nextId}`,
+      "Use the buttons below, or type:",
+      `/rating_approve ${nextId}`,
+      `/rating_reject ${nextId}`,
     ].join("\n"),
+    reply_markup: {
+      inline_keyboard: [[
+        { text: "✅ Approve", callback_data: `rating:approve:${nextId}` },
+        { text: "❌ Reject", callback_data: `rating:reject:${nextId}` },
+      ]],
+    },
   }).catch(() => {});
 
   return review;
@@ -164,7 +171,63 @@ async function adminReply(text: string) {
   await telegramApi("sendMessage", { chat_id: ADMIN_CHAT_ID, text, disable_web_page_preview: true });
 }
 
+async function answerCallback(callbackQueryId: string, text: string) {
+  await telegramApi("answerCallbackQuery", {
+    callback_query_id: callbackQueryId,
+    text,
+    show_alert: false,
+  }).catch(() => {});
+}
+
+async function clearRatingButtons(chatId: string | number, messageId: number) {
+  await telegramApi("editMessageReplyMarkup", {
+    chat_id: chatId,
+    message_id: messageId,
+    reply_markup: { inline_keyboard: [] },
+  }).catch(() => {});
+}
+
+function normalizeRatingCommand(command: string) {
+  const aliases: Record<string, string> = {
+    reting_approve: "rating_approve",
+    reting_reject: "rating_reject",
+    reting_delete: "rating_delete",
+    approve_rating: "rating_approve",
+    reject_rating: "rating_reject",
+    delete_rating: "rating_delete",
+    approve: "rating_approve",
+    reject: "rating_reject",
+  };
+  return aliases[command] || command;
+}
+
 export async function handleTelegramRatingUpdate(update: any) {
+  const callback = update?.callback_query;
+  if (callback?.message?.chat?.id && String(callback.message.chat.id) === ADMIN_CHAT_ID) {
+    const data = String(callback.data || "");
+    const match = data.match(/^rating:(approve|reject|delete):(\d+)$/);
+    if (!match) return false;
+
+    const action = match[1];
+    const id = Number(match[2]);
+    try {
+      if (action === "approve") {
+        const review = await updateStatus(id, "approved");
+        await answerCallback(String(callback.id), `Rating #${id} approved`);
+        await clearRatingButtons(callback.message.chat.id, callback.message.message_id);
+        await adminReply(`✅ Rating #${id} from ${review.name} is now published.`);
+      } else {
+        await updateStatus(id, "delete");
+        await answerCallback(String(callback.id), `Rating #${id} removed`);
+        await clearRatingButtons(callback.message.chat.id, callback.message.message_id);
+        await adminReply(`✅ Rating #${id} rejected and removed.`);
+      }
+    } catch {
+      await answerCallback(String(callback.id), `Rating #${id} was not found`);
+    }
+    return true;
+  }
+
   const message = update?.message;
   if (!message?.chat?.id || String(message.chat.id) !== ADMIN_CHAT_ID) return false;
   const text = String(message.text || "").trim();
@@ -172,7 +235,8 @@ export async function handleTelegramRatingUpdate(update: any) {
 
   const firstLine = text.split("\n")[0];
   const parts = firstLine.split(/\s+/);
-  const command = (parts[0] || "").replace(/^\//, "").replace(/@.+$/, "").replace(/-/g, "_").toLowerCase();
+  const rawCommand = (parts[0] || "").replace(/^\//, "").replace(/@.+$/, "").replace(/-/g, "_").toLowerCase();
+  const command = normalizeRatingCommand(rawCommand);
   const id = Number(parts[1]);
 
   if (command === "ratings_pending") {
@@ -199,6 +263,12 @@ export async function handleTelegramRatingUpdate(update: any) {
       "/rating_approve 1",
       "/rating_reject 1",
       "/rating_delete 1",
+      "",
+      "Easy shortcuts also work:",
+      "/approve 1",
+      "/reject 1",
+      "",
+      "For new ratings, simply tap the ✅ Approve or ❌ Reject button.",
     ].join("\n"));
     return true;
   }
