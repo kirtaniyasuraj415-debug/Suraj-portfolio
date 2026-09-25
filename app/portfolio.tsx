@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import EnquiryForm from "@/components/enquiry-form";
 import PortfolioChatbot from "@/components/portfolio-chatbot";
+import ScrollMotion from "@/components/scroll-motion";
 import { DEFAULT_PORTFOLIO_PROJECTS, type PortfolioProject } from "@/lib/portfolio-projects";
 
 const navigation = [
@@ -435,6 +436,7 @@ export default function Portfolio() {
       </DialogContent>
     </Dialog>
 
+    <ScrollMotion />
     <PortfolioChatbot />
   </main>;
 }
