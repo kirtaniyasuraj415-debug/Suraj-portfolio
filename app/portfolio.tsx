@@ -401,6 +401,12 @@ export default function Portfolio() {
 
     <section id="contact" className="contact-section">
       <div className="content-width">
+        <div className="contact-art" aria-hidden="true">
+          <span className="contact-art-orbit contact-art-orbit-one" />
+          <span className="contact-art-orbit contact-art-orbit-two" />
+          <span className="contact-art-beam" />
+          <span className="contact-art-glow" />
+        </div>
         <SectionLabel>Let’s Make It Happen</SectionLabel>
         <div className="contact-main">
           <h2>Have a project<br/>in <em>mind?</em></h2>
