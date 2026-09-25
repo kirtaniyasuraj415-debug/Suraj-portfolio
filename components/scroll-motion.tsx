@@ -2,44 +2,155 @@
 
 import { useEffect } from "react";
 
+const clamp = (value: number, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+const ease = (value: number) => {
+  const t = clamp(value);
+  return 1 - Math.pow(1 - t, 3);
+};
+
+type MotionItem = {
+  el: HTMLElement;
+  index: number;
+  direction: "left" | "right" | "up" | "scale";
+};
+
 export default function ScrollMotion() {
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) return;
 
-    const sections = Array.from(
-      document.querySelectorAll<HTMLElement>(
-        "main > section:not(.hero), .technology-row, .projects-heading, .project-card, .service-row, .process-grid article, #feedback article, #feedback form, details"
-      )
-    );
+    const raw: Array<{ selector: string; direction: MotionItem["direction"] }> = [
+      { selector: ".skills-marquee", direction: "up" },
+      { selector: ".about-label", direction: "left" },
+      { selector: ".about-copy", direction: "right" },
+      { selector: ".technology-row > span", direction: "up" },
+      { selector: ".projects-heading", direction: "right" },
+      { selector: ".project-card", direction: "scale" },
+      { selector: "[aria-labelledby='why-heading'] .section-heading", direction: "up" },
+      { selector: ".why-card", direction: "up" },
+      { selector: ".services-section .section-heading", direction: "up" },
+      { selector: ".service-row", direction: "up" },
+      { selector: ".process-section > .section-label", direction: "left" },
+      { selector: ".process-section > h2", direction: "up" },
+      { selector: ".process-grid article", direction: "up" },
+      { selector: ".process-section > .mt-12", direction: "up" },
+      { selector: "#feedback > div > div:first-child", direction: "left" },
+      { selector: "#feedback article", direction: "right" },
+      { selector: "#feedback form", direction: "up" },
+      { selector: "details", direction: "up" },
+      { selector: ".contact-section .section-label", direction: "left" },
+      { selector: ".contact-main h2", direction: "left" },
+      { selector: ".contact-arrow", direction: "scale" },
+      { selector: ".contact-bottom", direction: "up" },
+      { selector: ".site-footer > *", direction: "up" },
+    ];
 
-    sections.forEach((element, index) => {
-      element.classList.add("scroll-reveal");
-      element.style.setProperty("--reveal-index", String(index % 5));
-    });
+    const items: MotionItem[] = [];
+    let counter = 0;
+    for (const group of raw) {
+      document.querySelectorAll<HTMLElement>(group.selector).forEach((el) => {
+        if (el.dataset.cinematicMotion === "true") return;
+        el.dataset.cinematicMotion = "true";
+        el.classList.add("cinematic-scroll-item");
+        const direction =
+          group.selector === ".project-card"
+            ? (counter % 2 === 0 ? "left" : "right")
+            : group.direction;
+        items.push({ el, index: counter++, direction });
+      });
+    }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            (entry.target as HTMLElement).classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.12,
-        rootMargin: "0px 0px -8% 0px",
-      }
-    );
-
-    sections.forEach((element) => observer.observe(element));
+    const projectVisuals = Array.from(document.querySelectorAll<HTMLElement>(".project-visual"));
+    projectVisuals.forEach((el) => el.classList.add("cinematic-project-visual"));
 
     const hero = document.querySelector<HTMLElement>(".hero");
-    hero?.classList.add("hero-motion-ready");
-    requestAnimationFrame(() => hero?.classList.add("hero-motion-visible"));
+    let frame = 0;
+    let ticking = false;
 
-    return () => observer.disconnect();
+    const render = () => {
+      ticking = false;
+      const vh = window.innerHeight || 1;
+
+      if (hero && !reduceMotion) {
+        const rect = hero.getBoundingClientRect();
+        const heroProgress = clamp(-rect.top / Math.max(rect.height * 0.92, 1));
+        hero.style.setProperty("--hero-scroll", heroProgress.toFixed(4));
+      }
+
+      items.forEach(({ el, index, direction }) => {
+        if (reduceMotion) {
+          el.style.setProperty("--motion-opacity", "1");
+          el.style.setProperty("--motion-x", "0px");
+          el.style.setProperty("--motion-y", "0px");
+          el.style.setProperty("--motion-scale", "1");
+          el.style.setProperty("--motion-blur", "0px");
+          return;
+        }
+
+        const rect = el.getBoundingClientRect();
+        const rawProgress = (vh * 0.94 - rect.top) / Math.max(vh * 0.68 + rect.height * 0.45, 1);
+        const stagger = Math.min((index % 4) * 0.045, 0.135);
+        const progress = ease(clamp((rawProgress - stagger) / (1 - stagger)));
+
+        let x = 0;
+        let y = (1 - progress) * 54;
+        let scale = 0.965 + progress * 0.035;
+
+        if (direction === "left") x = -(1 - progress) * 72;
+        if (direction === "right") x = (1 - progress) * 72;
+        if (direction === "scale") {
+          y = (1 - progress) * 72;
+          scale = 0.91 + progress * 0.09;
+        }
+
+        const center = rect.top + rect.height / 2;
+        const centerOffset = clamp((center - vh / 2) / vh, -1, 1);
+        const parallax = -centerOffset * 14 * progress;
+
+        el.style.setProperty("--motion-opacity", progress.toFixed(4));
+        el.style.setProperty("--motion-x", `${x.toFixed(2)}px`);
+        el.style.setProperty("--motion-y", `${(y + parallax).toFixed(2)}px`);
+        el.style.setProperty("--motion-scale", scale.toFixed(4));
+        el.style.setProperty("--motion-blur", `${((1 - progress) * 5).toFixed(2)}px`);
+
+        if (el.classList.contains("project-card")) {
+          el.style.setProperty("--project-progress", progress.toFixed(4));
+        }
+      });
+
+      projectVisuals.forEach((visual) => {
+        if (reduceMotion) {
+          visual.style.setProperty("--visual-shift", "0px");
+          visual.style.setProperty("--visual-scale", "1");
+          return;
+        }
+        const rect = visual.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+        const normalized = clamp((center - vh / 2) / vh, -1, 1);
+        visual.style.setProperty("--visual-shift", `${(-normalized * 24).toFixed(2)}px`);
+        visual.style.setProperty("--visual-scale", (1.045 - Math.abs(normalized) * 0.025).toFixed(4));
+      });
+    };
+
+    const requestRender = () => {
+      if (ticking) return;
+      ticking = true;
+      frame = window.requestAnimationFrame(render);
+    };
+
+    render();
+    window.addEventListener("scroll", requestRender, { passive: true });
+    window.addEventListener("resize", requestRender);
+
+    return () => {
+      window.removeEventListener("scroll", requestRender);
+      window.removeEventListener("resize", requestRender);
+      window.cancelAnimationFrame(frame);
+      items.forEach(({ el }) => {
+        delete el.dataset.cinematicMotion;
+        el.classList.remove("cinematic-scroll-item");
+      });
+      projectVisuals.forEach((el) => el.classList.remove("cinematic-project-visual"));
+    };
   }, []);
 
   return null;
