@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from 
 import EnquiryForm from "@/components/enquiry-form";
 import PortfolioChatbot from "@/components/portfolio-chatbot";
 import ScrollMotion from "@/components/scroll-motion";
+import CinematicIntro from "@/components/cinematic-intro";
 import { DEFAULT_PORTFOLIO_PROJECTS, type PortfolioProject } from "@/lib/portfolio-projects";
 
 const navigation = [
@@ -168,6 +169,7 @@ export default function Portfolio() {
   </article>;
 
   return <main id="top">
+    <CinematicIntro />
     <section className="hero" aria-labelledby="hero-title">
       <div className="hero-atmosphere" aria-hidden="true" />
       <header className="site-header">
