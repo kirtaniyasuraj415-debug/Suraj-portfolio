@@ -1261,3 +1261,209 @@ details.cinematic-scroll-item{
     transform:none!important;
   }
 }
+
+
+/* Performance + color pass: blend Why cards into the page while keeping the glow alive. */
+.why-card{
+  background:
+    linear-gradient(180deg,#150b07 0%,#120805 55%,#0f0704 100%)!important;
+  border-color:#6a3a2454!important;
+  box-shadow:
+    inset 0 1px 0 #ffffff0d,
+    inset 0 -1px 0 #e8793410,
+    0 14px 34px #00000024!important;
+  contain:layout paint;
+  transform:translateZ(0);
+  backface-visibility:hidden;
+}
+.why-card:before{display:none!important}
+.why-card:after{
+  inset:0!important;
+  opacity:.24!important;
+  background:
+    linear-gradient(115deg,#ffffff08 0%,transparent 25%,transparent 72%,#ef7b3210 100%)!important;
+  background-size:100% 100%!important;
+  animation:none!important;
+}
+.why-card>.why-card-live-bg{
+  inset:-28%!important;
+  opacity:.68!important;
+  background:
+    radial-gradient(circle at 28% 34%,#f078322d 0%,#b83b1118 27%,transparent 57%),
+    radial-gradient(circle at 76% 72%,#ff8d4334 0%,#c74b171a 24%,transparent 55%)!important;
+  background-size:100% 100%!important;
+  filter:none!important;
+  animation:whyGlowAlive 8.8s cubic-bezier(.45,0,.2,1) infinite alternate!important;
+  will-change:transform,opacity!important;
+}
+.why-card>.why-card-live-bg:before,
+.why-card>.why-card-live-bg:after{
+  display:none!important;
+}
+.why-card:nth-child(2)>.why-card-live-bg{animation-delay:-2.2s!important}
+.why-card:nth-child(3)>.why-card-live-bg{animation-delay:-4.4s!important}
+.why-card:nth-child(4)>.why-card-live-bg{animation-delay:-6.1s!important}
+.why-card:hover>.why-card-live-bg{
+  opacity:.82!important;
+  animation-duration:6.2s!important;
+}
+.why-card.why-card-pulse>.why-card-live-bg{
+  animation:whyGlowTap 1.35s cubic-bezier(.16,.84,.24,1) both!important;
+  opacity:.9!important;
+}
+.why-card-title{color:#f0e7df!important}
+.why-card-copy{color:#9c8d83!important}
+.why-card-icon{
+  border-color:#9f5b3438!important;
+  background:#1b0d08b8!important;
+  color:#e1854f!important;
+}
+@keyframes whyGlowAlive{
+  0%{transform:translate3d(-7%,5%,0) scale(.96) rotate(-1deg);opacity:.55}
+  42%{transform:translate3d(5%,-4%,0) scale(1.035) rotate(.5deg);opacity:.72}
+  100%{transform:translate3d(9%,7%,0) scale(1.08) rotate(1.2deg);opacity:.64}
+}
+@keyframes whyGlowTap{
+  0%{transform:translate3d(0,0,0) scale(.98);opacity:.62}
+  35%{transform:translate3d(-7%,-7%,0) scale(1.12);opacity:.94}
+  72%{transform:translate3d(7%,3%,0) scale(1.06);opacity:.78}
+  100%{transform:translate3d(0,0,0) scale(1);opacity:.7}
+}
+
+/* Final CTA v3: remove cheap watermark/rings and use restrained directional light. */
+.contact-section{
+  background:
+    radial-gradient(ellipse 64% 52% at 5% 14%,#50200f1f 0%,transparent 70%),
+    radial-gradient(ellipse 54% 62% at 98% 82%,#6f240d18 0%,transparent 72%),
+    linear-gradient(180deg,#0c0503 0%,#090402 100%)!important;
+}
+.contact-section>.content-width{
+  background:
+    linear-gradient(135deg,#160b07f2 0%,#100704f5 58%,#120805f3 100%)!important;
+  border-color:#6e3d2757!important;
+  box-shadow:
+    inset 0 1px 0 #ffffff10,
+    inset 0 -1px 0 #dc6e2e0c,
+    0 26px 70px #00000042!important;
+}
+.contact-main h2:after{display:none!important}
+.contact-art-orbit{display:none!important}
+.contact-art-glow{
+  width:66%!important;
+  right:-20%!important;
+  top:-20%!important;
+  background:
+    radial-gradient(circle at 45% 50%,#f57c3535 0%,#d4581f18 28%,transparent 68%)!important;
+  filter:blur(12px)!important;
+  animation:contactGlowTravel 11s ease-in-out infinite alternate!important;
+}
+.contact-art-beam{
+  width:122%!important;
+  height:32%!important;
+  right:-34%!important;
+  top:13%!important;
+  transform:rotate(-13deg)!important;
+  background:
+    linear-gradient(90deg,transparent 0%,#f69b5b05 34%,#f3813c14 52%,#db591e09 66%,transparent 88%)!important;
+  filter:blur(8px)!important;
+  opacity:.58!important;
+}
+.contact-art-line{
+  position:absolute;
+  z-index:-1;
+  display:block;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#f08a4a2d,transparent);
+  transform-origin:center;
+  pointer-events:none;
+}
+.contact-art-line-one{
+  width:74%;
+  right:-10%;
+  top:30%;
+  transform:rotate(-15deg);
+  animation:contactLineDriftOne 9s ease-in-out infinite alternate;
+}
+.contact-art-line-two{
+  width:58%;
+  right:-3%;
+  top:48%;
+  transform:rotate(-15deg);
+  opacity:.58;
+  animation:contactLineDriftTwo 11s ease-in-out infinite alternate;
+}
+.contact-art-flare{
+  position:absolute;
+  z-index:-1;
+  width:190px;
+  height:190px;
+  right:7%;
+  top:19%;
+  background:
+    linear-gradient(135deg,transparent 48%,#ff8a4218 49.5%,#ff8a4218 50.5%,transparent 52%),
+    linear-gradient(45deg,transparent 48%,#ff8a420e 49.5%,#ff8a420e 50.5%,transparent 52%);
+  opacity:.65;
+  transform:rotate(10deg);
+  animation:contactFlareDrift 10s ease-in-out infinite alternate;
+}
+@keyframes contactLineDriftOne{
+  from{translate:-4% 5%;opacity:.35}
+  to{translate:8% -4%;opacity:.72}
+}
+@keyframes contactLineDriftTwo{
+  from{translate:6% -3%;opacity:.22}
+  to{translate:-6% 5%;opacity:.54}
+}
+@keyframes contactFlareDrift{
+  from{transform:translate3d(-8px,8px,0) rotate(7deg) scale(.94);opacity:.38}
+  to{transform:translate3d(12px,-10px,0) rotate(13deg) scale(1.05);opacity:.7}
+}
+
+@media(max-width:760px){
+  .why-card{
+    box-shadow:inset 0 1px 0 #ffffff0b,0 9px 22px #0000001f!important;
+    contain:layout paint style;
+  }
+  .why-card>.why-card-live-bg{
+    inset:-20%!important;
+    opacity:.58!important;
+    animation-duration:10.5s!important;
+  }
+  .why-card:hover{transform:none!important}
+  .contact-art-glow{
+    width:105vw!important;
+    right:-58vw!important;
+    top:-4%!important;
+    filter:blur(10px)!important;
+  }
+  .contact-art-beam{
+    width:145%!important;
+    right:-72%!important;
+    top:16%!important;
+    filter:blur(6px)!important;
+  }
+  .contact-art-line-one{
+    width:96%;
+    right:-30%;
+    top:30%;
+  }
+  .contact-art-line-two{
+    width:84%;
+    right:-20%;
+    top:44%;
+  }
+  .contact-art-flare{
+    width:126px;
+    height:126px;
+    right:2%;
+    top:20%;
+    opacity:.48;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .why-card>.why-card-live-bg,
+  .contact-art-line,
+  .contact-art-flare{
+    animation:none!important;
+  }
+}
