@@ -1113,3 +1113,151 @@ details.cinematic-scroll-item{
     animation:none!important;
   }
 }
+
+
+/* Motion cleanup: preserve every reveal/parallax movement, but keep content sharp. */
+.cinematic-scroll-item{
+  filter:none!important;
+  will-change:translate,scale,opacity!important;
+}
+.scroll-reveal,
+.scroll-reveal.is-visible{
+  filter:none!important;
+}
+@media(max-width:760px){
+  .scroll-reveal{filter:none!important}
+}
+
+/* Live Why Work With Me gradient — ambient at rest, stronger on touch/click. */
+.why-card{
+  cursor:default;
+}
+.why-card>.why-card-live-bg{
+  position:absolute;
+  z-index:0;
+  inset:-18%;
+  border-radius:inherit;
+  overflow:hidden;
+  pointer-events:none;
+  opacity:.95;
+  background:
+    radial-gradient(circle at 16% 24%,#ffb16f24 0%,#f57a3220 18%,transparent 48%),
+    radial-gradient(circle at 86% 78%,#ff7c2f31 0%,#b53e111e 23%,transparent 53%),
+    linear-gradient(120deg,transparent 20%,#ffb7780a 46%,transparent 68%);
+  background-size:145% 145%,160% 160%,210% 210%;
+  animation:whyAuroraField 9s cubic-bezier(.45,0,.2,1) infinite alternate;
+  will-change:transform,background-position,opacity;
+}
+.why-card>.why-card-live-bg:before,
+.why-card>.why-card-live-bg:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+  will-change:transform,opacity;
+}
+.why-card>.why-card-live-bg:before{
+  width:62%;
+  aspect-ratio:1;
+  left:4%;
+  top:18%;
+  background:radial-gradient(circle,#ff994f44 0%,#ed6a2827 30%,#9a300e0d 57%,transparent 72%);
+  filter:blur(16px);
+  animation:whyAuroraBlobA 7.4s ease-in-out infinite alternate;
+}
+.why-card>.why-card-live-bg:after{
+  width:72%;
+  aspect-ratio:1;
+  right:-8%;
+  bottom:-18%;
+  background:radial-gradient(circle,#ff7c304d 0%,#e95e222d 28%,#7b250c12 54%,transparent 73%);
+  filter:blur(20px);
+  animation:whyAuroraBlobB 8.6s ease-in-out infinite alternate;
+}
+.why-card:nth-child(2)>.why-card-live-bg{
+  animation-delay:-2.3s;
+  animation-direction:alternate-reverse;
+}
+.why-card:nth-child(2)>.why-card-live-bg:before{animation-delay:-1.4s}
+.why-card:nth-child(2)>.why-card-live-bg:after{animation-delay:-3.1s}
+.why-card:nth-child(3)>.why-card-live-bg{
+  animation-delay:-4.1s;
+}
+.why-card:nth-child(3)>.why-card-live-bg:before{animation-delay:-2.7s}
+.why-card:nth-child(3)>.why-card-live-bg:after{animation-delay:-.9s}
+.why-card:nth-child(4)>.why-card-live-bg{
+  animation-delay:-5.4s;
+  animation-direction:alternate-reverse;
+}
+.why-card:nth-child(4)>.why-card-live-bg:before{animation-delay:-4.2s}
+.why-card:nth-child(4)>.why-card-live-bg:after{animation-delay:-2s}
+.why-card>.why-card-topline,
+.why-card>.why-card-body{
+  position:relative;
+  z-index:2;
+}
+.why-card:hover>.why-card-live-bg{
+  opacity:1;
+  animation-duration:6.6s;
+}
+.why-card:hover>.why-card-live-bg:before{animation-duration:5.4s}
+.why-card:hover>.why-card-live-bg:after{animation-duration:6s}
+.why-card.why-card-pulse>.why-card-live-bg{
+  opacity:1;
+}
+.why-card.why-card-pulse>.why-card-live-bg:after{
+  animation:whyAuroraTap 1.35s cubic-bezier(.16,.84,.24,1) both;
+}
+.why-card.why-card-pulse>.why-card-live-bg:before{
+  animation-duration:3.7s;
+}
+@keyframes whyAuroraField{
+  0%{
+    transform:translate3d(-2%,2%,0) rotate(-1deg) scale(1);
+    background-position:0% 15%,100% 82%,0% 50%;
+  }
+  48%{
+    transform:translate3d(4%,-3%,0) rotate(.7deg) scale(1.035);
+    background-position:34% 4%,68% 96%,52% 42%;
+  }
+  100%{
+    transform:translate3d(-1%,5%,0) rotate(1.4deg) scale(1.06);
+    background-position:74% 32%,18% 58%,100% 55%;
+  }
+}
+@keyframes whyAuroraBlobA{
+  0%{transform:translate3d(-12%,8%,0) scale(.84);opacity:.48}
+  50%{transform:translate3d(30%,-12%,0) scale(1.14);opacity:.82}
+  100%{transform:translate3d(56%,20%,0) scale(.96);opacity:.62}
+}
+@keyframes whyAuroraBlobB{
+  0%{transform:translate3d(12%,12%,0) scale(1.02);opacity:.48}
+  45%{transform:translate3d(-24%,-22%,0) scale(.9);opacity:.76}
+  100%{transform:translate3d(-48%,6%,0) scale(1.13);opacity:.66}
+}
+@keyframes whyAuroraTap{
+  0%{transform:translate3d(0,0,0) scale(.92);opacity:.58}
+  35%{transform:translate3d(-18%,-16%,0) scale(1.3);opacity:1}
+  72%{transform:translate3d(-34%,8%,0) scale(1.08);opacity:.82}
+  100%{transform:translate3d(-12%,0,0) scale(1);opacity:.66}
+}
+@media(max-width:760px){
+  .why-card>.why-card-live-bg{
+    inset:-14%;
+    animation-duration:7.6s;
+  }
+  .why-card>.why-card-live-bg:before{
+    filter:blur(13px);
+  }
+  .why-card>.why-card-live-bg:after{
+    filter:blur(16px);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .why-card>.why-card-live-bg,
+  .why-card>.why-card-live-bg:before,
+  .why-card>.why-card-live-bg:after{
+    animation:none!important;
+    transform:none!important;
+  }
+}
