@@ -974,7 +974,7 @@ html.cinematic-intro-done .site-header{animation:introHeaderSettle .72s cubic-be
 
 /* Motion refinement — softer blur, earlier settle, cleaner mobile */
 .cinematic-scroll-item{
-  filter:blur(min(var(--motion-blur,2px),2.4px));
+  filter:blur(var(--motion-blur,2px));
 }
 .project-card.cinematic-scroll-item{
   transition:rotate .32s ease;
