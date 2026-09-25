@@ -233,6 +233,10 @@ export async function handleTelegramProjectUpdate(update: any) {
     return;
   }
 
+  const projectCommands = ["project_title", "project_label", "project_description", "project_image_url", "project_set"];
+  if (!projectCommands.includes(command)) {
+    return sendTelegramAdminMessage("Unknown command. Use /project_help or /rating_help.");
+  }
   if (!slot) return sendTelegramAdminMessage("❌ Invalid project ID. Use 1 to 4.");
 
   const rest = firstLine.split(/\s+/).slice(2).join(" ").trim();
@@ -278,12 +282,17 @@ export async function setupTelegramProjectWebhook(origin: string) {
       { command: "project_image", description: "Change a project screenshot" },
       { command: "project_set", description: "Update multiple project fields" },
       { command: "project_help", description: "Show project editing commands" },
+      { command: "ratings_pending", description: "Show ratings waiting for approval" },
+      { command: "ratings", description: "Show published portfolio ratings" },
+      { command: "rating_approve", description: "Approve rating: /rating_approve 2" },
+      { command: "rating_reject", description: "Reject rating: /rating_reject 2" },
+      { command: "rating_help", description: "Show rating moderation commands" },
     ],
   });
   return telegramApi("setWebhook", {
     url: `${origin}/api/telegram-webhook`,
     secret_token: WEBHOOK_SECRET,
-    allowed_updates: ["message"],
+    allowed_updates: ["message", "callback_query"],
     drop_pending_updates: false,
   });
 }
