@@ -103,25 +103,25 @@ export default function ScrollMotion() {
         const progress = ease(clamp((rawProgress - stagger) / (1 - stagger)));
 
         let x = 0;
-        let y = (1 - progress) * 54;
-        let scale = 0.965 + progress * 0.035;
+        let y = (1 - progress) * 44;
+        let scale = 0.973 + progress * 0.027;
 
         if (direction === "left") x = -(1 - progress) * 72;
         if (direction === "right") x = (1 - progress) * 72;
         if (direction === "scale") {
-          y = (1 - progress) * 72;
-          scale = 0.91 + progress * 0.09;
+          y = (1 - progress) * 64;
+          scale = 0.925 + progress * 0.075;
         }
 
         const center = rect.top + rect.height / 2;
         const centerOffset = clamp((center - vh / 2) / vh, -1, 1);
-        const parallax = -centerOffset * 14 * progress;
+        const parallax = -centerOffset * 12 * progress;
 
         el.style.setProperty("--motion-opacity", progress.toFixed(4));
         el.style.setProperty("--motion-x", `${x.toFixed(2)}px`);
         el.style.setProperty("--motion-y", `${(y + parallax).toFixed(2)}px`);
         el.style.setProperty("--motion-scale", scale.toFixed(4));
-        el.style.setProperty("--motion-blur", `${((1 - progress) * 5).toFixed(2)}px`);
+        el.style.setProperty("--motion-blur", `${((1 - progress) * 2.4).toFixed(2)}px`);
 
         if (el.classList.contains("project-card")) {
           el.style.setProperty("--project-progress", progress.toFixed(4));
