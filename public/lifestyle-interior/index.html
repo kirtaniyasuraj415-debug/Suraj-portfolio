@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lifestyle Interior Kolkata — Premium Website Demo</title><style>:root {
+  --bg: #050505;
+  --panel: #090909;
+  --text: #f4f2ee;
+  --muted: #8c8c88;
+  --line: rgba(255,255,255,.10);
+  --line-strong: rgba(255,255,255,.16);
+  --pad: clamp(18px, 3vw, 48px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{display:block;width:100%;height:100%;object-fit:cover}
+main{overflow:hidden;background:#050505}
+.grid-shell{width:min(1520px,100%);margin:auto;border-left:1px solid var(--line);border-right:1px solid var(--line);position:relative}
+.grid-shell:before,.grid-shell:after{content:"";position:absolute;top:0;bottom:0;width:1px;background:var(--line);pointer-events:none;z-index:5}
+.grid-shell:before{left:33.333%}.grid-shell:after{left:66.666%}
+.shell-row{position:relative;z-index:10}
+.nav{height:76px;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;border-bottom:1px solid var(--line);padding:0 var(--pad);font-size:12px;text-transform:uppercase;letter-spacing:.11em;background:rgba(4,4,4,.88);backdrop-filter:blur(14px)}
+.brand{display:flex;gap:8px;font-weight:700}.brand span:last-child{color:#808080}
+.nav-links{justify-self:center;display:flex;gap:26px;color:#a8a8a3}.nav-links a:hover{color:#fff}
+.pill{justify-self:end;border:1px solid var(--line-strong);border-radius:999px;padding:11px 15px;display:flex;gap:9px;align-items:center}
+.hero-media{height:min(78vh,920px);min-height:650px;position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+.hero-media img{filter:saturate(.72) contrast(1.06) brightness(.62);transform:scale(1.01)}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(0,0,0,.05) 46%,rgba(0,0,0,.52) 100%)}
+.hero-title{position:absolute;left:var(--pad);right:var(--pad);top:8%;display:flex;justify-content:space-between;align-items:flex-start;font-size:clamp(68px,11vw,186px);font-weight:300;letter-spacing:-.075em;line-height:.82;white-space:nowrap}
+.hero-title span:last-child{margin-top:1.1em}
+.hero-card{position:absolute;right:var(--pad);bottom:var(--pad);width:min(340px,42vw);padding:20px 0 0;border-top:1px solid rgba(255,255,255,.4);font-size:14px;line-height:1.45}.hero-card p{margin:0 0 18px}.hero-card a{font-size:12px;text-transform:uppercase;letter-spacing:.1em}
+.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:#7e7e79}
+.intro{display:grid;grid-template-columns:repeat(3,1fr);min-height:760px;border-bottom:1px solid var(--line)}
+.intro>.eyebrow{padding:36px var(--pad);grid-column:1/2;border-right:0}
+.intro h2{grid-column:1/3;margin:0;padding:24px var(--pad) 50px;font-size:clamp(40px,5.1vw,82px);font-weight:350;line-height:1.02;letter-spacing:-.055em;align-self:end}
+.stat-block{grid-column:3/4;grid-row:1/3;padding:36px var(--pad);display:flex;flex-direction:column;justify-content:flex-end;gap:7px}.stat{font-size:clamp(66px,7vw,110px);font-weight:300;letter-spacing:-.07em}.stat-label{color:#8e8e88;font-size:12px;text-transform:uppercase;letter-spacing:.11em}
+.intro-copy{grid-column:1/2;margin:0;padding:36px var(--pad) 80px;color:#8f8f89;line-height:1.65;font-size:13px}
+.intro-image{grid-column:2/4;margin:0;min-height:390px;position:relative;border-top:1px solid var(--line);overflow:hidden}.intro-image img{filter:saturate(.75) brightness(.72)}.intro-image figcaption,.project-main figcaption{position:absolute;left:18px;bottom:16px;background:rgba(0,0,0,.68);padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.11em}
+.proof{display:grid;grid-template-columns:repeat(3,1fr);min-height:720px;border-bottom:1px solid var(--line)}
+.proof-score{padding:36px var(--pad);display:flex;flex-direction:column;gap:7px;color:#8b8b86;font-size:11px;text-transform:uppercase;letter-spacing:.1em}.big-number{font-size:clamp(72px,8vw,128px);line-height:.9;color:#f4f2ee;letter-spacing:-.07em;text-transform:none}.proof-image{grid-column:2/3;grid-row:1/3;margin:0;min-height:510px}.proof-image img{filter:saturate(.55) contrast(1.08) brightness(.68)}
+.proof-list{grid-column:3/4;display:flex;flex-direction:column;padding:34px var(--pad);gap:18px;color:#aaa9a4;font-size:12px}.proof-quote{grid-column:1/2;align-self:end;padding:40px var(--pad);font-size:clamp(24px,3vw,44px);line-height:1.08;letter-spacing:-.035em}.proof:after{content:"";grid-column:3/4;grid-row:2/3;background:linear-gradient(180deg,transparent,rgba(255,255,255,.02))}
+.projects{display:grid;grid-template-columns:repeat(3,1fr);min-height:850px;border-bottom:1px solid var(--line)}.projects>.eyebrow{padding:36px var(--pad)}.projects h2{grid-column:2/4;margin:0;padding:34px var(--pad);font-size:clamp(46px,6vw,92px);font-weight:350;letter-spacing:-.06em;line-height:.98}.project-index{grid-column:1/2;display:flex;flex-direction:column;padding:42px var(--pad);gap:18px;color:#7c7c77;font-size:12px}.project-index span:first-child{color:#f2f1ec}.project-main{grid-column:2/4;margin:0;min-height:560px;position:relative;overflow:hidden}.project-main img{filter:saturate(.62) contrast(1.06) brightness(.62)}
+.services{border-bottom:1px solid var(--line);padding-bottom:80px}.services>.eyebrow{padding:36px var(--pad)}.services>h2{margin:0;padding:18px var(--pad) 56px;font-size:clamp(48px,6.2vw,96px);font-weight:350;line-height:.96;letter-spacing:-.06em;max-width:980px}.service-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}.service-card{min-height:260px;padding:28px var(--pad);border-bottom:1px solid var(--line);position:relative}.service-card:nth-child(3n+1),.service-card:nth-child(3n+2){border-right:1px solid var(--line)}.service-card>span{color:#676763;font-size:10px;letter-spacing:.16em}.service-card h3{font-size:24px;font-weight:400;letter-spacing:-.03em;margin:78px 0 12px}.service-card p{margin:0;color:#7f7f7a;font-size:12px;line-height:1.6;max-width:300px}
+.testimonial{display:grid;grid-template-columns:repeat(3,1fr);min-height:700px;border-bottom:1px solid var(--line)}.wide-image{margin:0;grid-column:1/3;min-height:700px}.wide-image img{filter:saturate(.6) contrast(1.06) brightness(.58)}.review-copy{grid-column:3/4;padding:36px var(--pad);display:flex;flex-direction:column;justify-content:flex-end}.review-copy h2{font-size:clamp(31px,3.3vw,52px);font-weight:350;letter-spacing:-.05em;line-height:1.02;margin:34px 0 24px}.review-copy p{font-size:13px;color:#858580;line-height:1.6}
+.contact{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}.contact-head{grid-column:1/2;padding:36px var(--pad)}.contact-head h2{font-size:clamp(40px,5vw,72px);font-weight:350;line-height:.98;letter-spacing:-.055em;margin:46px 0}.contact-form{grid-column:2/4;padding:36px var(--pad) 70px;display:grid;grid-template-columns:1fr 1fr;gap:22px 28px}.contact-form label{display:flex;flex-direction:column;gap:10px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#787873}.contact-form input,.contact-form select,.contact-form textarea{width:100%;background:transparent;border:0;border-bottom:1px solid var(--line-strong);color:#f3f2ed;border-radius:0;padding:13px 0;font:inherit;font-size:15px;outline:none}.contact-form textarea{resize:vertical}.contact-form select option{background:#111}.contact-form .message{grid-column:1/-1}.contact-form button{grid-column:2/3;justify-self:end;margin-top:12px;border:1px solid var(--line-strong);background:#f1f0eb;color:#070707;border-radius:999px;padding:13px 18px;font-size:11px;text-transform:uppercase;letter-spacing:.11em;cursor:pointer}
+.footer{display:grid;grid-template-columns:repeat(4,1fr);padding:48px var(--pad) 70px;gap:28px;font-size:11px;color:#777771}.footer-brand{font-weight:700;color:#f1f0eb;display:flex;flex-direction:column}.footer strong{display:block;color:#eee;font-weight:500;text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}.footer p{margin:0 0 7px;line-height:1.55}.footer a{display:block;margin-bottom:7px}.footer-site{align-self:end;color:#f2f1ed!important;text-transform:uppercase;letter-spacing:.1em}
+@media(max-width:900px){.grid-shell:before{left:50%}.grid-shell:after{display:none}.nav{grid-template-columns:1fr auto}.nav-links{display:none}.pill{font-size:9px}.hero-media{min-height:630px}.hero-title{top:11%;font-size:clamp(56px,16vw,110px);white-space:normal;display:block}.hero-title span{display:block}.hero-title span:last-child{margin-top:0}.hero-card{width:58vw}.intro,.proof,.projects,.contact,.testimonial{grid-template-columns:1fr 1fr}.intro>.eyebrow{grid-column:1/2}.intro h2{grid-column:1/3}.stat-block{grid-column:2/3;grid-row:1/2}.intro-copy{grid-column:1/2}.intro-image{grid-column:2/3}.proof-image{grid-column:2/3}.proof-list{gtrid-column:1/2;grid-row:2/3}.proof-quote{grid-column:1/2;grid-row:3/4}.projects h2{grid-column:1/3}.project-index{grid-column:1/2}.project-main{grid-column:2/3}.service-grid{grid-template-columns:1fr 1fr}.service-card:nth-child(3N+1),.service-card:nth-child(3N+2){border-right:0}.service-card:nth-child(odd){border-right:1px solid var(--line)}.wide-image{grid-column:1/2}.review-copy{grid-column:2/3}.contact-head{grid-column:1/2}.contact-form{grid-column:2/3;grid-template-columns:1fr}.contact-form .message,.contact-form button{grid-column:1}.footer{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){:root{--pad:18px}.grid-shell:before,.grid-shell:after{display:none}.nav{height:64px}.brand{font-size:9px;flex-direction:column;gap:1px}.pill{padding:9px 11px}.hero-media{min-height:610px;height:78svh}.hero-title{top:10%;font-size:clamp(58px,20vw,90px);line-height:.88}.hero-card{left:18px;right:18px;width:auto}.intro,.proof,.projects,.contact,.testimonial{display:block;min-height:0}.intro>.eyebrow,.intro h2,.stat-block,.intro-copy,.intro-image,.proof-score,.proof-image,.proof-list,.proof-quote,.projects>.eyebrow,.projects h2,.project-index,.project-main,.wide-image,.review-copy,.contact-head,.contact-form{display:block;width:auto;min-height:0}.intro h2,.projects h2,.services>h2{padding-top:22px;padding-bottom:44px}.stat-block{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.stat{font-size:76px}.intro-image,.proof-image,.project-main,.wide-image{height:66vw;min-height:310px}.proof-list{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.project-index{border-bottom:1px solid var(--line)}.service-grid{grid-template-columns:1fr}.service-card,.service-card:nth-child(odd){border-right:0}.service-card{min-height:220px}.review-copy{min-height:430px}.contact-form{padding-bottom:52px}.contact-form button{margin-top:18px}.footer{grid-template-columns:1fr;padding-bottom:50px}.footer-site{margin-top:16px}}
+</style><style>.preview-note{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:99;background:#f1f0eb;color:#070707;padding:10px 14px;border-radius:999px;font:600 10px/1 ui-sans-serif,sans-serif;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 8px 30px rgba(0,0,0,.35)}@media(max-width:620px){.preview-note{width:calc(100% - 28px);text-align:center}}</style>
+
+<style id="campy-motion">
+  /* Motion inspired by the supplied reference video:
+     clean page-scale entrance, clipped upward reveals, smooth section drift. */
+  body{
+    overflow-x:hidden;
+  }
+
+  main{
+    transform-origin:50% 12%;
+  }
+
+  body.motion-ready main{
+    animation:pageSettle 1.15s cubic-bezier(.16,1,.3,1) both;
+  }
+  @keyframes pageSettle{
+    0%{opacity:.25;transform:translate3d(0,34px,0) scale(.965);filter:blur(10px)}
+    55%{opacity:1;filter:blur(0)}
+    100%{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}
+  }
+
+  .scene-reveal{
+    opacity:0;
+    transform:translate3d(0,42px,0);
+    clip-path:inset(12% 0 0 0);
+    transition:
+      opacity .78s cubic-bezier(.16,1,.3,1),
+      transform .9s cubic-bezier(.16,1,.3,1),
+      clip-path .9s cubic-bezier(.16,1,.3,1);
+    transition-delay:var(--scene-delay,0ms);
+    will-change:transform,opacity,clip-path;
+  }
+  .scene-reveal.is-in{
+    opacity:1;
+    transform:translate3d(0,0,0);
+    clip-path:inset(0 0 0 0);
+  }
+
+  .scene-media{
+    overflow:hidden;
+  }
+  .scene-media img{
+    transform:scale(1.045) translate3d(0,var(--media-y,0px),0);
+    transition:transform .18s linear;
+    will-change:transform;
+  }
+  .scene-media.is-in img{
+    transform:scale(1.015) translate3d(0,var(--media-y,0px),0);
+  }
+
+  .hero-title span,.hero-card,.nav{
+    opacity:0;
+    transform:translate3d(0,24px,0);
+  }
+  body.motion-ready .nav{
+    animation:heroIn .72s .22s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  body.motion-ready .hero-title span:first-child{
+    animation:heroIn .82s .34s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  body.motion-ready .hero-title span:last-child{
+    animation:heroIn .82s .44s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  body.motion-ready .hero-card{
+    animation:heroIn .82s .56s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  @keyframes heroIn{
+    to{opacity:1;transform:translate3d(0,0,0)}
+  }
+
+  .rating-showcase{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    min-height:520px;
+    border-bottom:1px solid var(--line);
+    align-items:stretch;
+  }
+  .rating-kicker{
+    padding:36px var(--pad);
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.18em;
+    color:#777772;
+  }
+  .rating-panel{
+    grid-column:2/4;
+    margin:42px var(--pad) 54px;
+    border:1px solid rgba(255,255,255,.14);
+    background:
+      linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.012) 48%,rgba(255,255,255,.028));
+    box-shadow:0 34px 90px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.06);
+    padding:clamp(24px,3.5vw,46px);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    min-height:390px;
+    position:relative;
+    overflow:hidden;
+  }
+  .rating-panel:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:radial-gradient(circle at 86% 8%,rgba(255,255,255,.08),transparent 30%);
+  }
+  .rating-topline,.rating-foot{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.13em;
+    color:#8a8a85;
+  }
+  .rating-badge{
+    color:#e9e8e2;
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:999px;
+    padding:9px 12px;
+  }
+  .rating-main{
+    position:relative;
+    display:grid;
+    grid-template-columns:minmax(150px,.7fr) 1fr;
+    align-items:end;
+    gap:clamp(22px,4vw,64px);
+  }
+  .rating-number{
+    font-size:clamp(104px,13vw,190px);
+    line-height:.72;
+    font-weight:300;
+    letter-spacing:-.085em;
+  }
+  .rating-stars{
+    font-size:18px;
+    letter-spacing:.22em;
+    margin-bottom:20px;
+    color:#f3f1e9;
+  }
+  .rating-meta p{
+    margin:0;
+    max-width:430px;
+    color:#90908a;
+    font-size:13px;
+    line-height:1.65;
+  }
+  .rating-foot{
+    padding-top:22px;
+    border-top:1px solid rgba(255,255,255,.10);
+  }
+  .rating-foot a{color:#efeee8}
+
+  @media(max-width:900px){
+    .rating-showcase{grid-template-columns:1fr 1fr}
+    .rating-panel{grid-column:1/3}
+  }
+  @media(max-width:620px){
+    .rating-showcase{display:block;min-height:0}
+    .rating-kicker{padding-bottom:8px}
+    .rating-panel{margin:18px 18px 42px;min-height:360px;padding:24px}
+    .rating-main{grid-template-columns:1fr;gap:26px}
+    .rating-number{font-size:112px}
+    .rating-topline,.rating-foot{align-items:flex-start;flex-direction:column}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    body.motion-ready main,.nav,.hero-title span,.hero-card{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
+    .scene-reveal{opacity:1!important;transform:none!important;clip-path:none!important;transition:none!important}
+    .scene-media img{transform:none!important;transition:none!important}
+  }
+</style>
+<style id="noor-premium-sections">
+  .section-head{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+  .section-head .eyebrow{padding:34px var(--pad)}
+  .section-head h2{grid-column:2/4;margin:0;padding:30px var(--pad) 50px;font-size:clamp(42px,5.6vw,86px);font-weight:350;line-height:.98;letter-spacing:-.055em}
+  .section-note{color:#7f7f79;font-size:12px;line-height:1.65}
+
+  /* Why choose us */
+  .why-us{border-bottom:1px solid var(--line)}
+  .why-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+  .why-card{min-height:300px;padding:30px;position:relative;border-top:1px solid var(--line);border-right:1px solid var(--line);overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,0))}
+  .why-card:last-child{border-right:0}
+  .why-card .index{font-size:10px;letter-spacing:.16em;color:#686864}
+  .why-card h3{font-size:clamp(25px,2.3vw,38px);font-weight:350;line-height:1.02;letter-spacing:-.04em;margin:95px 0 14px}
+  .why-card p{margin:0;color:#7f7f79;font-size:12px;line-height:1.65;max-width:280px}
+  .why-card:after{content:"";position:absolute;left:30px;right:30px;bottom:24px;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.18),transparent)}
+
+  /* Process */
+  .process{border-bottom:1px solid var(--line)}
+  .process-track{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line)}
+  .process-step{min-height:300px;padding:28px;position:relative;border-right:1px solid var(--line)}
+  .process-step:last-child{border-right:0}
+  .process-step .num{font-size:10px;color:#6c6c68;letter-spacing:.16em}
+  .process-step h3{font-size:23px;font-weight:400;letter-spacing:-.03em;margin:110px 0 12px}
+  .process-step p{margin:0;color:#7f7f7a;font-size:12px;line-height:1.6}
+  .process-step:before{content:"";position:absolute;left:28px;top:62px;width:8px;height:8px;border:1px solid rgba(255,255,255,.38);border-radius:50%;background:#050505}
+  .process-step:after{content:"";position:absolute;left:36px;right:-1px;top:66px;height:1px;background:rgba(255,255,255,.13)}
+  .process-step:last-child:after{display:none}
+
+  /* Transformation */
+  .transformation{border-bottom:1px solid var(--line)}
+  .transform-wrap{display:grid;grid-template-columns:1fr 2fr;min-height:700px}
+  .transform-copy{padding:42px var(--pad);display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--line)}
+  .transform-copy h3{font-size:clamp(34px,4vw,58px);font-weight:350;line-height:1;letter-spacing:-.05em;margin:0}
+  .transform-copy p{color:#81817c;font-size:12px;line-height:1.7;max-width:330px}
+  .compare-frame{position:relative;min-height:700px;overflow:hidden;background:#0b0b0b}
+  .compare-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.66) contrast(1.06) brightness(.68)}
+  .compare-after{clip-path:inset(0 50% 0 0)}
+  .compare-divider{position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(255,255,255,.88);pointer-events:none}
+  .compare-knob{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:#f3f1eb;color:#080808;display:grid;place-items:center;font-size:16px;box-shadow:0 18px 50px rgba(0,0,0,.35);pointer-events:none}
+  .compare-label{position:absolute;top:22px;padding:9px 12px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.52);font-size:9px;text-transform:uppercase;letter-spacing:.16em}
+  .compare-label.before{left:22px}.compare-label.after{right:22px}
+  .compare-range{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize}
+
+  /* Case studies */
+  .case-studies{border-bottom:1px solid var(--line)}
+  .case-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+  .case-card{min-height:580px;border-right:1px solid var(--line);display:flex;flex-direction:column}
+  .case-card:last-child{border-right:0}
+  .case-image{height:340px;overflow:hidden}
+  .case-image img{filter:saturate(.67) contrast(1.04) brightness(.68);transition:transform .8s cubic-bezier(.16,1,.3,1)}
+  .case-card:hover .case-image img{transform:scale(1.035)}
+  .case-body{padding:26px 28px 34px;display:flex;flex:1;flex-direction:column}
+  .case-type{font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:#6d6d68}
+  .case-body h3{font-size:27px;font-weight:380;letter-spacing:-.035em;margin:34px 0 16px}
+  .case-meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:auto;padding-top:22px;border-top:1px solid var(--line)}
+  .case-meta span{font-size:10px;color:#81817b;line-height:1.45}.case-meta b{display:block;color:#e5e4df;font-weight:500;text-transform:uppercase;letter-spacing:.1em;font-size:8px;margin-bottom:5px}
+
+  /* Testimonials */
+  .testimonials{border-bottom:1px solid var(--line)}
+  .testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+  .quote-card{min-height:430px;padding:32px;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,0))}
+  .quote-card:last-child{border-right:0}
+  .quote-stars{font-size:12px;letter-spacing:.24em;color:#e6e4df}
+  .quote-text{font-size:clamp(20px,2vw,30px);font-weight:350;line-height:1.15;letter-spacing:-.03em;margin:42px 0;color:#deddd8}
+  .quote-person{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:#74746f}
+  .quote-person strong{display:block;color:#eeeeea;font-weight:500;margin-bottom:7px}
+
+  /* Service areas */
+  .areas{border-bottom:1px solid var(--line)}
+  .areas-layout{display:grid;grid-template-columns:1fr 2fr;min-height:560px}
+  .areas-copy{padding:40px var(--pad);border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between}
+  .areas-copy h3{font-size:clamp(38px,4vw,64px);font-weight:350;line-height:.98;letter-spacing:-.05em;margin:0}
+  .areas-map{position:relative;min-height:560px;background:
+    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:72px 72px;overflow:hidden}
+  .areas-map:before{content:"";position:absolute;inset:14%;border:1px solid rgba(255,255,255,.08);border-radius:50%;transform:rotate(-9deg)}
+  .areas-map:after{content:"";position:absolute;inset:25% 20%;border:1px solid rgba(255,255,255,.06);border-radius:50%;transform:rotate(16deg)}
+  .area-point{position:absolute;display:flex;align-items:center;gap:10px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#c8c7c2;z-index:2}
+  .area-point i{width:10px;height:10px;border-radius:50%;border:1px solid rgba(255,255,255,.55);background:#050505;box-shadow:0 0 0 5px rgba(255,255,255,.035)}
+  .area-point.kolkata{left:46%;top:44%}.area-point.med{left:25%;top:67%}.area-point.bard{left:37%;top:28%}.area-point.dur{left:20%;top:20%}
+  .area-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .area-chips span{border:1px solid var(--line);padding:9px 11px;border-radius:999px;font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:#8b8b86}
+
+  /* Founder */
+  .founder{border-bottom:1px solid var(--line)}
+  .founder-layout{display:grid;grid-template-columns:1.05fr 1.95fr;min-height:720px}
+  .founder-photo{min-height:720px;overflow:hidden;border-right:1px solid var(--line)}
+  .founder-photo img{filter:saturate(.58) contrast(1.05) brightness(.7)}
+  .founder-copy{padding:48px var(--pad);display:flex;flex-direction:column;justify-content:space-between}
+  .founder-copy h3{font-size:clamp(50px,6.4vw,98px);font-weight:330;line-height:.9;letter-spacing:-.065em;margin:0;max-width:760px}
+  .founder-copy-bottom{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+  .founder-copy p{margin:0;color:#85857f;font-size:13px;line-height:1.7}
+  .founder-stats{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+  .founder-stats div{padding:20px 0;border-bottom:1px solid var(--line)}
+  .founder-stats div:nth-child(odd){border-right:1px solid var(--line);padding-right:20px}.founder-stats div:nth-child(even){padding-left:20px}
+  .founder-stats strong{font-size:28px;font-weight:350;letter-spacing:-.04em}.founder-stats span{display:block;color:#73736e;font-size:9px;text-transform:uppercase;letter-spacing:.12em;margin-top:6px}
+
+  /* Budget */
+  .budget{border-bottom:1px solid var(--line)}
+  .budget-wrap{display:grid;grid-template-columns:1fr 2fr;min-height:520px}
+  .budget-intro{padding:40px var(--pad);border-right:1px solid var(--line)}
+  .budget-intro h3{font-size:clamp(42px,4.5vw,68px);font-weight:350;line-height:.98;letter-spacing:-.05em;margin:40px 0 22px}
+  .budget-intro p{color:#7e7e79;font-size:12px;line-height:1.65}
+  .budget-panel{margin:42px var(--pad);border:1px solid rgba(255,255,255,.13);padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:30px;background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.01))}
+  .budget-value{font-size:clamp(80px,10vw,150px);font-weight:300;line-height:.8;letter-spacing:-.08em}
+  .budget-value small{display:block;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#7b7b76;margin-top:20px}
+  .budget-types{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .budget-types span{border:1px solid var(--line);padding:18px 16px;font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:#a3a39d;display:flex;align-items:center;justify-content:space-between}
+  .budget-types span:after{content:"↗";color:#e9e8e2}
+
+  /* FAQ */
+  .faq{border-bottom:1px solid var(--line)}
+  .faq-list{border-top:1px solid var(--line)}
+  .faq-item{border-bottom:1px solid var(--line)}
+  .faq-q{width:100%;background:none;border:0;color:inherit;text-align:left;padding:24px var(--pad);display:grid;grid-template-columns:70px 1fr auto;gap:20px;align-items:center;cursor:pointer;font:inherit}
+  .faq-q .faq-num{font-size:9px;color:#686864;letter-spacing:.15em}.faq-q strong{font-size:clamp(18px,2vw,28px);font-weight:380;letter-spacing:-.025em}.faq-q .plus{font-size:24px;font-weight:300;transition:transform .35s ease}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.16,1,.3,1)}
+  .faq-a p{margin:0;padding:0 var(--pad) 28px calc(var(--pad) + 90px);max-width:920px;color:#7f7f79;font-size:13px;line-height:1.7}
+  .faq-item.open .faq-a{max-height:220px}.faq-item.open .plus{transform:rotate(45deg)}
+
+  /* Final CTA */
+  .final-cta{min-height:500px;border-bottom:1px solid var(--line);position:relative;display:flex;align-items:flex-end;overflow:hidden}
+  .final-cta:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.018),transparent 50%),radial-gradient(circle at 80% 20%,rgba(255,255,255,.055),transparent 34%)}
+  .final-cta-inner{position:relative;width:100%;padding:58px var(--pad);display:grid;grid-template-columns:2fr 1fr;gap:40px;align-items:end}
+  .final-cta h2{margin:0;font-size:clamp(58px,8.5vw,132px);font-weight:300;line-height:.82;letter-spacing:-.075em;max-width:1050px}
+  .final-cta-actions{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+  .cta-primary,.cta-secondary{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:14px 18px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;border:1px solid var(--line-strong)}
+  .cta-primary{background:#f1f0eb;color:#080808}.cta-secondary{background:transparent;color:#eee}
+  .cta-primary:hover,.cta-secondary:hover{transform:translateY(-2px)}
+
+  .auto-reveal{opacity:0;transform:translate3d(0,38px,0);clip-path:inset(10% 0 0 0);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .92s cubic-bezier(.16,1,.3,1),clip-path .92s cubic-bezier(.16,1,.3,1);transition-delay:var(--auto-delay,0ms)}
+  .auto-reveal.is-in{opacity:1;transform:none;clip-path:inset(0 0 0 0)}
+  .auto-media{overflow:hidden}.auto-media img{transform:scale(1.04);transition:transform 1.2s cubic-bezier(.16,1,.3,1)}.auto-media.is-in img{transform:scale(1)}
+
+  @media(max-width:1000px){
+    .why-grid{grid-template-columns:1fr 1fr}.why-card:nth-child(2){border-right:0}.why-card:nth-child(-n+2){border-bottom:1px solid var(--line)}
+    .process-track{grid-template-columns:1fr 1fr}.process-step:nth-child(even){border-right:0}.process-step:last-child{grid-column:1/3}
+    .case-grid,.testimonial-grid{grid-template-columns:1fr}.case-card,.quote-card{border-right:0;border-bottom:1px solid var(--line)}
+    .case-card:last-child,.quote-card:last-child{border-bottom:0}
+    .founder-layout{grid-template-columns:1fr 1fr}.founder-copy-bottom{grid-template-columns:1fr}
+  }
+  @media(max-width:760px){
+    .section-head{grid-template-columns:1fr}.section-head h2{grid-column:1}
+    .why-grid{grid-template-columns:1fr}.why-card{border-right:0!important;border-bottom:1px solid var(--line)}
+    .process-track{grid-template-columns:1fr}.process-step{border-right:0;border-bottom:1px solid var(--line)}.process-step:last-child{grid-column:auto}
+    .transform-wrap,.areas-layout,.founder-layout,.budget-wrap{grid-template-columns:1fr}.transform-copy,.areas-copy,.founder-photo,.budget-intro{border-right:0;border-bottom:1px solid var(--line)}
+    .compare-frame{min-height:520px}.founder-photo{min-height:520px}.founder-copy-bottom{grid-template-columns:1fr}.budget-panel{grid-template-columns:1fr;margin:24px 18px}.budget-types{grid-template-columns:1fr}
+    .final-cta-inner{grid-template-columns:1fr}.final-cta h2{font-size:clamp(58px,17vw,98px)}
+  }
+  @media(max-width:620px){
+    .why-card,.process-step,.quote-card{padding:24px}.why-card h3{margin-top:70px}
+    .case-image{height:62vw;min-height:280px}.transform-copy{min-height:360px}.areas-map{min-height:480px}
+    .founder-stats{grid-template-columns:1fr}.founder-stats div:nth-child(odd),.founder-stats div:nth-child(even){border-right:0;padding-left:0;padding-right:0}
+    .faq-q{grid-template-columns:44px 1fr auto;padding:22px 18px}.faq-a p{padding:0 18px 26px 62px}
+  }
+  @media(prefers-reduced-motion:reduce){.auto-reveal{opacity:1!important;transform:none!important;clip-path:none!important;transition:none!important}.auto-media img{transform:none!important;transition:none!important}}
+</style>
+<style id="lifestyle-extra">
+  .photo-gallery{border-bottom:1px solid var(--line)}
+  .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+  .gallery-item{position:relative;min-height:360px;overflow:hidden;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .gallery-item:nth-child(3n){border-right:0}
+  .gallery-item img{filter:saturate(.72) contrast(1.04) brightness(.72);transition:transform 1s cubic-bezier(.16,1,.3,1),filter .5s ease}
+  .gallery-item:hover img{transform:scale(1.035);filter:saturate(.82) contrast(1.04) brightness(.78)}
+  .gallery-item span{position:absolute;left:18px;bottom:16px;background:rgba(0,0,0,.58);border:1px solid rgba(255,255,255,.1);padding:8px 10px;font-size:9px;letter-spacing:.13em;text-transform:uppercase}
+  .studio-map{position:relative;min-height:560px;background:
+    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:72px 72px;overflow:hidden}
+  .studio-map:before{content:"";position:absolute;left:50%;top:50%;width:360px;height:360px;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,.075);border-radius:50%}
+  .studio-map:after{content:"";position:absolute;left:50%;top:50%;width:220px;height:220px;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,.055);border-radius:50%}
+  .studio-pin{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;text-align:center}
+  .studio-pin i{display:block;width:14px;height:14px;border:1px solid rgba(255,255,255,.75);border-radius:50%;background:#050505;box-shadow:0 0 0 7px rgba(255,255,255,.045);margin:0 auto 16px}
+  .studio-pin strong{font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:500}.studio-pin span{display:block;color:#74746f;font-size:10px;letter-spacing:.1em;margin-top:8px}
+  .contact-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+  .contact-detail-grid a,.contact-detail-grid span{border:1px solid var(--line);padding:15px;font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:#aaa9a4}
+  .availability-badge{display:inline-flex;border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:9px 12px;font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:#e9e8e2;margin-top:18px}
+  @media(max-width:900px){.gallery-grid{grid-template-columns:1fr 1fr}.gallery-item:nth-child(3n){border-right:1px solid var(--line)}.gallery-item:nth-child(even){border-right:0}}
+  @media(max-width:620px){.gallery-grid{grid-template-columns:1fr}.gallery-item,.gallery-item:nth-child(3n){border-right:0;min-height:70vw}.contact-detail-grid{grid-template-columns:1fr}}
+</style></head>
+<body><main>
+<section class="hero grid-shell" id="home">
+  <nav class="nav shell-row">
+    <a class="brand" href="#home"><span>LIFESTYLE</span><span>INTERIOR</span></a>
+    <div class="nav-links"><a href="#studio">Studio</a><a href="#projects">Projects</a><a href="#services">Services</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a></div>
+    <a class="pill" href="tel:+916297740771">Call now ↗</a>
+  </nav>
+  <div class="hero-media">
+    <img src="https://lh3.googleusercontent.com/grass-cs/ACvplmOgP7uMVNQbBK0a5tIZoOl2UdC96n4-7TFG1w1UsF8IudI_SzP-9p031jNYRKyJ473FDdpDfeeB7rxmvcID7mg-y1oPWI99q6XczSuBggX7QNwOZAW5q7p2GVrBvOHrO926Vx1r1zXK5-8=w300-h225-p-k-no" alt="Lifestyle Interior Kolkata project">
+    <div class="hero-shade"></div>
+    <div class="hero-title"><span>Lifestyle</span><span>Interior</span></div>
+    <div class="hero-card">
+      <p>Modern interior design and renovation for homes and offices in Kolkata — with custom furniture, carpentry, finishes, flooring and lighting under one creative direction.</p>
+      <a href="#projects">Explore the work ↗</a>
+    </div>
+  </div>
+</section>
+
+<section class="intro grid-shell" id="studio">
+  <div class="eyebrow">01 / Studio</div>
+  <h2>Stylish, functional spaces designed around everyday living.</h2>
+  <div class="stat-block"><span class="stat">302</span><span class="stat-label">Photos on Google profile</span></div>
+  <p class="intro-copy">Lifestyle Interior is an interior design studio in Taltala, Kolkata. Its Google profile highlights interior design and renovation work across modern décor, custom furniture, carpentry, painting, wallpaper, flooring and lighting solutions for homes and offices.</p>
+  <figure class="intro-image"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmNuqD5UhNdaM64zsFOpSs-eHlKtwAHHG8WYCLfL_7aVmy78Gy9TWOK9vrs_7qZJwdM_ARnbxwamDn8kf3DafHzgmWjxz6XpFR8uKpF4RXlGqaUn9FG4qWuqN6iu3eRQKg9A4qecwniot19s=w300-h225-p-k-no" alt="Lifestyle Interior residential project"><figcaption>Project imagery / Google Business Profile</figcaption></figure>
+</section>
+
+<section class="proof grid-shell">
+  <div class="proof-score"><span class="big-number">4.6</span><span>Google rating</span><span>14 reviews</span></div>
+  <figure class="proof-image"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmOAgPefXKgH2ZP4WaCpDuH76YQZfs_eTVOl8aVHedcKjiPFEiCL3KgFcnUsf4mPa9UG8ckZtfAoqEKF5cdOLVZH2zukn-6wvzCTN76xabcoEUemW74T73InQg3mMhpDFoB08_GvtRCiGiY=w300-h225-p-k-no" alt="Lifestyle Interior project"></figure>
+  <div class="proof-list">
+    <span>01 — Interior design</span>
+    <span>02 — Home & office renovation</span>
+    <span>03 — Custom furniture & carpentry</span>
+    <span>04 — Painting, wallpaper & flooring</span>
+    <span>05 — Lighting & modern décor</span>
+  </div>
+  <div class="proof-quote">“Stylish, functional spaces that reflect your personality.”</div>
+</section>
+
+<section class="rating-showcase grid-shell" id="rating-card">
+  <div class="rating-kicker">Google Reputation</div>
+  <div class="rating-panel">
+    <div class="rating-topline">
+      <span class="rating-badge">Google profile rating</span>
+      <span class="rating-count">14 reviews</span>
+    </div>
+    <div class="rating-main">
+      <div class="rating-number">4.6</div>
+      <div class="rating-meta">
+        <div class="rating-stars" aria-label="4.6 out of 5 stars">★★★★★</div>
+        <p>Reviewers mention quality, proactive work, responsiveness and detailed design explanations.</p>
+      </div>
+    </div>
+    <div class="rating-foot">
+      <span>Lifestyle Interior · Kolkata</span>
+      <a href="https://maps.app.goo.gl/5VQfdGzu3P2thQh87?g_st=ac" target="_blank" rel="noopener">View on Google Maps ↗</a>
+    </div>
+  </div>
+</section>
+
+<section class="why-us grid-shell" id="why-us">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">Why Lifestyle</div>
+    <h2 class="auto-reveal">One studio for design, renovation and finishing details.</h2>
+  </div>
+  <div class="why-grid">
+    <article class="why-card auto-reveal"><span class="index">01</span><h3>Modern Design</h3><p>Contemporary interior direction planned to make everyday spaces feel refined, practical and personal.</p></article>
+    <article class="why-card auto-reveal"><span class="index">02</span><h3>Custom Furniture</h3><p>Made-for-space furniture and carpentry solutions that support both storage and visual balance.</p></article>
+    <article class="why-card auto-reveal"><span class="index">03</span><h3>Complete Finishes</h3><p>Painting, wallpaper, flooring and lighting brought together as part of the overall interior experience.</p></article>
+    <article class="why-card auto-reveal"><span class="index">04</span><h3>Renovation Focus</h3><p>Home and office renovation support for clients looking to upgrade existing spaces with a clearer design language.</p></article>
+  </div>
+</section>
+
+<section class="projects grid-shell" id="projects">
+  <div class="eyebrow">02 / Featured work</div>
+  <h2>Interiors shaped through detail.</h2>
+  <div class="project-index">
+    <span>Residential Interior</span>
+    <span>Kitchen Renovation</span>
+    <span>Custom Furniture</span>
+    <span>Office Interior</span>
+    <span>Wall & Surface Finishes</span>
+    <span>Lighting Design</span>
+  </div>
+  <figure class="project-main"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmMS2M-BPmBtYiiypZ-zSXjROUmH5cIFbutKfPxX4UJQ_e97DxEkhMnzEp-AyfgEeuZQ5wVyM4iqKznzJFn2zG1gv2Av0vXWSe4haDmmfSd0ovY4jDQ26QsSxkhRKFIK0Qdr3q8hEbNCPTb_=w300-h225-p-k-no" alt="Lifestyle Interior featured project"><figcaption>Lifestyle Interior — selected project image.</figcaption></figure>
+</section>
+
+<section class="services grid-shell" id="services">
+  <div class="eyebrow">03 / Services</div>
+  <h2>From renovation to the final layer of light.</h2>
+  <div class="service-grid">
+    <article class="service-card"><span>01</span><h3>Interior Design</h3><p>Design direction for residential and office interiors with a focus on modern style and practical living.</p></article>
+    <article class="service-card"><span>02</span><h3>Renovation</h3><p>Transform existing rooms and spaces through coordinated upgrades, finishes and detailing.</p></article>
+    <article class="service-card"><span>03</span><h3>Custom Furniture</h3><p>Furniture designed around the scale, storage requirements and visual language of the space.</p></article>
+    <article class="service-card"><span>04</span><h3>Carpentry</h3><p>Custom woodwork and built-in solutions for functional storage and interior detailing.</p></article>
+    <article class="service-card"><span>05</span><h3>Painting, Wallpaper & Flooring</h3><p>Surface treatments that bring texture, tone and cohesion to the overall interior.</p></article>
+    <article class="service-card"><span>06</span><h3>Lighting & Décor</h3><p>Lighting and decorative choices used to complete the mood and usability of the space.</p></article>
+  </div>
+</section>
+
+<section class="process grid-shell" id="process">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">04 / Process</div>
+    <h2 class="auto-reveal">A simple path from idea to finished interior.</h2>
+  </div>
+  <div class="process-track">
+    <article class="process-step auto-reveal"><span class="num">01</span><h3>Brief</h3><p>Understand the space, preferences, practical needs and renovation goals.</p></article>
+    <article class="process-step auto-reveal"><span class="num">02</span><h3>Planning</h3><p>Define the design direction, key elements, finishes and functional layout.</p></article>
+    <article class="process-step auto-reveal"><span class="num">03</span><h3>Detailing</h3><p>Coordinate furniture, carpentry, surfaces, flooring and lighting choices.</p></article>
+    <article class="process-step auto-reveal"><span class="num">04</span><h3>Execution</h3><p>Bring the design together through renovation and on-site implementation.</p></article>
+    <article class="process-step auto-reveal"><span class="num">05</span><h3>Finish</h3><p>Complete the visual layers and prepare the space for everyday use.</p></article>
+  </div>
+</section>
+
+<section class="transformation grid-shell" id="transformation">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">05 / Visual Stories</div>
+    <h2 class="auto-reveal">Slide between two views from the studio’s Google gallery.</h2>
+  </div>
+  <div class="transform-wrap">
+    <div class="transform-copy auto-reveal">
+      <h3>Two interiors. One design language.</h3>
+      <div>
+        <p>Use the slider to compare two project images published on Lifestyle Interior’s Google Business Profile.</p>
+        <p class="section-note">The slider is a visual comparison — not presented as a before/after of the same room.</p>
+      </div>
+    </div>
+    <div class="compare-frame auto-reveal auto-media" id="compare-frame">
+      <img src="https://lh3.googleusercontent.com/grass-cs/ACvplmM4jB6WKiKjhqGASg8R5hjwKCbxJ-mKyoCj69EuANuH_0IEIWOyevTE9jH-HlS2LBKiQFbQ9tYDeYWW4-KS0qpxf4x_FoxXmcJD6GK2JErzqWPZda0pZ1CClrUf0wRNSFohuwg=w300-h225-p-k-no" alt="Lifestyle Interior gallery view one">
+      <img class="compare-after" id="compare-after" src="https://lh3.googleusercontent.com/grass-cs/ACvplmPPi6ZyGMv5efzQ1Vj6RkS-FSJkLlMBk9C0-y5E0RW3WflU_uYAf3nCrOevW-96yVeL8CVd6YRT3fmooiWAsPMStXutmQcbcHO9O5YnVeBk4kd0GpP_rA9XnG_T_hkswJlIeQlzTg=w300-h225-p-k-no" alt="Lifestyle Interior gallery view two">
+      <div class="compare-divider" id="compare-divider"></div>
+      <div class="compare-knob" id="compare-knob">↔</div>
+      <span class="compare-label before">View 01</span>
+      <span class="compare-label after">View 02</span>
+      <input class="compare-range" id="compare-range" type="range" min="0" max="100" value="50" aria-label="Project image comparison">
+    </div>
+  </div>
+</section>
+
+<section class="case-studies grid-shell" id="case-studies">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">06 / Project Focus</div>
+    <h2 class="auto-reveal">Three ways Lifestyle Interior shapes a space.</h2>
+  </div>
+  <div class="case-grid">
+    <article class="case-card auto-reveal">
+      <div class="case-image auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmPmPAQVk63acfZJcQFpBNIhJuDRUU6tmky2KSMTb9I_x4GyLqq-M-P8lF6x2NQH1894HzDX6w7jGhOpp6-pk4VwrUokGaSMFnOERrzu2hIxiGknXf3_dNUQrj6dRwns8bFK2jdazQ=w300-h225-p-k-no" alt="Lifestyle Interior residential work"></div>
+      <div class="case-body"><span class="case-type">Residential</span><h3>Modern home interiors</h3><p class="section-note">Design decisions built around everyday comfort, storage and a clean contemporary feel.</p><div class="case-meta"><span><b>Scope</b>Interior design</span><span><b>Focus</b>Function + décor</span></div></div>
+    </article>
+    <article class="case-card auto-reveal">
+      <div class="case-image auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmPy477GkO68u_JbU4kHTc0I-3RWYtn3_cFN_ViE07v0xePn4azSP_cpJRL6QAbYgoFlH4JO8ySIkD9laULwZoJz0M36izUBKtCSPZOTq_XOgoV2bbjK4GaJCfzdgGvxalz_-h5f=w300-h225-p-k-no" alt="Lifestyle Interior renovation work"></div>
+      <div class="case-body"><span class="case-type">Renovation</span><h3>Upgrading existing spaces</h3><p class="section-note">Renovation supported by carpentry, surfaces, flooring and finishing details.</p><div class="case-meta"><span><b>Scope</b>Renovation</span><span><b>Focus</b>Upgrade + finish</span></div></div>
+    </article>
+    <article class="case-card auto-reveal">
+      <div class="case-image auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmPmuNV505QLi7qOrrm9HRzViY0iVALMcrMQSKRVc2yNnssBh5cpjv9O4iL287NCovpmmoL4KkOoxulbWVhIcBm1rvE2vxVnEPr0-Ti6HMS5Kt0c4Nv7_a1KRx5iogkjvqI1R_DTWg=w300-h225-p-k-no" alt="Lifestyle Interior furniture and lighting work"></div>
+      <div class="case-body"><span class="case-type">Detailing</span><h3>Furniture, finish & light</h3><p class="section-note">Custom elements and lighting used to bring the full room together.</p><div class="case-meta"><span><b>Scope</b>Furniture + lighting</span><span><b>Focus</b>Detail + mood</span></div></div>
+    </article>
+  </div>
+</section>
+
+<section class="photo-gallery grid-shell" id="gallery">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">07 / Google Gallery</div>
+    <h2 class="auto-reveal">Project imagery directly from the business profile.</h2>
+  </div>
+  <div class="gallery-grid">
+    <figure class="gallery-item auto-reveal auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmNmR9NACasOhw9Dasy6S0pGUaMXeZGkuBhqUhR_KcbzyO9sxo2aPDUsxS3IVspAfwfjM-8gy2uar4z_fF-SzrplIKTtAz7E4Ni5PIrUyI-TP6J0O8FoC2SyXuROEDRorEWICqRf=w300-h450-p-k-no" alt="Lifestyle Interior Google profile project 1"><span>Project 01</span></figure><figure class="gallery-item auto-reveal auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmM4jB6WKiKjhqGASg8R5hjwKCbxJ-mKyoCj69EuANuH_0IEIWOyevTE9jH-HlS2LBKiQFbQ9tYDeYWW4-KS0qpxf4x_FoxXmcJD6GK2JErzqWPZda0pZ1CClrUf0wRNSFohuwg=w300-h225-p-k-no" alt="Lifestyle Interior Google profile project 2"><span>Project 02</span></figure><figure class="gallery-item auto-reveal auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmPPi6ZyGMv5efzQ1Vj6RkS-FSJkLlMBk9C0-y5E0RW3WflU_uYAf3nCrOevW-96yVeL8CVd6YRT3fmooiWAsPMStXutmQcbcHO9O5YnVeBk4kd0GpP_rA9XnG_T_hkswJlIeQlzTg=w300-h225-p-k-no" alt="Lifestyle Interior Google profile project 3"><span>Project 03</span></figure><figure class="gallery-item auto-reveal auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmPmPAQVk63acfZJcQFpBNIhJuDRUU6tmky2KSMTb9I_x4GyLqq-M-P8lF6x2NQH1894HzDX6w7jGhOpp6-pk4VwrUokGaSMFnOERrzu2hIxiGknXf3_dNUQrj6dRwns8bFK2jdazQ=w300-h225-p-k-no" alt="Lifestyle Interior Google profile project 4"><span>Project 04</span></figure><figure class="gallery-item auto-reveal auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmPy477GkO68u_JbU4kHTc0I-3RWYtn3_cFN_ViE07v0xePn4azSP_cpJRL6QAbYgoFlH4JO8ySIkD9laULwZoJz0M36izUBKtCSPZOTq_XOgoV2bbjK4GaJCfzdgGvxalz_-h5f=w300-h225-p-k-no" alt="Lifestyle Interior Google profile project 5"><span>Project 05</span></figure><figure class="gallery-item auto-reveal auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmPmuNV505QLi7qOrrm9HRzViY0iVALMcrMQSKRVc2yNnssBh5cpjv9O4iL287NCovpmmoL4KkOoxulbWVhIcBm1rvE2vxVnEPr0-Ti6HMS5Kt0c4Nv7_a1KRx5iogkjvqI1R_DTWg=w300-h225-p-k-no" alt="Lifestyle Interior Google profile project 6"><span>Project 06</span></figure><figure class="gallery-item auto-reveal auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmPqfA4UFGiOYsVtT5az9VrA9yrwdrCEHKWnbbpLS56VS-mBHLCqvYfFq5wohuYGhnfZ0cW0k1gKmY32UCafyRo-4f-CAl-x0YL8R90fAITPsBm1bJuRVkYy5vUAxoBurjNkDpbm=w300-h225-p-k-no" alt="Lifestyle Interior Google profile project 7"><span>Project 07</span></figure><figure class="gallery-item auto-reveal auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmOB0cVH8ACawoJ4GRl546K40TNb7HKXqWuz1DjsCq2vwAzQd5ukvDbez-4oNkfLIE791jc34gOPXAJ8yC-lbVzsFf88bYLkoMdgFPrdr2vP0Gw7L7Ald-BdkC-4l4zMOrfxNITIHBm7zJ9d=w408-h544-k-no" alt="Lifestyle Interior Google profile project 8"><span>Project 08</span></figure><figure class="gallery-item auto-reveal auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmPoV8vQC5gnt-FiJSiKf8niSLqZz6E_5p0nNQqienbATRG0bOZEWtQrZvEXUckSDNHudpUBIYgZY5f0Lpx9trpsbpPv6ei00wkJTvbi9qprAfsIA6eizij5QPx_sDO7uOjm8tvpaeHVamg=w360-h270-k-no" alt="Lifestyle Interior Google profile project 9"><span>Project 09</span></figure>
+  </div>
+</section>
+
+<section class="testimonials grid-shell" id="testimonials">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">08 / Reviews</div>
+    <h2 class="auto-reveal">What clients highlight on Google.</h2>
+  </div>
+  <div class="testimonial-grid">
+    <article class="quote-card auto-reveal"><div><div class="quote-stars">★★★★★</div><p class="quote-text">“Bit expensive but they don't compromise with quality. Very happy.”</p></div><div class="quote-person"><strong>Google Reviewer</strong>Quality-focused feedback</div></article>
+    <article class="quote-card auto-reveal"><div><div class="quote-stars">★★★★★</div><p class="quote-text">“The team is very efficient and proactive in their work.”</p></div><div class="quote-person"><strong>Google Reviewer</strong>Service feedback</div></article>
+    <article class="quote-card auto-reveal"><div><div class="quote-stars">★★★★★</div><p class="quote-text">“Detailed designs were explained clearly and the designer tried to stay within my budget.”</p></div><div class="quote-person"><strong>Google Reviewer</strong>Design consultation feedback</div></article>
+  </div>
+</section>
+
+<section class="areas grid-shell" id="studio-location">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">09 / Kolkata Studio</div>
+    <h2 class="auto-reveal">Located in Taltala, central Kolkata.</h2>
+  </div>
+  <div class="areas-layout">
+    <div class="areas-copy auto-reveal">
+      <h3>12/A, McLeod Street.</h3>
+      <div>
+        <p class="section-note">Taltala, Kolkata, West Bengal 700017, India</p>
+        <div class="contact-detail-grid">
+          <a href="tel:+916297740771">+91 62977 40771 ↗</a>
+          <a href="https://maps.app.goo.gl/5VQfdGzu3P2thQh87?g_st=ac" target="_blank" rel="noopener">Open Google Maps ↗</a>
+          <span>Plus Code: G9X6+V7</span>
+          <span>Interior Designer</span>
+        </div>
+        <span class="availability-badge">Open 24 hours · 7 days</span>
+      </div>
+    </div>
+    <div class="studio-map auto-reveal">
+      <div class="studio-pin"><i></i><strong>Lifestyle Interior</strong><span>Taltala · Kolkata 700017</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="founder grid-shell" id="approach">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">10 / Design Approach</div>
+    <h2 class="auto-reveal">A practical interior, finished with personality.</h2>
+  </div>
+  <div class="founder-layout">
+    <div class="founder-photo auto-reveal auto-media"><img src="https://lh3.googleusercontent.com/grass-cs/ACvplmPqfA4UFGiOYsVtT5az9VrA9yrwdrCEHKWnbbpLS56VS-mBHLCqvYfFq5wohuYGhnfZ0cW0k1gKmY32UCafyRo-4f-CAl-x0YL8R90fAITPsBm1bJuRVkYy5vUAxoBurjNkDpbm=w300-h225-p-k-no" alt="Lifestyle Interior design work"></div>
+    <div class="founder-copy auto-reveal">
+      <h3>Design that works in real life.</h3>
+      <div class="founder-copy-bottom">
+        <p>The business profile positions Lifestyle Interior around modern décor, renovation, custom furniture, carpentry, painting, wallpaper, flooring and lighting. The common thread is simple: make the space more functional while giving it a stronger visual identity.</p>
+        <div class="founder-stats">
+          <div><strong>4.6</strong><span>Google rating</span></div>
+          <div><strong>14</strong><span>Google reviews</span></div>
+          <div><strong>302</strong><span>Profile photos</span></div>
+          <div><strong>24/7</strong><span>Listed opening hours</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="budget grid-shell" id="scope">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">11 / What We Handle</div>
+    <h2 class="auto-reveal">One interior brief, multiple layers of execution.</h2>
+  </div>
+  <div class="budget-wrap">
+    <div class="budget-intro auto-reveal"><div class="eyebrow">Project scope</div><h3>Homes. Offices. Renovations.</h3><p>There is no minimum project value published on the Google Maps listing, so the website keeps the focus on scope and services rather than inventing a budget threshold.</p></div>
+    <div class="budget-panel auto-reveal">
+      <div class="budget-value">6<small>Core service areas highlighted on the profile</small></div>
+      <div class="budget-types"><span>Interior Design</span><span>Renovation</span><span>Custom Furniture</span><span>Carpentry</span><span>Surfaces & Flooring</span><span>Lighting & Décor</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="faq grid-shell" id="faq">
+  <div class="section-head">
+    <div class="eyebrow auto-reveal">12 / FAQ</div>
+    <h2 class="auto-reveal">Quick answers before you call.</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item auto-reveal"><button class="faq-q" type="button"><span class="faq-num">01</span><strong>Do you handle home and office interiors?</strong><span class="plus">+</span></button><div class="faq-a"><p>Yes. The Google Business Profile describes interior design and renovation services for both homes and offices.</p></div></div>
+    <div class="faq-item auto-reveal"><button class="faq-q" type="button"><span class="faq-num">02</span><strong>Do you provide custom furniture and carpentry?</strong><span class="plus">+</span></button><div class="faq-a"><p>Yes. Custom furniture and carpentry are explicitly listed in the owner’s business description.</p></div></div>
+    <div class="faq-item auto-reveal"><button class="faq-q" type="button"><span class="faq-num">03</span><strong>Can you handle painting, wallpaper and flooring?</strong><span class="plus">+</span></button><div class="faq-a"><p>Yes. Painting, wallpaper and flooring are among the services highlighted on the Google profile.</p></div></div>
+    <div class="faq-item auto-reveal"><button class="faq-q" type="button"><span class="faq-num">04</span><strong>What are the listed opening hours?</strong><span class="plus">+</span></button><div class="faq-a"><p>Google Maps currently lists Lifestyle Interior as open 24 hours every day of the week.</p></div></div>
+    <div class="faq-item auto-reveal"><button class="faq-q" type="button"><span class="faq-num">05</span><strong>Where is the studio located?</strong><span class="plus">+</span></button><div class="faq-a"><p>12/A, McLeod St, Taltala, Kolkata, West Bengal 700017, India.</p></div></div>
+    <div class="faq-item auto-reveal"><button class="faq-q" type="button"><span class="faq-num">06</span><strong>Is there an official website listed on Google?</strong><span class="plus">+</span></button><div class="faq-a"><p>No website is currently listed on the Google Business Profile, which is why this redesign is presented as a dedicated website concept.</p></div></div>
+  </div>
+</section>
+
+<section class="contact grid-shell" id="contact">
+  <div class="contact-head">
+    <div class="eyebrow">13 / Start a conversation</div>
+    <h2>Planning a new interior or renovation?</h2>
+    <p style="color:#858580;line-height:1.7;font-size:13px;margin-top:30px">Lifestyle Interior<br>12/A, McLeod St, Taltala, Kolkata 700017<br>Phone: +91 62977 40771<br>Google rating: 4.6 / 5 · 14 reviews</p>
+  </div>
+  <form class="contact-form" id="preview-form">
+    <label>Name<input name="name" required></label>
+    <label>Phone<input name="phone" required></label>
+    <label>Email<input type="email" name="email"></label>
+    <label>Project type<select name="projectType"><option>Home Interior</option><option>Office Interior</option><option>Renovation</option><option>Custom Furniture</option><option>Carpentry / Finishes</option></select></label>
+    <label class="message">Tell us about your space<textarea name="message" rows="5" required></textarea></label>
+    <button type="submit">Request a callback ↗</button>
+  </form>
+</section>
+
+<section class="final-cta grid-shell" id="final-cta">
+  <div class="final-cta-inner">
+    <h2 class="auto-reveal">A better space starts with one call.</h2>
+    <div class="final-cta-actions auto-reveal">
+      <a class="cta-primary" href="tel:+916297740771">Call Lifestyle Interior ↗</a>
+      <a class="cta-secondary" href="https://maps.app.goo.gl/5VQfdGzu3P2thQh87?g_st=ac" target="_blank" rel="noopener">View on Google Maps ↗</a>
+      <p class="section-note">Lifestyle Interior · Taltala · Kolkata</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer grid-shell">
+  <div class="footer-brand"><span>LIFESTYLE</span><span>INTERIOR</span></div>
+  <div><strong>Kolkata Studio</strong><p>12/A, McLeod St, Taltala, Kolkata, West Bengal 700017</p><p>Plus Code: G9X6+V7</p></div>
+  <div><strong>Contact</strong><a href="tel:+916297740771">+91 62977 40771</a><a href="https://maps.app.goo.gl/5VQfdGzu3P2thQh87?g_st=ac" target="_blank">Google Maps ↗</a></div>
+  <div><strong>Hours</strong><p>Open 24 hours</p><p>Monday–Sunday</p></div>
+  <a class="footer-site" href="https://maps.app.goo.gl/5VQfdGzu3P2thQh87?g_st=ac" target="_blank">Business Profile ↗</a>
+</footer>
+</main>
+
+<div class="preview-note" id="note">Lifestyle Interior — premium website concept</div>
+<script>
+document.getElementById('preview-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const n=document.getElementById('note');
+  n.textContent='Demo enquiry captured — connect backend after approval.';
+  setTimeout(()=>n.textContent='Lifestyle Interior — premium website concept',5000);
+});
+</script>
+
+<script id="campy-motion-js">
+(() => {
+  document.body.classList.add('motion-ready');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const targets = [...document.querySelectorAll(
+    '.intro > .eyebrow,.intro h2,.stat-block,.intro-copy,.intro-image,'+
+    '.proof-score,.proof-image,.proof-list,.proof-quote,.rating-kicker,.rating-panel,'+
+    '.projects > .eyebrow,.projects h2,.project-index,.project-main,.services > .eyebrow,.services > h2,.service-card,'+
+    '.auto-reveal,.contact-head,.contact-form,.footer > *'
+  )];
+  targets.forEach((el,i)=>{
+    if(!el.classList.contains('auto-reveal')) el.classList.add('scene-reveal');
+    el.style.setProperty('--scene-delay',((i%5)*55)+'ms');
+    if(el.matches('figure,.intro-image,.proof-image,.project-main,.wide-image,.auto-media')) el.classList.add('scene-media');
+  });
+  if(reduce){targets.forEach(el=>el.classList.add('is-in'))}
+  else{
+    const io=new IntersectionObserver(entries=>entries.forEach(entry=>{
+      if(entry.isIntersecting){entry.target.classList.add('is-in');io.unobserve(entry.target)}
+    }),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    targets.forEach(el=>io.observe(el));
+  }
+  const range=document.getElementById('compare-range');
+  const after=document.getElementById('compare-after');
+  const divider=document.getElementById('compare-divider');
+  const knob=document.getElementById('compare-knob');
+  if(range&&after&&divider&&knob){
+    const paint=v=>{const n=Math.max(0,Math.min(100,Number(v)));after.style.clipPath='inset(0 '+(100-n)+'% 0 0)';divider.style.left=n+'%';knob.style.left=n+'%'};
+    range.addEventListener('input',e=>paint(e.target.value));paint(range.value);
+  }
+  document.querySelectorAll('.faq-q').forEach(btn=>btn.addEventListener('click',()=>{
+    const item=btn.closest('.faq-item');const open=item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(x=>x.classList.remove('open'));
+    if(!open)item.classList.add('open');
+  }));
+})();
+</script>
+</body></html>
