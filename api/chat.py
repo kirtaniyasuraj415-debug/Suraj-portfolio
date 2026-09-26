@@ -1,4 +1,4 @@
-from http.server import BaseHTTPRequestHandler
+# Redeploy marker: apply latest Vercel production environment variables\nfrom http.server import BaseHTTPRequestHandler
 import json
 import os
 import urllib.request
