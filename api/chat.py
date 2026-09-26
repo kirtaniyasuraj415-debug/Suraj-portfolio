@@ -7,8 +7,8 @@ import urllib.error
 NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "").strip()
 NVIDIA_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
 
-PRIMARY_MODEL = "openai/gpt-oss-20b"
-FALLBACK_MODEL = "google/gemma-4-31b-it"
+PRIMARY_MODEL = "google/gemma-4-31b-it"
+FALLBACK_MODEL = "nvidia/nemotron-3-super-120b-a12b"
 MODELS = [PRIMARY_MODEL, FALLBACK_MODEL]
 
 SYSTEM_PROMPT = """You are the official SURAJ.WEB portfolio assistant for Suraj Kirtaniya, an independent web developer.
@@ -118,31 +118,6 @@ class handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_GET(self):
-        if "?probe=1" in self.path:
-            if not NVIDIA_API_KEY:
-                self._json(503, {"ok": False, "configured": False})
-                return
-            try:
-                answer, model = try_models(
-                    [{"role": "user", "content": "Reply with exactly: OK"}],
-                    max_tokens=24,
-                )
-                self._json(200, {
-                    "ok": True,
-                    "configured": True,
-                    "providerConnected": True,
-                    "model": model,
-                    "sample": answer[:80],
-                })
-            except Exception as error:
-                print(f"NVIDIA provider probe failed: {type(error).__name__}: {error}")
-                self._json(502, {
-                    "ok": False,
-                    "configured": True,
-                    "providerConnected": False,
-                })
-            return
-
         self._json(200, {
             "service": "suraj-web-nvidia-chat",
             "primaryModel": PRIMARY_MODEL,
