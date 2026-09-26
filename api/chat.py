@@ -1,4 +1,3 @@
-# Redeploy marker: apply latest Vercel production environment variables
 from http.server import BaseHTTPRequestHandler
 import json
 import os
@@ -7,7 +6,10 @@ import urllib.error
 
 NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "").strip()
 NVIDIA_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
-MODEL = "z-ai/glm-5.1"
+
+PRIMARY_MODEL = "openai/gpt-oss-20b"
+FALLBACK_MODEL = "google/gemma-4-31b-it"
+MODELS = [PRIMARY_MODEL, FALLBACK_MODEL]
 
 SYSTEM_PROMPT = """You are the official SURAJ.WEB portfolio assistant for Suraj Kirtaniya, an independent web developer.
 
@@ -55,6 +57,56 @@ def compact_messages(raw):
         result.append({"role": role, "content": content[:1200]})
     return result
 
+def call_nvidia(model, messages, max_tokens=360):
+    payload = {
+        "model": model,
+        "messages": [{"role": "system", "content": SYSTEM_PROMPT}] + messages,
+        "max_tokens": max_tokens,
+        "stream": False,
+    }
+
+    request = urllib.request.Request(
+        NVIDIA_URL,
+        data=json.dumps(payload).encode("utf-8"),
+        method="POST",
+        headers={
+            "Authorization": "Bearer " + NVIDIA_API_KEY,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": "SURAJ.WEB/1.0",
+        },
+    )
+
+    with urllib.request.urlopen(request, timeout=28) as response:
+        data = json.loads(response.read().decode("utf-8"))
+
+    message = (
+        data.get("choices", [{}])[0]
+        .get("message", {})
+        .get("content", "")
+    )
+    message = str(message).strip()
+    if not message:
+        raise ValueError("NVIDIA returned an empty assistant message")
+    return message
+
+def try_models(messages, max_tokens=360):
+    errors = []
+    for model in MODELS:
+        try:
+            return call_nvidia(model, messages, max_tokens=max_tokens), model
+        except urllib.error.HTTPError as error:
+            try:
+                detail = error.read().decode("utf-8", errors="replace")[:1200]
+            except Exception:
+                detail = ""
+            errors.append(f"{model}: HTTP {error.code} {detail}")
+            print(f"NVIDIA model failure: {model} HTTP {error.code} {detail}")
+        except Exception as error:
+            errors.append(f"{model}: {type(error).__name__}: {error}")
+            print(f"NVIDIA model failure: {model} {type(error).__name__}: {error}")
+    raise RuntimeError("All NVIDIA models failed: " + " | ".join(errors))
+
 class handler(BaseHTTPRequestHandler):
     def _json(self, status, payload):
         body = json.dumps(payload).encode("utf-8")
@@ -66,9 +118,35 @@ class handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_GET(self):
+        if "?probe=1" in self.path:
+            if not NVIDIA_API_KEY:
+                self._json(503, {"ok": False, "configured": False})
+                return
+            try:
+                answer, model = try_models(
+                    [{"role": "user", "content": "Reply with exactly: OK"}],
+                    max_tokens=24,
+                )
+                self._json(200, {
+                    "ok": True,
+                    "configured": True,
+                    "providerConnected": True,
+                    "model": model,
+                    "sample": answer[:80],
+                })
+            except Exception as error:
+                print(f"NVIDIA provider probe failed: {type(error).__name__}: {error}")
+                self._json(502, {
+                    "ok": False,
+                    "configured": True,
+                    "providerConnected": False,
+                })
+            return
+
         self._json(200, {
             "service": "suraj-web-nvidia-chat",
-            "model": MODEL,
+            "primaryModel": PRIMARY_MODEL,
+            "fallbackModel": FALLBACK_MODEL,
             "configured": bool(NVIDIA_API_KEY),
             "accepts": "POST",
         })
@@ -91,42 +169,11 @@ class handler(BaseHTTPRequestHandler):
                 self._json(400, {"error": "Please send a message."})
                 return
 
-            payload = {
-                "model": MODEL,
-                "messages": [{"role": "system", "content": SYSTEM_PROMPT}] + messages,
-                "max_tokens": 320,
-                "temperature": 0.25,
-                "top_p": 0.9,
-                "stream": False,
-            }
+            message, model = try_models(messages)
+            self._json(200, {"message": message, "model": model})
 
-            request = urllib.request.Request(
-                NVIDIA_URL,
-                data=json.dumps(payload).encode("utf-8"),
-                method="POST",
-                headers={
-                    "Authorization": "Bearer " + NVIDIA_API_KEY,
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "User-Agent": "SURAJ.WEB/1.0",
-                },
-            )
-
-            with urllib.request.urlopen(request, timeout=24) as response:
-                data = json.loads(response.read().decode("utf-8"))
-
-            message = (
-                data.get("choices", [{}])[0]
-                .get("message", {})
-                .get("content", "")
-            )
-            message = str(message).strip()
-            if not message:
-                raise ValueError("Empty NVIDIA response")
-
-            self._json(200, {"message": message, "model": MODEL})
-
-        except urllib.error.HTTPError:
+        except json.JSONDecodeError:
+            self._json(400, {"error": "Invalid request."})
+        except Exception as error:
+            print(f"SURAJ.WEB chat request failed: {type(error).__name__}: {error}")
             self._json(502, {"error": "The AI assistant is temporarily unavailable."})
-        except Exception:
-            self._json(500, {"error": "The AI assistant is temporarily unavailable."})
