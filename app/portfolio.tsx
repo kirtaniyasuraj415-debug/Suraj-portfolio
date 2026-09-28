@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { ArrowDown, ArrowRight, ArrowUpRight, Code2, Gauge, Menu, MessageCircle, Monitor, Rocket, Smartphone, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -121,7 +121,7 @@ export default function Portfolio() {
       } catch {}
 
       try {
-        const snapshot = await getDocs(collection(db, "portfolioProjects"));
+        const snapshot = await getDocs(query(collection(db, "portfolioProjects"), where("visible", "==", true)));
         if (!cancelled && snapshot.size > 0) {
           const cmsProjects = snapshot.docs
             .map((item) => ({ docId: item.id, ...(item.data() as Omit<CmsProject, "docId">) }))
@@ -132,7 +132,7 @@ export default function Portfolio() {
       } catch {}
 
       try {
-        const snapshot = await getDocs(collection(db, "portfolioServices"));
+        const snapshot = await getDocs(query(collection(db, "portfolioServices"), where("visible", "==", true)));
         if (!cancelled && snapshot.size > 0) {
           setServices(
             snapshot.docs
