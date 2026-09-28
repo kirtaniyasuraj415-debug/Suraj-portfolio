@@ -1,7 +1,6 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
 import { getFirestore, doc, getDocFromServer, type Firestore } from "firebase/firestore";
-import { getStorage, type FirebaseStorage } from "firebase/storage";
 import firebaseAppletConfig from "../firebase-applet-config.json";
 
 let app: FirebaseApp;
@@ -14,7 +13,6 @@ if (!getApps().length) {
 // CRITICAL: Must pass firestoreDatabaseId according to Firebase skill
 export const db: Firestore = getFirestore(app, firebaseAppletConfig.firestoreDatabaseId);
 export const auth: Auth = getAuth(app);
-export const storage: FirebaseStorage = getStorage(app);
 
 export enum OperationType {
   CREATE = "create",
