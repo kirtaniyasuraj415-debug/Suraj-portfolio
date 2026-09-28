@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { DEFAULT_PORTFOLIO_PROJECTS } from "@/lib/portfolio-projects";
 import { DEFAULT_SERVICES, type CmsProject, type CmsService } from "@/lib/cms";
 
@@ -29,14 +27,27 @@ export function usePublicProjects() {
 
   useEffect(() => {
     let cancelled = false;
-    getDocs(query(collection(db, "portfolioProjects"), where("visible", "==", true)))
-      .then((snapshot) => {
-        if (cancelled) return;
-        if (snapshot.size > 0) {
+    fetch("/api/public-cms", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (!cancelled && Array.isArray(data?.projects) && data.projects.length) {
           setProjects(
-            snapshot.docs
-              .map((item) => ({ docId: item.id, ...(item.data() as Omit<CmsProject, "docId">) }))
-              .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0))
+            data.projects.map((project: any, index: number) => ({
+              slug: project.id || `project-${index + 1}`,
+              brand: project.brand || "",
+              title: project.title || "",
+              description: project.line || "",
+              category: project.tag || "",
+              detail: project.detail || "",
+              imageUrl: project.image || "",
+              color: project.color || "#21110a",
+              backword: project.backword || "",
+              scope: Array.isArray(project.scope) ? project.scope : [],
+              liveUrl: project.liveUrl || "",
+              order: index + 1,
+              visible: true,
+              featured: index < 4,
+            }))
           );
         }
       })
@@ -54,15 +65,11 @@ export function usePublicServices() {
 
   useEffect(() => {
     let cancelled = false;
-    getDocs(query(collection(db, "portfolioServices"), where("visible", "==", true)))
-      .then((snapshot) => {
-        if (cancelled) return;
-        if (snapshot.size > 0) {
-          setServices(
-            snapshot.docs
-              .map((item) => ({ docId: item.id, ...(item.data() as Omit<CmsService, "docId">) }))
-              .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0))
-          );
+    fetch("/api/public-cms", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (!cancelled && Array.isArray(data?.services) && data.services.length) {
+          setServices(data.services);
         }
       })
       .catch(() => {})
