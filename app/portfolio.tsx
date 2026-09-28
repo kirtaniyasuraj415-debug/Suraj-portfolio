@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { ArrowDown, ArrowRight, ArrowUpRight, Code2, Gauge, Menu, MessageCircle, Monitor, Rocket, Smartphone, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -11,8 +10,7 @@ import PortfolioChatbot from "@/components/portfolio-chatbot";
 import ScrollMotion from "@/components/scroll-motion";
 import CinematicIntro from "@/components/cinematic-intro";
 import { DEFAULT_PORTFOLIO_PROJECTS, type PortfolioProject } from "@/lib/portfolio-projects";
-import { db } from "@/lib/firebase";
-import { cmsProjectToPortfolio, DEFAULT_SERVICES, DEFAULT_SITE_SETTINGS, type CmsProject, type CmsService } from "@/lib/cms";
+import { DEFAULT_SERVICES, DEFAULT_SITE_SETTINGS, type CmsService } from "@/lib/cms";
 
 const navigation = [
   ["About", "about"],
@@ -109,49 +107,18 @@ export default function Portfolio() {
   useEffect(() => {
     let cancelled = false;
 
-    const loadCms = async () => {
-      // Keep the existing Telegram-backed data as a fallback while Firestore CMS
-      // is being bootstrapped.
-      try {
-        const response = await fetch("/api/portfolio-projects", { cache: "no-store" });
-        const data = response.ok ? await response.json() : null;
-        if (!cancelled && Array.isArray(data?.projects) && data.projects.length) {
-          setProjects(data.projects);
+    fetch("/api/public-cms", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (cancelled || !data) return;
+        if (Array.isArray(data.projects) && data.projects.length) setProjects(data.projects);
+        if (Array.isArray(data.services) && data.services.length) setServices(data.services);
+        if (data.settings && typeof data.settings === "object") {
+          setSiteSettings((current) => ({ ...current, ...data.settings }));
         }
-      } catch {}
+      })
+      .catch(() => {});
 
-      try {
-        const snapshot = await getDocs(query(collection(db, "portfolioProjects"), where("visible", "==", true)));
-        if (!cancelled && snapshot.size > 0) {
-          const cmsProjects = snapshot.docs
-            .map((item) => ({ docId: item.id, ...(item.data() as Omit<CmsProject, "docId">) }))
-            .filter((item) => item.visible !== false)
-            .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
-          setProjects(cmsProjects.map(cmsProjectToPortfolio));
-        }
-      } catch {}
-
-      try {
-        const snapshot = await getDocs(query(collection(db, "portfolioServices"), where("visible", "==", true)));
-        if (!cancelled && snapshot.size > 0) {
-          setServices(
-            snapshot.docs
-              .map((item) => ({ docId: item.id, ...(item.data() as Omit<CmsService, "docId">) }))
-              .filter((item) => item.visible !== false)
-              .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0))
-          );
-        }
-      } catch {}
-
-      try {
-        const snapshot = await getDoc(doc(db, "portfolioSettings", "public"));
-        if (!cancelled && snapshot.exists()) {
-          setSiteSettings((current) => ({ ...current, ...snapshot.data() }));
-        }
-      } catch {}
-    };
-
-    void loadCms();
     return () => { cancelled = true; };
   }, []);
 
