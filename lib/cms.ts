@@ -9,6 +9,7 @@ export type CmsProject = {
   category: string;
   detail: string;
   imageUrl: string;
+  imageFileId?: string;
   imagePath?: string;
   color: string;
   backword: string;
