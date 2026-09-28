@@ -43,8 +43,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { auth, db, storage } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import {
   DEFAULT_SERVICES,
   DEFAULT_SITE_SETTINGS,
@@ -54,7 +53,7 @@ import {
   type PublicSiteSettings,
 } from "@/lib/cms";
 
-type Tab = "dashboard" | "projects" | "services" | "enquiries" | "reviews" | "settings";
+type Tab = "dashboard" | "projects" | "services" | "enquiries" | "reviews" | "admins" | "settings";
 type AccessState = "loading" | "signed-out" | "denied" | "admin";
 
 type Enquiry = {
@@ -78,6 +77,15 @@ type Review = {
   message: string;
   createdAt: string;
 };
+
+type AdminAccess = {
+  email: string;
+  role: "admin";
+  addedAt?: unknown;
+  addedBy?: string;
+};
+
+const OWNER_EMAIL = "surajkirtaniya5@gmail.com";
 
 const EMPTY_PROJECT: CmsProject = {
   slug: "",
@@ -152,27 +160,48 @@ function TextArea({
 
 async function compressImage(file: File) {
   if (!file.type.startsWith("image/")) throw new Error("Please select an image file.");
-  if (file.size > 15 * 1024 * 1024) throw new Error("Image is too large. Keep it under 15 MB.");
+  if (file.size > 18 * 1024 * 1024) throw new Error("Image is too large. Keep it under 18 MB.");
+
+  const toDataUrl = (blob: Blob) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ""));
+      reader.onerror = () => reject(new Error("Unable to read the image."));
+      reader.readAsDataURL(blob);
+    });
 
   try {
     const bitmap = await createImageBitmap(file);
-    const maxWidth = 1800;
-    const scale = Math.min(1, maxWidth / bitmap.width);
-    const width = Math.max(1, Math.round(bitmap.width * scale));
-    const height = Math.max(1, Math.round(bitmap.height * scale));
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext("2d");
-    if (!context) return file;
-    context.drawImage(bitmap, 0, 0, width, height);
+    let width = Math.min(bitmap.width, 1400);
+    let height = Math.round(bitmap.height * (width / bitmap.width));
+    let quality = 0.82;
+    let blob: Blob | null = null;
+
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(width));
+      canvas.height = Math.max(1, Math.round(height));
+      const context = canvas.getContext("2d");
+      if (!context) break;
+      context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, "image/webp", quality)
+      );
+      if (blob && blob.size <= 520 * 1024) break;
+      width *= 0.86;
+      height *= 0.86;
+      quality = Math.max(0.56, quality - 0.07);
+    }
+
     bitmap.close();
-    const blob = await new Promise<Blob | null>((resolve) =>
-      canvas.toBlob(resolve, "image/webp", 0.84)
-    );
-    return blob ? new File([blob], file.name.replace(/\.[^.]+$/, "") + ".webp", { type: "image/webp" }) : file;
-  } catch {
-    return file;
+    if (!blob) throw new Error("Unable to optimize the image.");
+    if (blob.size > 650 * 1024) {
+      throw new Error("Image could not be compressed enough. Try a smaller screenshot.");
+    }
+    return toDataUrl(blob);
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error("Unable to process the image.");
   }
 }
 
@@ -185,6 +214,8 @@ export default function AdminApp() {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [settingsData, setSettingsData] = useState<PublicSiteSettings>(DEFAULT_SITE_SETTINGS);
+  const [admins, setAdmins] = useState<AdminAccess[]>([]);
+  const [newAdminEmail, setNewAdminEmail] = useState("");
   const [selectedProject, setSelectedProject] = useState<CmsProject | null>(null);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
@@ -196,8 +227,20 @@ export default function AdminApp() {
         setAccess("signed-out");
         return;
       }
+
+      const email = String(nextUser.email || "").trim().toLowerCase();
+      if (!nextUser.emailVerified || !email) {
+        setAccess("denied");
+        return;
+      }
+
+      if (email === OWNER_EMAIL) {
+        setAccess("admin");
+        return;
+      }
+
       try {
-        const admin = await getDoc(doc(db, "admins", nextUser.uid));
+        const admin = await getDoc(doc(db, "adminEmails", email));
         setAccess(admin.exists() ? "admin" : "denied");
       } catch {
         setAccess("denied");
@@ -205,6 +248,8 @@ export default function AdminApp() {
     });
     return unsubscribe;
   }, []);
+
+  const isOwner = String(user?.email || "").toLowerCase() === OWNER_EMAIL;
 
   const loadData = async () => {
     if (access !== "admin") return;
@@ -232,6 +277,17 @@ export default function AdminApp() {
         setSettingsData({ ...DEFAULT_SITE_SETTINGS, ...(settingsSnap.data() as Partial<PublicSiteSettings>) });
       }
 
+      if (String(auth.currentUser?.email || "").toLowerCase() === OWNER_EMAIL) {
+        const adminSnap = await getDocs(collection(db, "adminEmails"));
+        setAdmins(
+          adminSnap.docs
+            .map((item) => ({ email: item.id, ...(item.data() as Omit<AdminAccess, "email">) }))
+            .sort((a, b) => a.email.localeCompare(b.email))
+        );
+      } else {
+        setAdmins([]);
+      }
+
       fetch("/api/ratings", { cache: "no-store" })
         .then((response) => (response.ok ? response.json() : null))
         .then((data) => Array.isArray(data?.ratings) && setReviews(data.ratings))
@@ -249,7 +305,9 @@ export default function AdminApp() {
   const login = async () => {
     setNotice(null);
     try {
-      await signInWithPopup(auth, new GoogleAuthProvider());
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: "select_account" });
+      await signInWithPopup(auth, provider);
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Unable to sign in.");
     }
@@ -314,14 +372,6 @@ export default function AdminApp() {
     }
   };
 
-  const uploadProjectImage = async (file: File) => {
-    const optimized = await compressImage(file);
-    const path = `portfolio/projects/${Date.now()}-${slugify(optimized.name) || "project"}.webp`;
-    const uploadRef = ref(storage, path);
-    await uploadBytes(uploadRef, optimized, { contentType: optimized.type || "image/webp" });
-    return { imageUrl: await getDownloadURL(uploadRef), imagePath: path };
-  };
-
   const saveProject = async (draft: CmsProject, imageFile?: File | null) => {
     setBusy(true);
     setNotice(null);
@@ -332,14 +382,8 @@ export default function AdminApp() {
       if (!slug) throw new Error("Project slug is required.");
 
       let imageUrl = draft.imageUrl;
-      let imagePath = draft.imagePath;
       if (imageFile) {
-        const uploaded = await uploadProjectImage(imageFile);
-        if (draft.imagePath) {
-          await deleteObject(ref(storage, draft.imagePath)).catch(() => {});
-        }
-        imageUrl = uploaded.imageUrl;
-        imagePath = uploaded.imagePath;
+        imageUrl = await compressImage(imageFile);
       }
       if (!imageUrl) throw new Error("Add a project image.");
 
@@ -351,7 +395,7 @@ export default function AdminApp() {
         category: draft.category.trim(),
         detail: draft.detail.trim(),
         imageUrl,
-        imagePath: imagePath || "",
+        imagePath: "",
         color: draft.color || "#21110a",
         backword: draft.backword.trim(),
         scope: draft.scope.map((item) => item.trim()).filter(Boolean).slice(0, 8),
@@ -383,7 +427,6 @@ export default function AdminApp() {
     setBusy(true);
     try {
       await deleteDoc(doc(db, "portfolioProjects", project.docId));
-      if (project.imagePath) await deleteObject(ref(storage, project.imagePath)).catch(() => {});
       setSelectedProject(null);
       setNotice("Project deleted.");
       await loadData();
@@ -462,6 +505,48 @@ export default function AdminApp() {
     await loadData();
   };
 
+  const addAdmin = async () => {
+    if (!isOwner) return;
+    const email = newAdminEmail.trim().toLowerCase();
+    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+      setNotice("Enter a valid email address.");
+      return;
+    }
+    if (email === OWNER_EMAIL) {
+      setNotice("Owner email already has permanent access.");
+      return;
+    }
+    setBusy(true);
+    try {
+      await setDoc(doc(db, "adminEmails", email), {
+        email,
+        role: "admin",
+        addedAt: serverTimestamp(),
+        addedBy: OWNER_EMAIL,
+      });
+      setNewAdminEmail("");
+      setNotice(`${email} can now sign in as an admin with Google.`);
+      await loadData();
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Unable to add admin.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const removeAdmin = async (email: string) => {
+    if (!isOwner || email === OWNER_EMAIL) return;
+    if (!window.confirm(`Remove admin access for ${email}?`)) return;
+    setBusy(true);
+    try {
+      await deleteDoc(doc(db, "adminEmails", email));
+      setNotice(`${email} no longer has admin access.`);
+      await loadData();
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const stats = useMemo(() => ({
     projects: projects.length,
     visibleProjects: projects.filter((item) => item.visible).length,
@@ -480,7 +565,7 @@ export default function AdminApp() {
         <section className="w-full max-w-md rounded-[28px] border border-white/10 bg-[#130905] p-7 shadow-2xl">
           <p className="text-xs uppercase tracking-[0.2em] text-[#f47b38]">SURAJ.WEB Admin</p>
           <h1 className="font-['Antonio',sans-serif] text-5xl font-thin leading-none mt-4">Control your portfolio.</h1>
-          <p className="text-sm leading-6 text-[#a99689] mt-4">Projects, services, enquiries, images and site settings in one place.</p>
+          <p className="text-sm leading-6 text-[#a99689] mt-4">Sign in with your approved Google email. The owner account is already locked to surajkirtaniya5@gmail.com.</p>
           <button onClick={login} className="mt-7 h-12 w-full rounded-full bg-[#f47b38] font-medium text-white shadow-[0_0_28px_rgba(244,123,56,.25)]">
             Continue with Google
           </button>
@@ -495,14 +580,10 @@ export default function AdminApp() {
     return (
       <main className="min-h-screen bg-[#090402] text-[#f4e9e1] px-5 grid place-items-center">
         <section className="w-full max-w-lg rounded-[28px] border border-[#f47b38]/25 bg-[#130905] p-7">
-          <p className="text-xs uppercase tracking-[0.2em] text-[#f47b38]">Admin access required</p>
-          <h1 className="font-['Antonio',sans-serif] text-4xl mt-4">This Google account is signed in, but it is not an admin yet.</h1>
-          <p className="text-sm text-[#a99689] mt-4 leading-6">Create a Firestore document at <code className="text-[#e6c9b8]">admins/{user?.uid}</code>. The document can contain <code className="text-[#e6c9b8]">role: "owner"</code>.</p>
-          <button
-            onClick={() => navigator.clipboard.writeText(user?.uid || "")}
-            className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-xs"
-          ><Copy size={14}/> Copy my UID</button>
-          <button onClick={() => signOut(auth)} className="ml-2 mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-xs"><LogOut size={14}/> Sign out</button>
+          <p className="text-xs uppercase tracking-[0.2em] text-[#f47b38]">Access denied</p>
+          <h1 className="font-['Antonio',sans-serif] text-4xl mt-4">This email is not on the admin list.</h1>
+          <p className="text-sm text-[#a99689] mt-4 leading-6">Signed in as <strong className="text-[#ead9ce]">{user?.email}</strong>. Ask the owner to add this email from Admin → Admins.</p>
+          <button onClick={() => signOut(auth)} className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-xs"><LogOut size={14}/> Sign out</button>
         </section>
       </main>
     );
@@ -514,6 +595,7 @@ export default function AdminApp() {
     ["services", "Services", <BriefcaseBusiness size={17} key="s" />],
     ["enquiries", "Enquiries", <Inbox size={17} key="e" />],
     ["reviews", "Reviews", <Star size={17} key="r" />],
+    ...(isOwner ? [["admins", "Admins", <Check size={17} key="a" />] as [Tab, string, React.ReactNode]] : []),
     ["settings", "Settings", <Settings size={17} key="st" />],
   ];
 
@@ -584,7 +666,7 @@ export default function AdminApp() {
                 </article>
                 <article className="rounded-2xl border border-white/10 bg-[#120805] p-5">
                   <h2 className="font-['Antonio',sans-serif] text-2xl">Admin capabilities</h2>
-                  <p className="text-xs leading-6 text-[#927f73] mt-2">Unlimited projects, gallery uploads, project visibility, live links, services, enquiry pipeline and public site settings are managed here. Telegram can stay only for alerts and quick approvals.</p>
+                  <p className="text-xs leading-6 text-[#927f73] mt-2">Unlimited projects, secure gallery uploads, project visibility, live links, services, enquiry pipeline and public site settings are managed here. The owner can add or remove admin emails in one tap.</p>
                 </article>
               </div>
             </div>
@@ -694,6 +776,47 @@ export default function AdminApp() {
                     <p className="text-sm text-[#bdada2] leading-6 mt-4">{review.message}</p>
                   </article>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {tab === "admins" && isOwner && (
+            <div className="mt-7 max-w-3xl">
+              <div className="rounded-2xl border border-white/10 bg-[#120805] p-5 sm:p-6">
+                <p className="text-[10px] uppercase tracking-[.18em] text-[#f47b38]">Owner controls</p>
+                <h2 className="font-['Antonio',sans-serif] text-3xl mt-2">Admin access</h2>
+                <p className="text-sm leading-6 text-[#968378] mt-2">Your owner email has permanent access. To add another admin, just enter their Google email. No UID, Firebase console or manual document setup is needed.</p>
+
+                <div className="mt-5 flex flex-col sm:flex-row gap-2">
+                  <input
+                    type="email"
+                    value={newAdminEmail}
+                    onChange={(event) => setNewAdminEmail(event.target.value)}
+                    placeholder="newadmin@gmail.com"
+                    className="h-12 flex-1 rounded-xl border border-white/10 bg-[#0d0603] px-4 text-sm text-[#f4e9e1] outline-none focus:border-[#f47b38]/60"
+                  />
+                  <button onClick={() => void addAdmin()} className="h-12 rounded-xl bg-[#f47b38] px-5 text-sm text-white inline-flex items-center justify-center gap-2"><Plus size={16}/> Add Admin</button>
+                </div>
+
+                <div className="mt-6 grid gap-2">
+                  <div className="flex items-center justify-between gap-3 rounded-xl border border-[#f47b38]/25 bg-[#f47b38]/[.06] p-4">
+                    <div>
+                      <strong className="text-sm">{OWNER_EMAIL}</strong>
+                      <p className="text-[10px] uppercase tracking-[.12em] text-[#f47b38] mt-1">Owner · permanent access</p>
+                    </div>
+                    <span className="text-xs text-[#d6b29e]">Protected</span>
+                  </div>
+
+                  {admins.map((admin) => (
+                    <div key={admin.email} className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-black/10 p-4">
+                      <div>
+                        <strong className="text-sm">{admin.email}</strong>
+                        <p className="text-[10px] uppercase tracking-[.12em] text-[#77665d] mt-1">Admin</p>
+                      </div>
+                      <button onClick={() => void removeAdmin(admin.email)} className="inline-flex items-center gap-2 rounded-full border border-red-500/20 px-3 py-2 text-xs text-red-300"><Trash2 size={14}/> Remove</button>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
