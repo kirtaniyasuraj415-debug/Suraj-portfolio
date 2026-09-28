@@ -14,9 +14,19 @@ type MotionItem = {
   direction: "left" | "right" | "up" | "scale";
 };
 
+function setFinalMotion(el: HTMLElement) {
+  el.style.setProperty("--motion-opacity", "1");
+  el.style.setProperty("--motion-x", "0px");
+  el.style.setProperty("--motion-y", "0px");
+  el.style.setProperty("--motion-scale", "1");
+}
+
 export default function ScrollMotion() {
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const lightweightMode =
+      window.matchMedia("(max-width: 900px)").matches ||
+      window.matchMedia("(pointer: coarse)").matches;
 
     const raw: Array<{ selector: string; direction: MotionItem["direction"] }> = [
       { selector: ".skills-marquee", direction: "up" },
@@ -62,7 +72,108 @@ export default function ScrollMotion() {
     const projectVisuals = Array.from(document.querySelectorAll<HTMLElement>(".project-visual"));
     projectVisuals.forEach((el) => el.classList.add("cinematic-project-visual"));
 
+    const ambientTargets = [
+      ...Array.from(document.querySelectorAll<HTMLElement>(".why-card")),
+      ...Array.from(document.querySelectorAll<HTMLElement>(".contact-section")),
+    ];
+
+    const ambientObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle("motion-inview", entry.isIntersecting);
+        });
+      },
+      { rootMargin: "18% 0px 18% 0px", threshold: 0.01 },
+    );
+    ambientTargets.forEach((el) => ambientObserver.observe(el));
+
     const hero = document.querySelector<HTMLElement>(".hero");
+
+    if (reduceMotion) {
+      items.forEach(({ el }) => setFinalMotion(el));
+      projectVisuals.forEach((visual) => {
+        visual.style.setProperty("--visual-shift", "0px");
+        visual.style.setProperty("--visual-word-shift", "0px");
+        visual.style.setProperty("--visual-scale", "1");
+      });
+      return () => {
+        ambientObserver.disconnect();
+        items.forEach(({ el }) => {
+          delete el.dataset.cinematicMotion;
+          el.classList.remove("cinematic-scroll-item");
+        });
+        projectVisuals.forEach((el) => el.classList.remove("cinematic-project-visual"));
+      };
+    }
+
+    // Phones/tablets use one-shot intersection reveals instead of measuring every
+    // animated element on every scroll frame. This keeps the same motion language
+    // without the expensive continuous layout work that caused mobile stutter.
+    if (lightweightMode) {
+      document.documentElement.classList.add("lightweight-motion");
+
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target as HTMLElement;
+            setFinalMotion(el);
+            el.classList.add("motion-revealed");
+            revealObserver.unobserve(el);
+          });
+        },
+        { rootMargin: "0px 0px -7% 0px", threshold: 0.06 },
+      );
+
+      items.forEach(({ el }) => revealObserver.observe(el));
+
+      // Hero retains a light entrance animation, but no continuous scroll-linked
+      // transforms on mobile.
+      if (hero) hero.classList.add("mobile-hero-settled");
+
+      return () => {
+        revealObserver.disconnect();
+        ambientObserver.disconnect();
+        document.documentElement.classList.remove("lightweight-motion");
+        hero?.classList.remove("mobile-hero-settled");
+        items.forEach(({ el }) => {
+          delete el.dataset.cinematicMotion;
+          el.classList.remove("cinematic-scroll-item", "motion-revealed");
+        });
+        projectVisuals.forEach((el) => el.classList.remove("cinematic-project-visual"));
+      };
+    }
+
+    // Desktop/laptop: continuous motion only for elements close to the viewport.
+    // This avoids looping through the whole page on each scroll frame.
+    const activeItems = new Set<HTMLElement>();
+    const activeVisuals = new Set<HTMLElement>();
+
+    const activeObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const el = entry.target as HTMLElement;
+          if (entry.isIntersecting) activeItems.add(el);
+          else activeItems.delete(el);
+        });
+      },
+      { rootMargin: "35% 0px 35% 0px", threshold: 0 },
+    );
+
+    const visualObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const el = entry.target as HTMLElement;
+          if (entry.isIntersecting) activeVisuals.add(el);
+          else activeVisuals.delete(el);
+        });
+      },
+      { rootMargin: "30% 0px 30% 0px", threshold: 0 },
+    );
+
+    items.forEach(({ el }) => activeObserver.observe(el));
+    projectVisuals.forEach((el) => visualObserver.observe(el));
+
     let frame = 0;
     let ticking = false;
 
@@ -70,31 +181,27 @@ export default function ScrollMotion() {
       ticking = false;
       const vh = window.innerHeight || 1;
 
-      if (hero && !reduceMotion) {
+      if (hero) {
         const rect = hero.getBoundingClientRect();
-        const heroProgress = clamp(-rect.top / Math.max(rect.height * 0.92, 1));
-        hero.style.setProperty("--hero-scroll", heroProgress.toFixed(4));
-        hero.style.setProperty("--hero-name-y", `${(-heroProgress * 118).toFixed(2)}px`);
-        hero.style.setProperty("--hero-name-scale", (1 - heroProgress * 0.055).toFixed(4));
-        hero.style.setProperty("--hero-name-opacity", (1 - heroProgress * 0.82).toFixed(4));
-        hero.style.setProperty("--hero-portrait-y", `${(-heroProgress * 86).toFixed(2)}px`);
-        hero.style.setProperty("--hero-portrait-scale", (1 - heroProgress * 0.19).toFixed(4));
-        hero.style.setProperty("--hero-intro-y", `${(-heroProgress * 46).toFixed(2)}px`);
-        hero.style.setProperty("--hero-intro-opacity", (1 - heroProgress * 1.05).toFixed(4));
-        hero.style.setProperty("--hero-card-y", `${(-heroProgress * 72).toFixed(2)}px`);
-        hero.style.setProperty("--hero-card-scale", (1 - heroProgress * 0.12).toFixed(4));
-        hero.style.setProperty("--hero-card-opacity", (1 - heroProgress * 0.92).toFixed(4));
-        hero.style.setProperty("--hero-atmosphere-y", `${(heroProgress * 34).toFixed(2)}px`);
+        if (rect.bottom > -100 && rect.top < vh + 100) {
+          const heroProgress = clamp(-rect.top / Math.max(rect.height * 0.92, 1));
+          hero.style.setProperty("--hero-scroll", heroProgress.toFixed(4));
+          hero.style.setProperty("--hero-name-y", `${(-heroProgress * 118).toFixed(2)}px`);
+          hero.style.setProperty("--hero-name-scale", (1 - heroProgress * 0.055).toFixed(4));
+          hero.style.setProperty("--hero-name-opacity", (1 - heroProgress * 0.82).toFixed(4));
+          hero.style.setProperty("--hero-portrait-y", `${(-heroProgress * 86).toFixed(2)}px`);
+          hero.style.setProperty("--hero-portrait-scale", (1 - heroProgress * 0.19).toFixed(4));
+          hero.style.setProperty("--hero-intro-y", `${(-heroProgress * 46).toFixed(2)}px`);
+          hero.style.setProperty("--hero-intro-opacity", (1 - heroProgress * 1.05).toFixed(4));
+          hero.style.setProperty("--hero-card-y", `${(-heroProgress * 72).toFixed(2)}px`);
+          hero.style.setProperty("--hero-card-scale", (1 - heroProgress * 0.12).toFixed(4));
+          hero.style.setProperty("--hero-card-opacity", (1 - heroProgress * 0.92).toFixed(4));
+          hero.style.setProperty("--hero-atmosphere-y", `${(heroProgress * 34).toFixed(2)}px`);
+        }
       }
 
       items.forEach(({ el, index, direction }) => {
-        if (reduceMotion) {
-          el.style.setProperty("--motion-opacity", "1");
-          el.style.setProperty("--motion-x", "0px");
-          el.style.setProperty("--motion-y", "0px");
-          el.style.setProperty("--motion-scale", "1");
-          return;
-        }
+        if (!activeItems.has(el)) return;
 
         const rect = el.getBoundingClientRect();
         const rawProgress = (vh * 0.94 - rect.top) / Math.max(vh * 0.68 + rect.height * 0.45, 1);
@@ -120,26 +227,18 @@ export default function ScrollMotion() {
         el.style.setProperty("--motion-x", `${x.toFixed(2)}px`);
         el.style.setProperty("--motion-y", `${(y + parallax).toFixed(2)}px`);
         el.style.setProperty("--motion-scale", scale.toFixed(4));
-
-        if (el.classList.contains("project-card")) {
-          el.style.setProperty("--project-progress", progress.toFixed(4));
-        }
       });
 
       projectVisuals.forEach((visual) => {
-        if (reduceMotion) {
-          visual.style.setProperty("--visual-shift", "0px");
-          visual.style.setProperty("--visual-word-shift", "0px");
-          visual.style.setProperty("--visual-scale", "1");
-          return;
-        }
+        if (!activeVisuals.has(visual)) return;
+
         const rect = visual.getBoundingClientRect();
         const center = rect.top + rect.height / 2;
         const normalized = clamp((center - vh / 2) / vh, -1, 1);
-        const visualShift = -normalized * 24;
+        const visualShift = -normalized * 20;
         visual.style.setProperty("--visual-shift", `${visualShift.toFixed(2)}px`);
         visual.style.setProperty("--visual-word-shift", `${(-visualShift * 0.25).toFixed(2)}px`);
-        visual.style.setProperty("--visual-scale", (1.045 - Math.abs(normalized) * 0.025).toFixed(4));
+        visual.style.setProperty("--visual-scale", (1.035 - Math.abs(normalized) * 0.02).toFixed(4));
       });
     };
 
@@ -157,6 +256,9 @@ export default function ScrollMotion() {
       window.removeEventListener("scroll", requestRender);
       window.removeEventListener("resize", requestRender);
       window.cancelAnimationFrame(frame);
+      activeObserver.disconnect();
+      visualObserver.disconnect();
+      ambientObserver.disconnect();
       items.forEach(({ el }) => {
         delete el.dataset.cinematicMotion;
         el.classList.remove("cinematic-scroll-item");
