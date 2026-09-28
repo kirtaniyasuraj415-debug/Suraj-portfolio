@@ -9,6 +9,7 @@ import {
   type PublicSiteSettings,
 } from "@/lib/cms";
 import { TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID } from "@/lib/server/telegram-credentials";
+import { getPortfolioProjects } from "@/lib/server/telegram-project-store";
 
 const ADMIN_CHAT_ID = String(TELEGRAM_CHAT_ID);
 const STORAGE_LANGUAGES = ["eo", "cy", "ga", "gd", "eu", "gl", "is", "mt", "lv", "lt", "et", "sl"];
@@ -108,8 +109,8 @@ async function setCommands(language: string, commands: TelegramCommand[]) {
   });
 }
 
-function legacyProjects(): CmsProject[] {
-  return DEFAULT_PORTFOLIO_PROJECTS.map((project, index) => ({
+function legacyProjects(source: PortfolioProject[] = DEFAULT_PORTFOLIO_PROJECTS): CmsProject[] {
+  return source.map((project, index) => ({
     docId: `legacy-${project.id}`,
     slug: project.id,
     brand: project.brand,
@@ -128,10 +129,10 @@ function legacyProjects(): CmsProject[] {
   }));
 }
 
-function initialState(): AdminCmsState {
+function initialState(source: PortfolioProject[] = DEFAULT_PORTFOLIO_PROJECTS): AdminCmsState {
   return {
     version: 1,
-    projects: legacyProjects(),
+    projects: legacyProjects(source),
     services: DEFAULT_SERVICES.map((service, index) => ({
       ...service,
       docId: `service-${index + 1}`,
@@ -339,13 +340,18 @@ async function writeStoredState(state: AdminCmsState) {
   return normalized;
 }
 
+async function fallbackState() {
+  const currentProjects = await getPortfolioProjects().catch(() => DEFAULT_PORTFOLIO_PROJECTS);
+  return initialState(currentProjects);
+}
+
 export async function getAdminCmsState() {
-  return (await readStoredState()) || initialState();
+  return (await readStoredState()) || (await fallbackState());
 }
 
 export async function mutateAdminCmsState<T>(mutator: (state: AdminCmsState) => T | Promise<T>) {
   const run = mutationQueue.then(async () => {
-    const current = (await readStoredState()) || initialState();
+    const current = (await readStoredState()) || (await fallbackState());
     const draft = normalizeState(JSON.parse(JSON.stringify(current)) as AdminCmsState);
     const result = await mutator(draft);
     await writeStoredState(draft);
