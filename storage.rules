@@ -1,16 +1,8 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    // Portfolio images are public assets. Uploads require Firebase authentication.
-    // The admin UI separately verifies the signed-in account against Firestore
-    // admins/{uid} before exposing any upload controls.
-    match /portfolio/{allPaths=**} {
-      allow read: if true;
-      allow write: if request.auth != null
-        && request.resource.size < 15 * 1024 * 1024
-        && request.resource.contentType.matches('image/.*');
-    }
-
+    // Admin uploads are stored as aggressively-compressed WebP data inside the
+    // Firestore project document, so direct Storage writes are closed.
     match /{allPaths=**} {
       allow read, write: if false;
     }
