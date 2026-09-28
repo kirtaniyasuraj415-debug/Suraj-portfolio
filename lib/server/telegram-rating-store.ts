@@ -167,6 +167,15 @@ async function updateStatus(id: number, status: "pending" | "approved" | "delete
   return review;
 }
 
+export async function moderateRating(
+  id: number,
+  action: "approve" | "reject" | "delete"
+) {
+  if (!Number.isInteger(id) || id < 1) throw new Error("INVALID_RATING_ID");
+  if (action === "approve") return updateStatus(id, "approved");
+  return updateStatus(id, "delete");
+}
+
 async function adminReply(text: string) {
   await telegramApi("sendMessage", { chat_id: ADMIN_CHAT_ID, text, disable_web_page_preview: true });
 }
