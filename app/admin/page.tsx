@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import AdminApp from "@/components/admin/admin-app";
+import AdminApp from "@/components/admin/admin-app-v2";
 
 export const metadata: Metadata = {
   title: "Admin — SURAJ.WEB",
