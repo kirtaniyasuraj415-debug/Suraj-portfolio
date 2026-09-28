@@ -252,7 +252,7 @@ export default function Portfolio() {
           <article
             key={title}
             className={`why-card ${index === 0 || index === 3 ? "why-card-large" : "why-card-small"}`}
-            onPointerDown={(event) => {
+            onClick={(event) => {
               const card = event.currentTarget;
               card.classList.remove("why-card-pulse");
               void card.offsetWidth;
