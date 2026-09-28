@@ -24,8 +24,23 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    function hasVerifiedEmail() {
+      return isSignedIn()
+        && request.auth.token.email is string
+        && request.auth.token.email_verified == true;
+    }
+
+    function isOwner() {
+      return hasVerifiedEmail()
+        && request.auth.token.email == 'surajkirtaniya5@gmail.com';
+    }
+
     function isAdmin() {
-      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      return isOwner()
+        || (
+          hasVerifiedEmail()
+          && exists(/databases/$(database)/documents/adminEmails/$(request.auth.token.email))
+        );
     }
 
     function isValidProjectEnquiry(data) {
@@ -57,10 +72,20 @@ service cloud.firestore {
         (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 50));
     }
 
-    // Admins collection for role checks
+    // Email allowlist for the admin panel. The owner email above is always
+    // authorized, so first login needs no manual UID or Firestore bootstrap.
+    match /adminEmails/{email} {
+      // A signed-in user may only check whether their own verified email is allowed.
+      allow get: if hasVerifiedEmail() && request.auth.token.email == email;
+
+      // Only the owner can view the full admin list or add/remove admins.
+      allow list, create, update, delete: if isOwner();
+    }
+
+    // Legacy UID records remain readable for the owner only. New access control
+    // uses adminEmails and does not require UID setup.
     match /admins/{adminId} {
-      allow get: if isSignedIn() && request.auth.uid == adminId;
-      allow list, write: if false;
+      allow read, write: if isOwner();
     }
 
     // Client project enquiries collection (PII Protected)
