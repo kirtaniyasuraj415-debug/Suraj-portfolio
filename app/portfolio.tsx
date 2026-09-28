@@ -58,20 +58,24 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function ProjectVisual({ project }: { project: PortfolioProject }) {
   return (
     <div className={`project-visual visual-${project.id}`} style={{ backgroundColor: project.color }}>
-      <span className="project-backword" aria-hidden="true">{project.backword}</span>
-      <div className="website-mockup" aria-hidden="true">
-        {/* Native screenshots are intentional portfolio previews. */}
+      <div className="project-image-stage">
+        {/* Show the actual supplied project screenshot directly — no browser/device mockup shell. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={project.image}
-          alt=""
+          alt={`${project.title} website preview`}
           loading="lazy"
-          width="900"
-          height="540"
-          className="h-full w-full object-cover"
+          width="1200"
+          height="750"
+          className="project-image"
         />
       </div>
-      <span className="project-open"><ArrowUpRight size={23} /></span>
+      <span className="project-visual-shade" aria-hidden="true" />
+      <div className="project-visual-meta" aria-hidden="true">
+        <span>0{project.slot}</span>
+        <span>{project.tag}</span>
+      </div>
+      <span className="project-open"><ArrowUpRight size={22} /></span>
     </div>
   );
 }
