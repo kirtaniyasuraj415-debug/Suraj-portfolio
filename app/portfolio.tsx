@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { ArrowDown, ArrowRight, ArrowUpRight, Code2, Gauge, Menu, MessageCircle, Monitor, Rocket, Smartphone, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -10,6 +11,8 @@ import PortfolioChatbot from "@/components/portfolio-chatbot";
 import ScrollMotion from "@/components/scroll-motion";
 import CinematicIntro from "@/components/cinematic-intro";
 import { DEFAULT_PORTFOLIO_PROJECTS, type PortfolioProject } from "@/lib/portfolio-projects";
+import { db } from "@/lib/firebase";
+import { cmsProjectToPortfolio, DEFAULT_SERVICES, DEFAULT_SITE_SETTINGS, type CmsProject, type CmsService } from "@/lib/cms";
 
 const navigation = [
   ["About", "about"],
@@ -19,9 +22,7 @@ const navigation = [
   ["Contact", "contact"],
 ];
 
-const WHATSAPP_GENERAL_URL = `https://wa.me/917810963278?text=${encodeURIComponent(
-  "Hi Suraj, I came across your portfolio and would like to discuss a website/project."
-)}`;
+const WHATSAPP_MESSAGE = "Hi Suraj, I came across your portfolio and would like to discuss a website/project.";
 
 type PortfolioRating = {
   id: number;
@@ -72,7 +73,7 @@ function ProjectVisual({ project }: { project: PortfolioProject }) {
       </div>
       <span className="project-visual-shade" aria-hidden="true" />
       <div className="project-visual-meta" aria-hidden="true">
-        <span>0{project.slot}</span>
+        <span>{String(project.slot).padStart(2, "0")}</span>
         <span>{project.tag}</span>
       </div>
       <span className="project-open"><ArrowUpRight size={22} /></span>
@@ -86,6 +87,8 @@ export default function Portfolio() {
   const [active, setActive] = useState("about");
   const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null);
   const [projects, setProjects] = useState<PortfolioProject[]>(DEFAULT_PORTFOLIO_PROJECTS);
+  const [services, setServices] = useState<CmsService[]>(DEFAULT_SERVICES);
+  const [siteSettings, setSiteSettings] = useState(DEFAULT_SITE_SETTINGS);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [ratings, setRatings] = useState<PortfolioRating[]>([]);
   const [ratingValue, setRatingValue] = useState(5);
@@ -105,14 +108,50 @@ export default function Portfolio() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/portfolio-projects", { cache: "no-store" })
-      .then((response) => response.ok ? response.json() : null)
-      .then((data) => {
-        if (!cancelled && Array.isArray(data?.projects) && data.projects.length === 4) {
+
+    const loadCms = async () => {
+      // Keep the existing Telegram-backed data as a fallback while Firestore CMS
+      // is being bootstrapped.
+      try {
+        const response = await fetch("/api/portfolio-projects", { cache: "no-store" });
+        const data = response.ok ? await response.json() : null;
+        if (!cancelled && Array.isArray(data?.projects) && data.projects.length) {
           setProjects(data.projects);
         }
-      })
-      .catch(() => {});
+      } catch {}
+
+      try {
+        const snapshot = await getDocs(collection(db, "portfolioProjects"));
+        if (!cancelled && snapshot.size > 0) {
+          const cmsProjects = snapshot.docs
+            .map((item) => ({ docId: item.id, ...(item.data() as Omit<CmsProject, "docId">) }))
+            .filter((item) => item.visible !== false)
+            .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+          setProjects(cmsProjects.map(cmsProjectToPortfolio));
+        }
+      } catch {}
+
+      try {
+        const snapshot = await getDocs(collection(db, "portfolioServices"));
+        if (!cancelled && snapshot.size > 0) {
+          setServices(
+            snapshot.docs
+              .map((item) => ({ docId: item.id, ...(item.data() as Omit<CmsService, "docId">) }))
+              .filter((item) => item.visible !== false)
+              .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0))
+          );
+        }
+      } catch {}
+
+      try {
+        const snapshot = await getDoc(doc(db, "portfolioSettings", "public"));
+        if (!cancelled && snapshot.exists()) {
+          setSiteSettings((current) => ({ ...current, ...snapshot.data() }));
+        }
+      } catch {}
+    };
+
+    void loadCms();
     return () => { cancelled = true; };
   }, []);
 
@@ -162,6 +201,10 @@ export default function Portfolio() {
     }
   };
 
+  const whatsappUrl = `https://wa.me/${siteSettings.whatsappNumber}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  const leftProjects = projects.filter((_, index) => index % 2 === 0);
+  const rightProjects = projects.filter((_, index) => index % 2 === 1);
+
   const card = (project: PortfolioProject) => <article className="project-card" key={project.id}>
     <Button variant="ghost" className="project-trigger" aria-label={`View ${project.title} concept`} onClick={() => setSelectedProject(project)}><ProjectVisual project={project} /></Button>
     <div className="project-caption"><h3>{project.title}</h3><ArrowUpRight size={20} /></div>
@@ -192,7 +235,7 @@ export default function Portfolio() {
                 document.getElementById(id)?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
                 window.history.replaceState(null, "", `#${id}`);
               });
-            }}><SheetTitle className="wordmark">SURAJ.WEB</SheetTitle><SheetDescription>Design. Develop. Make an impression.</SheetDescription><nav aria-label="Mobile navigation">{navigation.map(([label,id]) => <a key={id} href={`#${id}`} onClick={(event) => { event.preventDefault(); mobileDestination.current = id; setMenuOpen(false); }}>{label}<ArrowUpRight size={22}/></a>)}</nav><a className="mobile-email" href={WHATSAPP_GENERAL_URL} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a></SheetContent>
+            }}><SheetTitle className="wordmark">SURAJ.WEB</SheetTitle><SheetDescription>Design. Develop. Make an impression.</SheetDescription><nav aria-label="Mobile navigation">{navigation.map(([label,id]) => <a key={id} href={`#${id}`} onClick={(event) => { event.preventDefault(); mobileDestination.current = id; setMenuOpen(false); }}>{label}<ArrowUpRight size={22}/></a>)}</nav><a className="mobile-email" href={whatsappUrl} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a></SheetContent>
           </Sheet>
         </div>
       </header>
@@ -233,8 +276,18 @@ export default function Portfolio() {
     <div className="technology-row content-width" aria-label="Technologies I work with"><span className="tech-react">◉ React</span><span className="tech-next">NEXT.js</span><span className="tech-firebase">ϟ Firebase</span><span className="tech-tailwind">≋ tailwindcss</span><span className="tech-vercel">▲ Vercel</span></div>
 
     <section id="projects" className="projects-section content-width" aria-labelledby="projects-heading">
-      <div className="project-column">{card(projects[0])}{card(projects[2])}<p className="project-statement">I believe the smallest details<br/>make the biggest difference<span>.</span></p></div>
-      <div className="project-column offset-column"><div className="projects-heading"><SectionLabel>Selected Concepts</SectionLabel><h2 id="projects-heading">Thoughtful design.<br/>Purposeful websites.</h2><p>A selection of independent website concepts.</p></div>{card(projects[1])}{card(projects[3])}</div>
+      <div className="project-column">
+        {leftProjects.map(card)}
+        <p className="project-statement">I believe the smallest details<br/>make the biggest difference<span>.</span></p>
+      </div>
+      <div className="project-column offset-column">
+        <div className="projects-heading">
+          <SectionLabel>{siteSettings.projectSectionLabel}</SectionLabel>
+          <h2 id="projects-heading" style={{ whiteSpace: "pre-line" }}>{siteSettings.projectSectionHeading}</h2>
+          <p>A selection of independent website concepts.</p>
+        </div>
+        {rightProjects.map(card)}
+      </div>
     </section>
 
     <section className="content-width pt-28 sm:pt-36" aria-labelledby="why-heading">
@@ -275,9 +328,12 @@ export default function Portfolio() {
     </section>
 
     <section id="services" className="services-section content-width">
-      <div className="section-heading"><SectionLabel>What I Do</SectionLabel><h2>Good design.<br/>Real-world function.</h2></div>
+      <div className="section-heading">
+        <SectionLabel>{siteSettings.servicesSectionLabel}</SectionLabel>
+        <h2 style={{ whiteSpace: "pre-line" }}>{siteSettings.servicesSectionHeading}</h2>
+      </div>
       <div className="service-list">
-        {[{n:"01",name:"Website Design",copy:"Distinctive layouts, considered typography, and a visual identity that feels like your business."},{n:"02",name:"Web Development",copy:"Responsive websites and landing pages, built to look right and work well on every screen."},{n:"03",name:"AI & Automation",copy:"Practical enquiry flows and connected tools that take repetitive work off your hands."}].map(s=><div className="service-row" key={s.n}><span>{s.n}</span><h3>{s.name}</h3><p>{s.copy}</p><ArrowUpRight/></div>)}
+        {services.map((service, index)=><div className="service-row" key={service.docId || `${service.title}-${index}`}><span>{String(index + 1).padStart(2, "0")}</span><h3>{service.title}</h3><p>{service.description}</p><ArrowUpRight/></div>)}
       </div>
     </section>
 
@@ -429,7 +485,7 @@ export default function Portfolio() {
           <p>Tell me what you’re thinking.<br/>Let’s build something that feels like you.</p>
           <div className="flex items-center gap-4 flex-wrap">
             <GetStartedButton onClick={() => setEnquiryOpen(true)}>Get Started</GetStartedButton>
-            <a className="contact-email" href={WHATSAPP_GENERAL_URL} target="_blank" rel="noopener noreferrer">Chat on WhatsApp<ArrowUpRight size={20}/></a>
+            <a className="contact-email" href={whatsappUrl} target="_blank" rel="noopener noreferrer">Chat on WhatsApp<ArrowUpRight size={20}/></a>
           </div>
         </div>
       </div>
