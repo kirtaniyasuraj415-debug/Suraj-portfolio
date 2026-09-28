@@ -308,13 +308,10 @@ async function writeStoredState(state: AdminCmsState) {
   const usedLanguages = Math.ceil(chunks.length / CHUNKS_PER_LANGUAGE);
   const writes: Promise<void>[] = [];
 
-  for (let languageIndex = 0; languageIndex < STORAGE_LANGUAGES.length; languageIndex += 1) {
+  // Only rewrite shards referenced by the new metadata. Old chunks in later
+  // shards are ignored because the metadata carries the exact chunk count.
+  for (let languageIndex = 0; languageIndex < usedLanguages; languageIndex += 1) {
     const language = STORAGE_LANGUAGES[languageIndex];
-    if (languageIndex >= usedLanguages) {
-      writes.push(setCommands(language, []));
-      continue;
-    }
-
     const start = languageIndex * CHUNKS_PER_LANGUAGE;
     const slice = chunks.slice(start, start + CHUNKS_PER_LANGUAGE);
     const commands: TelegramCommand[] = slice.map((chunk, localIndex) => {
