@@ -1742,3 +1742,71 @@ details.cinematic-scroll-item{
     transition:none!important;
   }
 }
+
+
+/* Mobile performance pass — preserve motion style without continuous scroll work. */
+.why-card>.why-card-live-bg,
+.contact-art-glow,
+.contact-art-beam,
+.contact-art-line,
+.contact-art-flare{
+  animation-play-state:paused!important;
+}
+.why-card.motion-inview>.why-card-live-bg,
+.contact-section.motion-inview .contact-art-glow,
+.contact-section.motion-inview .contact-art-beam,
+.contact-section.motion-inview .contact-art-line,
+.contact-section.motion-inview .contact-art-flare{
+  animation-play-state:running!important;
+}
+html.lightweight-motion .cinematic-scroll-item{
+  opacity:var(--motion-opacity,0);
+  translate:var(--motion-x,0px) var(--motion-y,34px);
+  scale:var(--motion-scale,.975);
+  transition:
+    opacity .62s cubic-bezier(.2,.72,.2,1),
+    translate .72s cubic-bezier(.16,.84,.24,1),
+    scale .72s cubic-bezier(.16,.84,.24,1);
+}
+html.lightweight-motion .cinematic-scroll-item.motion-revealed{
+  opacity:1;
+  translate:0 0;
+  scale:1;
+}
+html.lightweight-motion .cinematic-project-visual .project-image-stage{
+  translate:0 0!important;
+  scale:1!important;
+}
+html.lightweight-motion .hero-name,
+html.lightweight-motion .hero-portrait,
+html.lightweight-motion .hero-intro,
+html.lightweight-motion .hero-promise,
+html.lightweight-motion .hero-atmosphere{
+  translate:0 0!important;
+  scale:1!important;
+  opacity:1!important;
+}
+@media(max-width:900px),(pointer:coarse){
+  .portfolio-chat-launcher{
+    animation:none!important;
+  }
+  .why-card{
+    contain:layout paint style;
+  }
+  .why-card>.why-card-live-bg{
+    animation-duration:12s!important;
+  }
+  .contact-art-beam,
+  .contact-art-line-two,
+  .contact-art-flare{
+    display:none!important;
+  }
+  .contact-art-glow{
+    animation-duration:14s!important;
+  }
+  .project-card,
+  .why-card,
+  .contact-section>.content-width{
+    box-shadow:inset 0 1px 0 #ffffff0b,0 10px 26px #00000022!important;
+  }
+}
