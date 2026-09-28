@@ -1,6 +1,6 @@
 export type PortfolioProject = {
-  slot: 1 | 2 | 3 | 4;
-  id: "architecture" | "wedding" | "coffee" | "skincare";
+  slot: number;
+  id: string;
   brand: string;
   title: string;
   line: string;
