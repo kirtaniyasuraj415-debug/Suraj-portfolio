@@ -80,6 +80,33 @@ service cloud.firestore {
       allow delete: if isValidId(enquiryId) && isAdmin();
     }
 
+
+
+    // Public portfolio CMS. Visitors can only read visible content;
+    // authenticated administrators can manage everything.
+    match /portfolioProjects/{projectId} {
+      allow get, list: if isAdmin() || resource.data.visible == true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /portfolioServices/{serviceId} {
+      allow get, list: if isAdmin() || resource.data.visible == true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /portfolioSettings/{settingsId} {
+      allow get: if settingsId == "public" || isAdmin();
+      allow list: if isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Reserved for the admin-panel review migration. Public can read only
+    // explicitly published reviews; admins can moderate them.
+    match /portfolioReviews/{reviewId} {
+      allow get, list: if isAdmin() || resource.data.status == "approved";
+      allow create, update, delete: if isAdmin();
+    }
+
     // Connection testing heartbeat document (read-only probe)
     match /test/{testId} {
       allow get: if isValidId(testId);
