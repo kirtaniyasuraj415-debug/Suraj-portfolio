@@ -21,7 +21,7 @@ export default function ServicesIndex() {
       </header>
 
       <section className="mx-auto max-w-7xl px-5 sm:px-8 pt-14 sm:pt-20 pb-20">
-        <p className="text-xs uppercase tracking-[.2em] text-[#f47b38]">Services</p>
+        <p className="text-xs uppercase tracking-[.2em] text-[#f47b38]" style={{ transform: "translateY(-26px)" }}>Services</p>
         <h1 className="font-['Antonio',sans-serif] text-[19vw] sm:text-8xl lg:text-9xl font-thin leading-[.9] tracking-[-.04em] mt-5 max-w-4xl" style={{ transform: "translateY(-24px)" }}>
           Design, development, and practical automation.
         </h1>
