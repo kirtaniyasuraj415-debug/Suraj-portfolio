@@ -2149,3 +2149,185 @@ html.lightweight-motion .hero-atmosphere{
     transition:none!important;
   }
 }
+
+
+/* Project cards v4 — same compact reference proportions, fully matched to SURAJ.WEB. */
+.project-card{
+  padding:8px!important;
+  border:1px solid #6f3d2852!important;
+  border-radius:24px!important;
+  background:
+    radial-gradient(circle at 82% 110%,#f0783212 0%,transparent 34%),
+    linear-gradient(180deg,#1a0d08 0%,#120805 100%)!important;
+  box-shadow:
+    inset 0 1px 0 #ffffff0a,
+    0 16px 44px #0000002c!important;
+  color:#f2e8e0!important;
+}
+.project-card:hover{
+  border-color:#a45a356f!important;
+  background:
+    radial-gradient(circle at 82% 110%,#f0783217 0%,transparent 36%),
+    linear-gradient(180deg,#1d0f09 0%,#130805 100%)!important;
+  box-shadow:
+    inset 0 1px 0 #ffffff0d,
+    0 20px 48px #00000036!important;
+}
+.project-case-link{
+  border-radius:17px!important;
+  background:#0d0604!important;
+}
+.project-visual{
+  border-radius:17px!important;
+  background:#0d0604!important;
+}
+.project-image{
+  filter:none!important;
+}
+
+.project-details{
+  position:relative;
+}
+.project-details-toggle{
+  min-height:58px!important;
+  padding:0 6px 0 10px!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:12px!important;
+  place-items:initial!important;
+  border-top:1px solid #ffffff0a!important;
+  background:transparent!important;
+}
+.project-details-toggle-line{
+  display:none!important;
+}
+.project-details-copy{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  text-align:left;
+}
+.project-details-copy strong{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#f1e6df;
+  font:100 21px/1.05 var(--display);
+  letter-spacing:-.45px;
+}
+.project-details-copy small{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#8e7769;
+  font-size:8px;
+  line-height:1.1;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.project-details-chevron{
+  width:38px!important;
+  height:38px!important;
+  border:1px solid #f1844a38!important;
+  background:
+    radial-gradient(circle at 35% 25%,#ffffff18 0%,transparent 46%),
+    linear-gradient(180deg,#e9783a 0%,#c95624 100%)!important;
+  color:#fff7f1!important;
+  box-shadow:
+    inset 0 1px 0 #ffffff30,
+    0 6px 18px #d8612630!important;
+}
+.project-details-toggle:hover .project-details-chevron{
+  background:
+    radial-gradient(circle at 35% 25%,#ffffff20 0%,transparent 46%),
+    linear-gradient(180deg,#f18445 0%,#d46228 100%)!important;
+}
+.project-details[open] .project-details-chevron{
+  transform:rotate(180deg)!important;
+}
+.project-details-panel{
+  padding:17px 14px 15px!important;
+  border-top:1px solid #ffffff0b!important;
+  background:
+    linear-gradient(180deg,#12080566 0%,#0d0604b8 100%)!important;
+}
+.project-details-kicker{
+  padding-top:0!important;
+  color:#8f796b!important;
+}
+.project-details-kicker span:first-child{
+  color:#ef7e3f!important;
+}
+.project-caption{
+  margin-top:9px!important;
+}
+.project-caption h3{
+  color:#f3e8df!important;
+}
+.project-caption>a{
+  border-color:#ffffff16!important;
+  color:#ef7e3f!important;
+  background:#ffffff05!important;
+}
+.project-caption>a:hover{
+  background:#e77538!important;
+  color:#fff!important;
+}
+.project-card-summary{
+  color:#c8b7ad!important;
+}
+.project-card-detail{
+  color:#8f7d72!important;
+}
+.project-tags span{
+  border-color:#ffffff11!important;
+  background:#ffffff06!important;
+  color:#a99589!important;
+}
+.project-detail-actions{
+  border-top-color:#ffffff0b!important;
+}
+.project-case-study-link{
+  background:#ef7d3f!important;
+  color:#fff9f4!important;
+}
+.project-case-study-link:hover{
+  background:#ff8c4d!important;
+}
+.project-live-link{
+  border-color:#ffffff14!important;
+  color:#d5c0b3!important;
+  background:#ffffff04!important;
+}
+.project-live-link:hover{
+  border-color:#f47b3855!important;
+  color:#f29a6b!important;
+}
+
+@media(max-width:760px){
+  .project-card{
+    padding:7px!important;
+    border-radius:20px!important;
+  }
+  .project-case-link,
+  .project-visual{
+    border-radius:14px!important;
+  }
+  .project-details-toggle{
+    min-height:54px!important;
+    padding-left:9px!important;
+    padding-right:4px!important;
+  }
+  .project-details-copy strong{
+    font-size:20px;
+  }
+  .project-details-chevron{
+    width:36px!important;
+    height:36px!important;
+  }
+  .project-details-panel{
+    padding:15px 11px 13px!important;
+  }
+}
