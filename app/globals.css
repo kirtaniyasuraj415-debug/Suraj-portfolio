@@ -4255,3 +4255,130 @@ textarea:focus-visible{
   box-shadow:0 0 0 4px rgba(255,127,57,.12)!important;
 }
 
+/* SURAJ.WEB v11 — project info directly on master gradient */
+
+/* The image stays untouched. Remove the separate lower information layer completely. */
+.project-details{
+  margin:0!important;
+  padding:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  border:0!important;
+}
+
+/* Title/category/details sit directly on the project card's master gradient. */
+.project-details-toggle,
+.project-details[open] .project-details-toggle{
+  min-height:68px!important;
+  padding:13px 10px 13px 15px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* Remove any old strip/separator layer left by earlier card versions. */
+.project-details-toggle::before,
+.project-details-toggle::after,
+.project-details-toggle-line{
+  display:none!important;
+  content:none!important;
+}
+
+/* Keep the hierarchy clean on the gradient itself. */
+.project-details-copy{
+  position:relative!important;
+  z-index:2!important;
+}
+.project-details-copy strong{
+  color:#fff5ef!important;
+  font-size:clamp(22px,2.3vw,30px)!important;
+  line-height:1!important;
+}
+.project-details-copy small{
+  margin-top:4px!important;
+  color:rgba(239,220,209,.58)!important;
+}
+
+/* The Details label should not read like another panel. */
+.project-details-action{
+  position:relative!important;
+  z-index:2!important;
+}
+.project-details-action-label{
+  color:rgba(239,220,209,.58)!important;
+}
+
+/* Keep only the circular orange control as the actionable visual element. */
+.project-details-chevron{
+  border:0!important;
+  background:linear-gradient(180deg,#ff9555 0%,#ef6a2b 100%)!important;
+  box-shadow:0 10px 24px rgba(239,106,43,.22)!important;
+}
+
+/* Expanded content also flows directly on the same outer gradient instead of creating a second card. */
+.project-details-panel{
+  padding:4px 15px 17px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.project-details-panel::before,
+.project-details-panel::after{
+  display:none!important;
+  content:none!important;
+}
+
+.project-details-kicker{
+  padding-left:0!important;
+}
+.project-detail-actions{
+  border-top:0!important;
+}
+
+/* No accidental dark overlay under the title area. */
+.project-card .project-details,
+.project-card .project-details-toggle,
+.project-card .project-details-panel{
+  background-color:transparent!important;
+  background-image:none!important;
+}
+
+/* Preserve the card's existing gradient as the only surface under title and controls. */
+.project-card{
+  background:var(--v9-card)!important;
+}
+
+/* Mobile proportions matching the supplied screenshot. */
+@media(max-width:760px){
+  .project-details-toggle,
+  .project-details[open] .project-details-toggle{
+    min-height:62px!important;
+    padding:11px 7px 11px 13px!important;
+  }
+  .project-details-copy strong{
+    font-size:21px!important;
+  }
+  .project-details-copy small{
+    font-size:7.5px!important;
+  }
+  .project-details-action{
+    gap:7px!important;
+  }
+  .project-details-action-label{
+    font-size:7px!important;
+  }
+  .project-details-chevron{
+    width:38px!important;
+    height:38px!important;
+  }
+  .project-details-panel{
+    padding:3px 12px 14px!important;
+  }
+}
+
