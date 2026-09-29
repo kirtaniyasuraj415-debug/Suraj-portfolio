@@ -196,7 +196,10 @@ export default function Portfolio() {
             <span>{project.tag}</span>
           </div>
           <div className="project-caption">
-            <h3>{project.title}</h3>
+            <div>
+              <span className="project-overview-label">Project Overview</span>
+              <h3>{project.title}</h3>
+            </div>
             <a href={`/work/${encodeURIComponent(project.id)}`} aria-label={`Open ${project.title} case study`}>
               <ArrowUpRight size={20} />
             </a>
