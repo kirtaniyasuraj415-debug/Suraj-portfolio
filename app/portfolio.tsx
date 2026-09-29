@@ -391,7 +391,7 @@ export default function Portfolio() {
 
         <div className="grid gap-3">
           {ratings.length ? ratings.slice(0, 4).map((review) => (
-            <article key={review.id} className="rounded-2xl border border-white/[0.1] bg-[#160d07] p-5 sm:p-6">
+            <article key={review.id} className="portfolio-review-card rounded-2xl border border-white/[0.1] bg-[#160d07] p-5 sm:p-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h3 className="font-medium text-[#f6f0e9]">{review.name}</h3>
@@ -404,7 +404,7 @@ export default function Portfolio() {
               <p className="text-sm leading-6 text-[#c8bcb0] mt-4">“{review.message}”</p>
             </article>
           )) : (
-            <div className="rounded-2xl border border-dashed border-[#f87b38]/35 bg-[#f87b38]/[0.04] p-6 sm:p-8">
+            <div className="portfolio-review-empty rounded-2xl border border-dashed border-[#f87b38]/35 bg-[#f87b38]/[0.04] p-6 sm:p-8">
               <div className="flex text-[#f87b38] gap-1">{[1,2,3,4,5].map((star) => <Star key={star} size={18} />)}</div>
               <h3 className="font-['Antonio',sans-serif] text-2xl mt-5">Be the first published review.</h3>
               <p className="text-sm text-[#a99585] mt-2 leading-6">I’m keeping this section genuine. Visitor ratings appear here only after they are actually submitted and approved.</p>
@@ -413,7 +413,7 @@ export default function Portfolio() {
         </div>
       </div>
 
-      <form onSubmit={submitRating} className="mt-8 rounded-2xl sm:rounded-3xl border border-[#68462e] bg-[#160d07] p-5 sm:p-7">
+      <form onSubmit={submitRating} className="portfolio-rating-form mt-8 rounded-2xl sm:rounded-3xl border border-[#68462e] bg-[#160d07] p-5 sm:p-7">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 pb-5 border-b border-white/[0.08]">
           <div>
             <h3 className="font-['Antonio',sans-serif] text-3xl font-thin">Rate my portfolio work</h3>
@@ -477,7 +477,7 @@ export default function Portfolio() {
     </section>
 
     <section id="contact" className="contact-section">
-      <div className="content-width">
+      <div className="content-width contact-card-shell">
         <div className="contact-art" aria-hidden="true">
           <span className="contact-art-line contact-art-line-one" />
           <span className="contact-art-line contact-art-line-two" />
@@ -499,7 +499,7 @@ export default function Portfolio() {
         </div>
       </div>
     </section>
-    <footer className="site-footer content-width"><a href="#top" className="wordmark">SURAJ.WEB</a><nav className="footer-pages" aria-label="Portfolio pages"><a href="/work">Work</a><a href="/services">Services</a><a href="/about">About</a><a href="/start-project">Start Project</a></nav><p>© 2026 Suraj Kirtaniya</p><a href="#top">Back to top <ArrowDown size={15} className="rotate-180"/></a></footer>
+    <footer className="site-footer portfolio-footer content-width"><a href="#top" className="wordmark">SURAJ.WEB</a><nav className="footer-pages" aria-label="Portfolio pages"><a href="/work">Work</a><a href="/services">Services</a><a href="/about">About</a><a href="/start-project">Start Project</a></nav><p>© 2026 Suraj Kirtaniya</p><a href="#top">Back to top <ArrowDown size={15} className="rotate-180"/></a></footer>
 
     <Dialog open={enquiryOpen} onOpenChange={setEnquiryOpen}>
       <DialogContent className="w-[calc(100vw-20px)] max-w-[760px]! max-h-[92svh] overflow-y-auto gap-0 rounded-2xl border-[#68462e] bg-[#100702] p-0 text-[#f6f0e9] sm:rounded-3xl">

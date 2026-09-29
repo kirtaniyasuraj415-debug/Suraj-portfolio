@@ -7,8 +7,8 @@ export default function WorkIndex() {
   const { projects } = usePublicProjects();
 
   return (
-    <main className="min-h-screen bg-[#090402] text-[#f4e9e1]">
-      <header className="mx-auto max-w-7xl px-5 sm:px-8 py-6 flex items-center justify-between border-b border-white/10">
+    <main className="work-index-page min-h-screen bg-[#000000] text-[#f4e9e1]">
+      <header className="work-index-header mx-auto max-w-7xl px-5 sm:px-8 py-6 flex items-center justify-between border-b border-white/10">
         <a href="/" className="font-['Antonio',sans-serif] text-3xl">SURAJ.WEB</a>
         <a href="/" className="inline-flex items-center gap-2 text-xs text-[#aa978b]"><ArrowLeft size={14}/> Portfolio</a>
       </header>
@@ -23,12 +23,12 @@ export default function WorkIndex() {
 
         <div className="grid md:grid-cols-2 gap-5 sm:gap-7 mt-14">
           {projects.map((project, index) => (
-            <article key={project.docId || project.slug} className="overflow-hidden rounded-[24px] border border-white/10 bg-[#120805]">
+            <article key={project.docId || project.slug} className="work-index-card overflow-hidden rounded-[24px] border border-white/10 bg-[#120805]">
               <a href={`/work/${project.slug}`} className="group block">
-                <div className="aspect-[16/10] overflow-hidden bg-[#160b07]">
+                <div className="work-index-image aspect-[16/10] overflow-hidden bg-[#160b07]">
                   <img src={project.imageUrl} alt={project.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]" />
                 </div>
-                <div className="p-5 sm:p-6">
+                <div className="work-index-card-copy p-5 sm:p-6">
                   <div className="flex justify-between gap-4">
                     <div>
                       <span className="text-[10px] uppercase tracking-[.14em] text-[#7f6c61]">{String(index + 1).padStart(2,"0")} · {project.category}</span>
@@ -39,9 +39,9 @@ export default function WorkIndex() {
                   <p className="text-sm leading-6 text-[#a39186] mt-3">{project.description}</p>
                 </div>
               </a>
-              <div className="px-5 sm:px-6 pb-5 sm:pb-6 flex gap-3">
-                <a href={`/work/${project.slug}`} className="rounded-full bg-[#f47b38] px-4 py-2 text-xs text-white">View Case Study</a>
-                {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="rounded-full border border-white/10 px-4 py-2 text-xs text-[#d6c6bb]">Live Preview ↗</a>}
+              <div className="work-index-actions px-5 sm:px-6 pb-5 sm:pb-6 flex gap-3">
+                <a href={`/work/${project.slug}`} className="work-index-primary rounded-full bg-[#f47b38] px-4 py-2 text-xs text-white">View Case Study</a>
+                {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="work-index-secondary rounded-full border border-white/10 px-4 py-2 text-xs text-[#d6c6bb]">Live Preview ↗</a>}
               </div>
             </article>
           ))}

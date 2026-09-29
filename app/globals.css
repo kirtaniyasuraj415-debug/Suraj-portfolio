@@ -2757,3 +2757,358 @@ main{
     font-size:10px!important;
   }
 }
+
+/* SURAJ.WEB unified premium system — 2026-09-29 v7 */
+:root{
+  --suraj-jet:#000;
+  --suraj-card-black:#060606;
+  --suraj-orange:#f47b38;
+  --suraj-orange-soft:#ff9a5f;
+  --suraj-line:rgba(244,123,56,.22);
+  --suraj-line-strong:rgba(244,123,56,.38);
+  --suraj-premium-card:
+    radial-gradient(circle at 92% 86%,rgba(244,123,56,.48) 0%,rgba(244,123,56,.26) 13%,rgba(244,123,56,.11) 30%,transparent 55%),
+    radial-gradient(circle at 14% 0%,rgba(255,255,255,.07) 0%,transparent 24%),
+    linear-gradient(145deg,#151515 0%,#0a0a0a 44%,#030303 100%);
+  --suraj-premium-card-subtle:
+    radial-gradient(circle at 100% 100%,rgba(244,123,56,.28) 0%,rgba(244,123,56,.10) 26%,transparent 50%),
+    radial-gradient(circle at 0% 0%,rgba(255,255,255,.05),transparent 22%),
+    linear-gradient(145deg,#101010 0%,#070707 52%,#020202 100%);
+  --suraj-contact-gradient:
+    radial-gradient(ellipse 84% 48% at 50% -6%,rgba(255,255,255,.10) 0%,rgba(255,255,255,.025) 34%,transparent 64%),
+    radial-gradient(circle at 86% 68%,rgba(244,123,56,.42) 0%,rgba(244,123,56,.20) 18%,rgba(244,123,56,.07) 38%,transparent 60%),
+    linear-gradient(180deg,#111 0%,#050505 52%,#000 100%);
+}
+
+/* Make the hero promise card the visual source of truth. */
+.premium-glow-card{
+  background:var(--suraj-premium-card)!important;
+  border-color:var(--suraj-line-strong)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.10),
+    0 24px 60px rgba(0,0,0,.58),
+    0 12px 28px rgba(244,123,56,.10)!important;
+}
+
+/* Shared premium gradient language across the rest of the portfolio cards. */
+.project-card,
+.why-card,
+.process-grid article,
+.portfolio-review-card,
+.portfolio-rating-form,
+.work-index-card,
+.case-study-scope-card,
+.case-study-cta{
+  background:var(--suraj-premium-card-subtle)!important;
+  border:1px solid var(--suraj-line)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.045),
+    0 18px 48px rgba(0,0,0,.48)!important;
+}
+
+/* Keep project cards darker and let orange live mostly in the lower/right edge. */
+.project-card{
+  border-radius:28px!important;
+  background:var(--suraj-premium-card-subtle)!important;
+}
+.project-card:hover{
+  border-color:var(--suraj-line-strong)!important;
+  transform:translateY(-1px);
+}
+.project-details-toggle,
+.project-details-panel{
+  background:rgba(4,4,4,.90)!important;
+}
+.project-details[open] .project-details-toggle{
+  background:
+    linear-gradient(90deg,rgba(244,123,56,.07),transparent 52%),
+    #050505!important;
+}
+.project-details-panel{
+  background:
+    radial-gradient(circle at 100% 0%,rgba(244,123,56,.10),transparent 38%),
+    linear-gradient(180deg,#070707,#020202)!important;
+}
+
+/* Header and mobile navigation: remove the remaining wine/burgundy cast. */
+.site-header{
+  background:linear-gradient(180deg,rgba(0,0,0,.92),rgba(0,0,0,.70),transparent)!important;
+  border-color:rgba(255,255,255,.045)!important;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+.mobile-menu{
+  background:
+    radial-gradient(circle at 100% 100%,rgba(244,123,56,.19),transparent 34%),
+    linear-gradient(180deg,#0a0a0a 0%,#030303 58%,#000 100%)!important;
+  border-left:1px solid rgba(244,123,56,.25)!important;
+  box-shadow:-24px 0 70px rgba(0,0,0,.72)!important;
+}
+.mobile-menu nav a{
+  border-bottom-color:rgba(255,255,255,.08)!important;
+}
+.mobile-menu [data-slot="sheet-description"],
+.mobile-menu p{
+  color:#a7968a!important;
+}
+
+/* Published ratings: iOS-like geometry, jet-black interior, same orange family. */
+.portfolio-review-card{
+  border-radius:30px!important;
+  padding:22px 24px!important;
+  background:
+    radial-gradient(circle at 102% 100%,rgba(244,123,56,.19),transparent 42%),
+    linear-gradient(145deg,#0d0d0d,#040404 62%,#010101)!important;
+}
+.portfolio-review-empty{
+  border-radius:30px!important;
+  background:
+    radial-gradient(circle at 100% 100%,rgba(244,123,56,.11),transparent 46%),
+    #050505!important;
+  border-color:rgba(244,123,56,.26)!important;
+}
+.portfolio-rating-form{
+  max-width:900px;
+  margin-inline:auto;
+  border-radius:34px!important;
+  padding:clamp(20px,3vw,32px)!important;
+}
+.portfolio-rating-form input,
+.portfolio-rating-form textarea{
+  background:#020202!important;
+  border-color:rgba(255,255,255,.10)!important;
+  border-radius:18px!important;
+}
+.portfolio-rating-form input:focus,
+.portfolio-rating-form textarea:focus{
+  border-color:rgba(244,123,56,.72)!important;
+  box-shadow:0 0 0 3px rgba(244,123,56,.08)!important;
+}
+
+/* Work/product listing: same site language instead of separate brown cards. */
+.work-index-page,
+.case-study-page{
+  background:#000!important;
+}
+.work-index-header,
+.case-study-header{
+  background:rgba(0,0,0,.86)!important;
+  border-bottom-color:rgba(255,255,255,.06)!important;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+.work-index-card{
+  border-radius:30px!important;
+  overflow:hidden;
+  transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease;
+}
+.work-index-card:hover{
+  transform:translateY(-3px);
+  border-color:var(--suraj-line-strong)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 24px 60px rgba(0,0,0,.62)!important;
+}
+.work-index-image{
+  margin:10px 10px 0;
+  border-radius:22px!important;
+  background:#020202!important;
+  border:1px solid rgba(255,255,255,.055);
+}
+.work-index-card-copy{
+  padding-top:18px!important;
+}
+.work-index-actions{
+  border-top:1px solid rgba(255,255,255,.055);
+  padding-top:16px!important;
+}
+.work-index-primary{
+  background:linear-gradient(180deg,#ff8e4d,#df642b)!important;
+  box-shadow:0 8px 20px rgba(223,100,43,.22);
+}
+.work-index-secondary{
+  background:#070707!important;
+  border-color:rgba(255,255,255,.10)!important;
+}
+
+/* Individual project/case-study surfaces. */
+.case-study-preview{
+  border-radius:30px!important;
+  background:#020202!important;
+  border-color:rgba(244,123,56,.18)!important;
+  box-shadow:0 24px 64px rgba(0,0,0,.58);
+}
+.case-study-scope-card{
+  border-radius:24px!important;
+}
+.case-study-cta{
+  border-radius:32px!important;
+}
+
+/* Contact: reference architecture translated to black + orange, existing art/animation kept. */
+.contact-section{
+  background:#000!important;
+  padding:clamp(56px,8vw,110px) 0!important;
+}
+.contact-card-shell{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(244,123,56,.24);
+  border-radius:clamp(30px,4vw,46px);
+  padding:clamp(28px,6vw,76px)!important;
+  background:var(--suraj-contact-gradient)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.055),
+    0 28px 80px rgba(0,0,0,.62);
+}
+.contact-card-shell:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.024) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.024) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.7),transparent 88%);
+}
+.contact-card-shell > *{
+  position:relative;
+  z-index:2;
+}
+.contact-main{
+  padding-top:clamp(26px,4vw,58px)!important;
+}
+.contact-main h2{
+  font-size:clamp(64px,10vw,142px)!important;
+  line-height:.83!important;
+  letter-spacing:-.055em!important;
+}
+.contact-main h2 em{
+  color:var(--suraj-orange)!important;
+}
+.contact-arrow{
+  background:linear-gradient(180deg,#ff8f4f,#ed7134)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.24),
+    0 18px 38px rgba(244,123,56,.24)!important;
+}
+.contact-bottom{
+  border-top-color:rgba(255,255,255,.10)!important;
+}
+.contact-art-glow{
+  background:radial-gradient(circle,rgba(244,123,56,.46),rgba(244,123,56,.12) 36%,transparent 72%)!important;
+}
+.contact-art-line,
+.contact-art-beam{
+  border-color:rgba(244,123,56,.20)!important;
+}
+
+/* Footer: premium dark panel + oversized portfolio wordmark at the bottom. */
+.portfolio-footer{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  min-height:310px;
+  margin-top:26px!important;
+  padding:44px 42px 138px!important;
+  border:1px solid rgba(255,255,255,.07);
+  border-bottom:0;
+  border-radius:38px 38px 0 0;
+  background:
+    radial-gradient(circle at 82% 18%,rgba(244,123,56,.11),transparent 32%),
+    linear-gradient(180deg,#0b0b0b 0%,#030303 70%,#000 100%)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+}
+.portfolio-footer > *{
+  position:relative;
+  z-index:2;
+}
+.portfolio-footer:after{
+  content:"SURAJ.WEB";
+  position:absolute;
+  z-index:1;
+  left:50%;
+  bottom:-.12em;
+  transform:translateX(-50%);
+  font-family:"Antonio",sans-serif;
+  font-size:clamp(88px,17vw,260px);
+  line-height:.72;
+  letter-spacing:-.06em;
+  white-space:nowrap;
+  color:rgba(244,123,56,.085);
+  pointer-events:none;
+  user-select:none;
+  animation:surajFooterWordmark 9s ease-in-out infinite alternate;
+}
+@keyframes surajFooterWordmark{
+  from{transform:translateX(calc(-50% - 9px));opacity:.78}
+  to{transform:translateX(calc(-50% + 9px));opacity:1}
+}
+
+/* Keep major secondary card families visually coherent. */
+.why-card,
+.process-grid article{
+  border-radius:28px!important;
+}
+.why-card-live-bg{
+  background:
+    radial-gradient(circle at 86% 84%,rgba(244,123,56,.24),transparent 40%)!important;
+}
+
+@media(max-width:760px){
+  .project-card,
+  .portfolio-review-card,
+  .portfolio-rating-form,
+  .work-index-card,
+  .case-study-preview,
+  .case-study-cta,
+  .why-card,
+  .process-grid article{
+    border-radius:24px!important;
+  }
+  .portfolio-review-card{
+    padding:18px!important;
+  }
+  .portfolio-rating-form{
+    width:100%;
+  }
+  .work-index-image{
+    margin:8px 8px 0;
+    border-radius:18px!important;
+  }
+  .contact-section{
+    padding:44px 0 58px!important;
+  }
+  .contact-card-shell{
+    border-radius:28px;
+    padding:26px 22px 32px!important;
+  }
+  .contact-main{
+    align-items:flex-start!important;
+    gap:18px!important;
+  }
+  .contact-main h2{
+    font-size:clamp(62px,19vw,104px)!important;
+  }
+  .contact-arrow{
+    flex:0 0 82px!important;
+    width:82px!important;
+    height:82px!important;
+  }
+  .portfolio-footer{
+    min-height:270px;
+    padding:32px 24px 114px!important;
+    border-radius:28px 28px 0 0;
+  }
+  .portfolio-footer:after{
+    font-size:clamp(82px,24vw,150px);
+    bottom:-.08em;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .portfolio-footer:after{animation:none!important}
+  .work-index-card{transition:none!important}
+}
+
