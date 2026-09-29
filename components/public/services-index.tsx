@@ -49,12 +49,12 @@ export default function ServicesIndex() {
             <p className="text-xs uppercase tracking-[.2em] text-[#f47b38]">Included in the work</p>
             <h2 className="font-['Antonio',sans-serif] text-5xl sm:text-6xl font-thin leading-[.95] mt-4">The essentials are not add-ons.</h2>
           </div>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="services-included-grid grid sm:grid-cols-2 gap-5">
             {included.map(({icon:Icon,title,copy}) => (
-              <article key={title} className="rounded-[28px] bg-[radial-gradient(circle_at_92%_100%,rgba(244,123,56,.22),transparent_50%),linear-gradient(145deg,#0d0d0d,#030303_70%,#000)] p-6">
-                <Icon size={18} className="text-[#f47b38]"/>
-                <h3 className="font-['Antonio',sans-serif] text-3xl font-thin mt-7">{title}</h3>
-                <p className="text-sm leading-7 text-[#99877c] mt-3">{copy}</p>
+              <article key={title} className="services-included-card rounded-[28px] bg-[radial-gradient(circle_at_92%_100%,rgba(244,123,56,.22),transparent_50%),linear-gradient(145deg,#0d0d0d,#030303_70%,#000)] p-6 sm:p-7 flex flex-col">
+                <Icon size={19} className="services-included-icon text-[#f47b38] shrink-0"/>
+                <h3 className="services-included-title font-['Antonio',sans-serif] text-[30px] leading-[1.08] font-thin mt-8">{title}</h3>
+                <p className="services-included-copy text-[13px] leading-6 text-[#99877c] mt-4">{copy}</p>
               </article>
             ))}
           </div>
