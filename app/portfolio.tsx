@@ -178,9 +178,12 @@ export default function Portfolio() {
 
       <details className="project-details">
         <summary className="project-details-toggle" aria-label={`Show details for ${project.title}`}>
-          <span className="project-details-toggle-line" aria-hidden="true" />
+          <span className="project-details-copy">
+            <strong>{project.title}</strong>
+            <small>{project.tag}</small>
+          </span>
           <span className="project-details-chevron" aria-hidden="true">
-            <ChevronDown size={20} />
+            <ChevronDown size={18} />
           </span>
         </summary>
 
