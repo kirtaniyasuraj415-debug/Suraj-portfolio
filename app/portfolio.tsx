@@ -544,7 +544,7 @@ export default function Portfolio() {
     </footer>
 
     <Dialog open={enquiryOpen} onOpenChange={setEnquiryOpen}>
-      <DialogContent className="w-[calc(100vw-20px)] max-w-[760px]! max-h-[92svh] overflow-y-auto gap-0 rounded-2xl border-[#68462e] bg-[#100702] p-0 text-[#f6f0e9] sm:rounded-3xl">
+      <DialogContent className="enquiry-dialog-shell w-[calc(100vw-20px)] max-w-[760px]! max-h-[92svh] overflow-y-auto gap-0 rounded-2xl p-0 text-[#f6f0e9] sm:rounded-3xl">
         <DialogHeader className="px-5 pt-6 pb-4 text-left sm:px-8 sm:pt-8">
           <SectionLabel>Start a Project</SectionLabel>
           <DialogTitle className="font-['Antonio',sans-serif] text-3xl font-thin tracking-[-1px] text-[#f6f0e9] sm:text-4xl">
