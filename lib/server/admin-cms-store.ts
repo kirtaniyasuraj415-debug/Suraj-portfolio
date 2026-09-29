@@ -1,4 +1,4 @@
-import { createHash, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
+import { createCipheriv, createDecipheriv, createHash, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { deflateRawSync, inflateRawSync } from "node:zlib";
 import { DEFAULT_PORTFOLIO_PROJECTS, type PortfolioProject } from "@/lib/portfolio-projects";
 import {
@@ -235,21 +235,68 @@ function normalizeState(raw: Partial<AdminCmsState>): AdminCmsState {
   };
 }
 
+function cmsSecretCandidates() {
+  const values = [
+    process.env.ADMIN_SESSION_SECRET?.trim(),
+    process.env.NVIDIA_API_KEY?.trim(),
+  ].filter((value): value is string => Boolean(value));
+
+  const unique = [...new Set(values)];
+  if (!unique.length) throw new Error("CMS_SECRET_MISSING");
+
+  return unique.map((value) =>
+    createHash("sha256")
+      .update(value)
+      .update("::SURAJ.WEB::CMS::STATE::V2")
+      .digest()
+  );
+}
+
 function encodeState(state: AdminCmsState) {
   const json = JSON.stringify(state);
   const compressed = deflateRawSync(Buffer.from(json, "utf8"), { level: 9 });
-  const encoded = compressed.toString("base64url");
+  const key = cmsSecretCandidates()[0];
+  const iv = randomBytes(12);
+  const cipher = createCipheriv("aes-256-gcm", key, iv);
+  const encrypted = Buffer.concat([cipher.update(compressed), cipher.final()]);
+  const tag = cipher.getAuthTag();
+  const encoded = Buffer.concat([iv, tag, encrypted]).toString("base64url");
+
   const chunks: string[] = [];
   for (let i = 0; i < encoded.length; i += CHUNK_SIZE) {
     chunks.push(encoded.slice(i, i + CHUNK_SIZE));
   }
-  const checksum = createHash("sha256").update(encoded).digest("hex").slice(0, 20);
-  return { chunks, checksum };
+  return { chunks };
 }
 
-function decodeState(encoded: string): AdminCmsState {
+function decodeStateV1(encoded: string): AdminCmsState {
   const json = inflateRawSync(Buffer.from(encoded, "base64url")).toString("utf8");
   return normalizeState(JSON.parse(json) as Partial<AdminCmsState>);
+}
+
+function decodeStateV2(encoded: string): AdminCmsState {
+  const packed = Buffer.from(encoded, "base64url");
+  if (packed.length <= 28) throw new Error("CMS_STORAGE_CORRUPT");
+
+  const iv = packed.subarray(0, 12);
+  const tag = packed.subarray(12, 28);
+  const ciphertext = packed.subarray(28);
+
+  let lastError: unknown;
+  for (const key of cmsSecretCandidates()) {
+    try {
+      const decipher = createDecipheriv("aes-256-gcm", key, iv);
+      decipher.setAuthTag(tag);
+      const compressed = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
+      const json = inflateRawSync(compressed).toString("utf8");
+      return normalizeState(JSON.parse(json) as Partial<AdminCmsState>);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  console.warn("CMS encrypted state authentication failed", lastError instanceof Error ? lastError.name : "unknown");
+  throw new Error("CMS_STORAGE_AUTH_FAILED");
 }
 
 async function readStoredState(): Promise<AdminCmsState | null> {
@@ -257,14 +304,15 @@ async function readStoredState(): Promise<AdminCmsState | null> {
 
   const first = await getCommands(STORAGE_LANGUAGES[0]);
   const meta = first.find((item) => item.command === META_COMMAND)?.description || "";
-  const match = meta.match(/^v1:(\d+):([a-f0-9]{20})$/);
-  if (!match) {
+  const v2 = meta.match(/^v2:(\d+)$/);
+  const v1 = meta.match(/^v1:(\d+):([a-f0-9]{20})$/);
+
+  if (!v2 && !v1) {
     cache = { value: null, expiresAt: Date.now() + 5000 };
     return null;
   }
 
-  const total = Number(match[1]);
-  const checksum = match[2];
+  const total = Number((v2 || v1)![1]);
   if (!Number.isInteger(total) || total < 1 || total > STORAGE_LANGUAGES.length * CHUNKS_PER_LANGUAGE) {
     throw new Error("CMS_STORAGE_CORRUPT");
   }
@@ -290,17 +338,24 @@ async function readStoredState(): Promise<AdminCmsState | null> {
   }
 
   const encoded = chunks.join("");
-  const actual = createHash("sha256").update(encoded).digest("hex").slice(0, 20);
-  if (actual !== checksum) throw new Error("CMS_STORAGE_CHECKSUM_FAILED");
+  let state: AdminCmsState;
 
-  const state = decodeState(encoded);
+  if (v2) {
+    state = decodeStateV2(encoded);
+  } else {
+    const checksum = v1![2];
+    const actual = createHash("sha256").update(encoded).digest("hex").slice(0, 20);
+    if (actual !== checksum) throw new Error("CMS_STORAGE_CHECKSUM_FAILED");
+    state = decodeStateV1(encoded);
+  }
+
   cache = { value: state, expiresAt: Date.now() + 10000 };
   return state;
 }
 
 async function writeStoredState(state: AdminCmsState) {
   const normalized = normalizeState({ ...state, updatedAt: new Date().toISOString() });
-  const { chunks, checksum } = encodeState(normalized);
+  const { chunks } = encodeState(normalized);
   if (chunks.length > STORAGE_LANGUAGES.length * CHUNKS_PER_LANGUAGE) {
     throw new Error("CMS_STORAGE_FULL");
   }
@@ -308,8 +363,6 @@ async function writeStoredState(state: AdminCmsState) {
   const usedLanguages = Math.ceil(chunks.length / CHUNKS_PER_LANGUAGE);
   const writes: Promise<void>[] = [];
 
-  // Only rewrite shards referenced by the new metadata. Old chunks in later
-  // shards are ignored because the metadata carries the exact chunk count.
   for (let languageIndex = 0; languageIndex < usedLanguages; languageIndex += 1) {
     const language = STORAGE_LANGUAGES[languageIndex];
     const start = languageIndex * CHUNKS_PER_LANGUAGE;
@@ -325,7 +378,7 @@ async function writeStoredState(state: AdminCmsState) {
     if (languageIndex === 0) {
       commands.unshift({
         command: META_COMMAND,
-        description: `v1:${chunks.length}:${checksum}`,
+        description: `v2:${chunks.length}`,
       });
     }
 
