@@ -3907,3 +3907,351 @@ main,
   }
 }
 
+/* SURAJ.WEB v10 — restore clean sections, remove strokes, compact ratings */
+
+/* Keep the new black/orange gradient language, but remove the outlined/stroked look everywhere. */
+.premium-glow-card,
+.project-card,
+.project-case-link,
+.project-visual,
+.project-details-toggle,
+.project-details-panel,
+.project-tags span,
+.project-case-study-link,
+.project-live-link,
+.why-card,
+.service-row,
+.process-grid article,
+.process-cta-row,
+.portfolio-review-card,
+.portfolio-review-empty,
+.portfolio-rating-form,
+.portfolio-rating-form input,
+.portfolio-rating-form textarea,
+.faq-list-v9,
+.faq-list-v9 details,
+.work-index-card,
+.work-index-image,
+.work-index-primary,
+.work-index-secondary,
+.case-study-preview,
+.case-study-scope-card,
+.case-study-cta,
+.contact-card-shell,
+.contact-arrow,
+.mobile-menu,
+.portfolio-footer,
+.portfolio-footer .footer-pages a,
+.portfolio-footer-bottom,
+.promise-icons span,
+.promise-icons b,
+.project-details-chevron{
+  border:0!important;
+}
+
+/* Remove inset rings that visually read like strokes. */
+.premium-glow-card,
+.project-card,
+.why-card,
+.portfolio-review-card,
+.portfolio-rating-form,
+.work-index-card,
+.case-study-scope-card,
+.case-study-cta,
+.contact-card-shell{
+  box-shadow:0 22px 58px rgba(0,0,0,.56),0 10px 28px rgba(244,95,34,.07)!important;
+}
+
+/* Project cards keep the stronger gradient, without the orange outline. */
+.project-card{
+  background:var(--v9-card)!important;
+}
+.project-case-link,
+.project-visual{
+  background:#000!important;
+}
+.project-details-toggle{
+  background:
+    radial-gradient(circle at 100% 60%,rgba(255,127,57,.10),transparent 36%),
+    linear-gradient(180deg,#080808,#010101)!important;
+}
+.project-details-panel{
+  background:
+    radial-gradient(circle at 100% 0%,rgba(255,127,57,.18),transparent 42%),
+    linear-gradient(180deg,#060606,#000)!important;
+}
+.project-details-panel:before{
+  display:none!important;
+}
+
+/* Restore Services / What I Do to the original clean row layout. */
+.service-list-v9{
+  display:block!important;
+  margin-top:58px!important;
+}
+.service-row{
+  display:grid!important;
+  grid-template-columns:7% 36% 1fr 24px!important;
+  align-items:center!important;
+  gap:24px!important;
+  padding:38px 0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.service-row h3{
+  font:100 36px/1.2 var(--display)!important;
+  letter-spacing:-1px!important;
+  color:#f6f0e9!important;
+}
+.service-row p{
+  font-size:16px!important;
+  line-height:1.7!important;
+  color:#b5a597!important;
+  max-width:390px!important;
+}
+.service-row>span{
+  font-size:12px!important;
+  color:#a59587!important;
+}
+.service-row>svg{
+  color:#e57b3e!important;
+}
+
+/* Restore Process section to the original open three-column layout. */
+.process-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:50px!important;
+  margin-top:65px!important;
+}
+.process-grid article{
+  min-height:0!important;
+  padding:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.process-grid article>span{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  padding-top:0!important;
+  color:#e78a53!important;
+  font-size:13px!important;
+}
+.process-grid h3{
+  font:100 35px/1.3 var(--display)!important;
+  margin-top:24px!important;
+}
+.process-grid p{
+  font-size:16px!important;
+  line-height:1.8!important;
+  color:#b6a597!important;
+  margin-top:12px!important;
+  max-width:310px!important;
+}
+.process-cta-row{
+  background:transparent!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  padding:32px 0 0!important;
+}
+
+/* Restore FAQ to the original simple accordion list, without card boxes or separator strokes. */
+.faq-list-v9{
+  display:block!important;
+  margin-top:40px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.faq-list-v9 details{
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  padding:20px 0!important;
+}
+.faq-list-v9 details summary{
+  color:#f6f0e9!important;
+}
+.faq-list-v9 details p{
+  color:#a99585!important;
+  padding-top:12px!important;
+}
+
+/* Rating reviews: compact on desktop and mobile. Keep the two-column mobile composition. */
+.portfolio-review-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:12px!important;
+  align-items:start!important;
+}
+.portfolio-review-card{
+  aspect-ratio:auto!important;
+  min-height:176px!important;
+  max-height:190px!important;
+  border-radius:26px!important;
+  padding:16px!important;
+  background:
+    radial-gradient(circle at 100% 100%,rgba(255,127,57,.38),rgba(244,95,34,.11) 29%,transparent 54%),
+    linear-gradient(145deg,#0a0a0a,#020202 60%,#000)!important;
+}
+.portfolio-review-card>div:first-child{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  gap:8px!important;
+}
+.portfolio-review-card>div:first-child>div:last-child{
+  align-self:flex-start!important;
+}
+.portfolio-review-card h3{
+  font-size:14px!important;
+}
+.portfolio-review-card .text-xs{
+  font-size:9px!important;
+}
+.portfolio-review-card>p{
+  margin-top:auto!important;
+  padding-top:10px!important;
+  font-size:10.5px!important;
+  line-height:1.45!important;
+  color:#d8cbc2!important;
+}
+.portfolio-review-card [aria-label$="stars"] svg{
+  width:12px!important;
+  height:12px!important;
+}
+
+/* Rating form keeps the gradient but loses the framed outline. */
+.portfolio-rating-form{
+  border-radius:30px!important;
+  background:var(--v9-card-soft)!important;
+}
+.portfolio-rating-form input,
+.portfolio-rating-form textarea{
+  background:#000!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.045)!important;
+}
+
+/* Contact and footer keep the new look; only the strokes are removed. */
+.contact-card-shell{
+  border-radius:40px!important;
+  background:
+    radial-gradient(ellipse 100% 60% at 50% -10%,rgba(255,255,255,.16) 0%,rgba(255,255,255,.035) 34%,transparent 62%),
+    radial-gradient(circle at 92% 70%,rgba(255,127,57,.58) 0%,rgba(244,95,34,.28) 17%,rgba(244,95,34,.08) 36%,transparent 59%),
+    linear-gradient(180deg,#0b0b0b 0%,#030303 48%,#000 100%)!important;
+}
+.contact-bottom{
+  border-top:0!important;
+}
+.portfolio-footer .footer-pages a,
+.portfolio-footer-bottom{
+  border-top:0!important;
+}
+
+/* Work and case-study cards: same gradients, no outline. */
+.work-index-card,
+.case-study-scope-card,
+.case-study-cta{
+  background:var(--v9-card)!important;
+}
+.case-study-preview{
+  background:#000!important;
+}
+
+/* Keep mobile layout close to the compact screenshot. */
+@media(max-width:760px){
+  .service-list-v9{
+    margin-top:42px!important;
+  }
+  .service-row{
+    grid-template-columns:34px 1fr 20px!important;
+    gap:10px!important;
+    padding:23px 0!important;
+  }
+  .service-row>span{grid-column:1;grid-row:1}
+  .service-row h3{
+    grid-column:2;
+    grid-row:1;
+    font-size:28px!important;
+  }
+  .service-row p{
+    grid-column:1 / -1;
+    grid-row:2;
+    font-size:13px!important;
+    line-height:1.65!important;
+  }
+  .service-row>svg{grid-column:3;grid-row:1}
+
+  .process-grid{
+    grid-template-columns:1fr!important;
+    gap:31px!important;
+    margin-top:38px!important;
+  }
+  .process-grid h3{
+    font-size:31px!important;
+    margin-top:18px!important;
+  }
+  .process-grid p{
+    max-width:100%!important;
+    font-size:16px!important;
+    margin-top:8px!important;
+  }
+  .process-cta-row{
+    padding-top:26px!important;
+  }
+
+  .faq-list-v9{
+    margin-top:34px!important;
+  }
+  .faq-list-v9 details{
+    padding:17px 0!important;
+  }
+
+  .portfolio-review-grid{
+    gap:10px!important;
+  }
+  .portfolio-review-card{
+    min-height:148px!important;
+    max-height:158px!important;
+    border-radius:22px!important;
+    padding:12px!important;
+  }
+  .portfolio-review-card h3{
+    font-size:12px!important;
+  }
+  .portfolio-review-card .text-xs{
+    font-size:8px!important;
+  }
+  .portfolio-review-card>p{
+    font-size:9px!important;
+    line-height:1.4!important;
+    padding-top:8px!important;
+  }
+  .portfolio-review-card [aria-label$="stars"] svg{
+    width:10px!important;
+    height:10px!important;
+  }
+
+  .portfolio-rating-form{
+    border-radius:26px!important;
+    padding:18px!important;
+  }
+  .portfolio-rating-form h3{
+    font-size:28px!important;
+  }
+
+  .contact-card-shell{
+    border-radius:30px!important;
+  }
+}
+
+/* No visible focus-stroke rings; keep accessible focus via soft glow instead. */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible{
+  outline:0!important;
+  box-shadow:0 0 0 4px rgba(255,127,57,.12)!important;
+}
+
