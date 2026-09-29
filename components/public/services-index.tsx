@@ -25,7 +25,7 @@ export default function ServicesIndex() {
         <h1 className="font-['Antonio',sans-serif] text-[19vw] sm:text-8xl lg:text-9xl font-thin leading-[.9] tracking-[-.04em] mt-5 max-w-4xl">
           Design, development, and practical automation.
         </h1>
-        <p className="mt-6 max-w-xl text-sm sm:text-base leading-7 text-[#9f8d82]">
+        <p className="mt-10 sm:mt-12 max-w-xl text-sm sm:text-base leading-7 text-[#9f8d82]">
           The service mix stays focused: a strong visual direction, a responsive build and useful integrations where they genuinely improve the project.
         </p>
 
