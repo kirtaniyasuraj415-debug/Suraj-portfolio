@@ -18,7 +18,21 @@ export default function CaseStudy({ slug }: { slug: string }) {
     );
   }
 
-  if (!project) return <main className="case-study-page min-h-screen bg-[#000000]"/>;
+  if (!project) {
+    return (
+      <main className="case-study-page min-h-screen bg-[#000000] text-[#f4e9e1]">
+        <header className="case-study-header mx-auto max-w-7xl px-5 sm:px-8 py-6 flex items-center justify-between">
+          <a href="/" className="font-['Antonio',sans-serif] text-3xl">SURAJ.WEB</a>
+          <a href="/work" className="inline-flex items-center gap-2 text-xs text-[#aa978b]"><ArrowLeft size={14}/> All work</a>
+        </header>
+        <section className="mx-auto max-w-7xl px-5 sm:px-8 pt-16 pb-24">
+          <p className="text-xs uppercase tracking-[.2em] text-[#f47b38]">Loading project</p>
+          <div className="mt-6 h-20 sm:h-28 max-w-2xl rounded-[24px] bg-[linear-gradient(110deg,#080808_8%,#121212_18%,#080808_33%)] bg-[length:200%_100%] animate-pulse" />
+          <div className="mt-10 aspect-[16/9] rounded-[28px] bg-[linear-gradient(110deg,#050505_8%,#101010_18%,#050505_33%)] bg-[length:200%_100%] animate-pulse" />
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="case-study-page min-h-screen bg-[#000000] text-[#f4e9e1]">
