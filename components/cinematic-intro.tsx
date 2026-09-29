@@ -1,18 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 export default function CinematicIntro() {
   const [stage, setStage] = useState<"peek" | "hold" | "exit" | "done">("peek");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const introKey = "surajweb:intro-seen";
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) {
+    const alreadySeen = window.sessionStorage.getItem(introKey) === "1";
+
+    if (reduceMotion || alreadySeen) {
+      root.classList.remove("cinematic-intro-active", "cinematic-intro-exit");
+      root.classList.add("cinematic-intro-done");
       setStage("done");
       return;
     }
 
-    const root = document.documentElement;
+    window.sessionStorage.setItem(introKey, "1");
     const hold = window.setTimeout(() => {
       root.classList.add("cinematic-intro-active");
       setStage("hold");
