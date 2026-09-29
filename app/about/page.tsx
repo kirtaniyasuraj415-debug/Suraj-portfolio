@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import JsonLd from "@/components/seo/json-ld";
+import { absoluteUrl, pageMetadata, PERSON_NAME } from "@/lib/seo";
 import { ArrowLeft, ArrowUpRight, Gauge, MessageCircle, Smartphone, Sparkles } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "About — Suraj Kirtaniya",
-  description: "About Suraj Kirtaniya and the approach behind SURAJ.WEB.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "About Suraj Kirtaniya — Freelance Web Developer | SURAJ.WEB",
+  description: "Learn about Suraj Kirtaniya, the independent web developer behind SURAJ.WEB, and his approach to website design, responsive development, and practical automation.",
+  path: "/about",
+});
 
 const focus = [
   {
@@ -27,6 +30,21 @@ const focus = [
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-black text-[#f4e9e1]">
+      <JsonLd
+        data={{
+          "@type": "ProfilePage",
+          "@id": absoluteUrl("/about#profile"),
+          url: absoluteUrl("/about"),
+          name: "About Suraj Kirtaniya",
+          mainEntity: {
+            "@type": "Person",
+            "@id": absoluteUrl("/#suraj-kirtaniya"),
+            name: PERSON_NAME,
+            jobTitle: "Freelance Web Developer & Website Designer",
+            url: absoluteUrl("/about"),
+          },
+        }}
+      />
       <header className="mx-auto max-w-7xl px-5 sm:px-8 py-6 flex items-center justify-between">
         <a href="/" className="font-['Antonio',sans-serif] text-3xl">SURAJ.WEB</a>
         <a href="/" className="inline-flex items-center gap-2 text-xs text-[#aa978b] hover:text-[#f47b38] transition-colors">
