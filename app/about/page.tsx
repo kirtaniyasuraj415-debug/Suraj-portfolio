@@ -80,12 +80,12 @@ export default function AboutPage() {
               Design choices that have a job to do.
             </h2>
           </div>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="about-focus-grid grid md:grid-cols-3 gap-5">
             {focus.map(({icon: Icon,title,copy}) => (
-              <article key={title} className="rounded-[28px] bg-[radial-gradient(circle_at_90%_100%,rgba(244,123,56,.24),transparent_48%),linear-gradient(145deg,#0d0d0d,#030303_70%,#000)] p-5 sm:p-6">
-                <Icon size={19} className="text-[#f47b38]"/>
-                <h3 className="font-['Antonio',sans-serif] text-3xl font-thin mt-8">{title}</h3>
-                <p className="text-sm leading-7 text-[#9f8d82] mt-3">{copy}</p>
+              <article key={title} className="about-focus-card rounded-[28px] bg-[radial-gradient(circle_at_90%_100%,rgba(244,123,56,.24),transparent_48%),linear-gradient(145deg,#0d0d0d,#030303_70%,#000)] p-6 sm:p-7 flex flex-col">
+                <Icon size={20} className="about-focus-icon text-[#f47b38] shrink-0"/>
+                <h3 className="about-focus-title font-['Antonio',sans-serif] text-[30px] leading-[1.08] font-thin mt-9">{title}</h3>
+                <p className="about-focus-copy text-[13px] leading-6 text-[#9f8d82] mt-4">{copy}</p>
               </article>
             ))}
           </div>
