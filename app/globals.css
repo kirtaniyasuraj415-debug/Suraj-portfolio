@@ -4784,3 +4784,127 @@ textarea:focus-visible{
     line-height:1.65!important;
   }
 }
+
+
+/* SURAJ.WEB v15 — service spacing, one-time intro, jet-black enquiry */
+
+/* Service cards: keep titles and supporting copy visually separate. */
+.services-included-card{
+  min-height:205px!important;
+  padding:26px 28px!important;
+}
+.services-included-title{
+  margin-top:34px!important;
+  line-height:1.08!important;
+}
+.services-included-copy{
+  margin-top:24px!important;
+  line-height:1.78!important;
+  max-width:32ch!important;
+}
+.services-engagement-item{
+  min-width:0;
+}
+.services-engagement-title{
+  margin-top:20px!important;
+  line-height:1.1!important;
+}
+.services-engagement-copy{
+  margin-top:18px!important;
+  line-height:1.75!important;
+  max-width:30ch;
+}
+
+/* Booking / enquiry UI: remove the old burgundy-red surfaces. */
+.enquiry-dialog-shell{
+  border:0!important;
+  background:
+    radial-gradient(circle at 92% 100%,rgba(255,127,57,.13) 0%,rgba(244,95,34,.045) 28%,transparent 52%),
+    linear-gradient(145deg,#080808 0%,#020202 62%,#000 100%)!important;
+  box-shadow:0 34px 90px rgba(0,0,0,.72),0 12px 34px rgba(244,95,34,.055)!important;
+}
+.enquiry-form-shell{
+  border:0!important;
+  background:
+    radial-gradient(circle at 100% 100%,rgba(255,127,57,.12) 0%,rgba(244,95,34,.04) 30%,transparent 55%),
+    linear-gradient(145deg,#070707 0%,#020202 64%,#000 100%)!important;
+  box-shadow:0 24px 64px rgba(0,0,0,.54)!important;
+}
+.enquiry-form-shell input,
+.enquiry-form-shell textarea,
+.enquiry-form-shell select{
+  background:#020202!important;
+  border-color:rgba(255,255,255,.12)!important;
+  color:#f6f0e9!important;
+}
+.enquiry-form-shell input::placeholder,
+.enquiry-form-shell textarea::placeholder{
+  color:#70645d!important;
+}
+.enquiry-form-shell select option{
+  background:#050505!important;
+  color:#f6f0e9!important;
+}
+.enquiry-choice-content{
+  background:#020202!important;
+  border-color:rgba(255,255,255,.11)!important;
+  color:#b9aba2!important;
+}
+.enquiry-choice:hover .enquiry-choice-content{
+  border-color:rgba(255,127,57,.35)!important;
+}
+.enquiry-radio:checked+.enquiry-choice-content{
+  background:linear-gradient(145deg,rgba(255,127,57,.13),rgba(255,127,57,.045))!important;
+  border-color:rgba(255,127,57,.72)!important;
+  color:#ff8b49!important;
+  box-shadow:0 10px 24px rgba(244,95,34,.08)!important;
+}
+.enquiry-success-shell{
+  border:0!important;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(255,127,57,.16),transparent 44%),
+    linear-gradient(145deg,#080808,#020202 66%,#000)!important;
+  box-shadow:0 30px 80px rgba(0,0,0,.68),0 12px 34px rgba(244,95,34,.07)!important;
+}
+
+/* The modal header stays visually connected to the form instead of reading as a red panel. */
+.enquiry-dialog-shell [data-slot="dialog-header"]{
+  background:transparent!important;
+}
+
+/* Make the first visit cinematic; subsequent in-session back navigation is immediate.
+   JS handles the state, this ensures the completed state never blocks interaction. */
+html.cinematic-intro-done .cinematic-intro{
+  display:none!important;
+}
+
+@media(max-width:760px){
+  .services-included-card{
+    min-height:188px!important;
+    padding:24px!important;
+  }
+  .services-included-title{
+    margin-top:28px!important;
+  }
+  .services-included-copy{
+    margin-top:20px!important;
+    line-height:1.72!important;
+  }
+  .services-engagement-title{
+    margin-top:18px!important;
+  }
+  .services-engagement-copy{
+    margin-top:15px!important;
+    line-height:1.7!important;
+  }
+  .enquiry-dialog-shell{
+    background:
+      radial-gradient(circle at 100% 100%,rgba(255,127,57,.10),transparent 48%),
+      linear-gradient(145deg,#060606,#010101 68%,#000)!important;
+  }
+  .enquiry-form-shell{
+    background:
+      radial-gradient(circle at 100% 100%,rgba(255,127,57,.085),transparent 50%),
+      linear-gradient(145deg,#050505,#010101 70%,#000)!important;
+  }
+}
