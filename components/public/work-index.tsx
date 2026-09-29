@@ -23,7 +23,7 @@ export default function WorkIndex() {
 
         <div className="grid md:grid-cols-2 gap-5 sm:gap-7 mt-14">
           {projects.map((project, index) => (
-            <article key={project.docId || project.slug} className="work-index-card overflow-hidden rounded-[24px] border border-white/10 bg-[#120805]">
+            <article key={project.docId || project.slug} className="work-index-card suraj-master-card overflow-hidden rounded-[24px] border border-white/10 bg-[#120805]">
               <a href={`/work/${project.slug}`} className="group block">
                 <div className="work-index-image aspect-[16/10] overflow-hidden bg-[#160b07]">
                   <img src={project.imageUrl} alt={project.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]" />

@@ -50,7 +50,7 @@ export default function CaseStudy({ slug }: { slug: string }) {
           </div>
           <div className="grid sm:grid-cols-2 gap-3">
             {(project.scope || []).map((item, index) => (
-              <div key={item} className="case-study-scope-card rounded-2xl border border-white/10 bg-[#120805] p-5">
+              <div key={item} className="case-study-scope-card suraj-master-card rounded-2xl border border-white/10 bg-[#120805] p-5">
                 <span className="text-[10px] text-[#f47b38]">{String(index + 1).padStart(2,"0")}</span>
                 <p className="mt-6 text-sm text-[#c8b8ad]">{item}</p>
               </div>
@@ -58,7 +58,7 @@ export default function CaseStudy({ slug }: { slug: string }) {
           </div>
         </div>
 
-        <div className="case-study-cta mt-16 rounded-[26px] border border-[#f47b38]/20 bg-[radial-gradient(circle_at_90%_10%,rgba(244,123,56,.12),transparent_38%),#120805] p-6 sm:p-10 flex flex-wrap items-center justify-between gap-5">
+        <div className="case-study-cta suraj-master-card mt-16 rounded-[26px] border border-[#f47b38]/20 bg-[radial-gradient(circle_at_90%_10%,rgba(244,123,56,.12),transparent_38%),#120805] p-6 sm:p-10 flex flex-wrap items-center justify-between gap-5">
           <div>
             <p className="text-xs uppercase tracking-[.16em] text-[#f47b38]">Have something similar in mind?</p>
             <h2 className="font-['Antonio',sans-serif] text-4xl sm:text-5xl mt-2">Let’s build it properly.</h2>

@@ -389,7 +389,7 @@ export default function Portfolio() {
           })()}
         </div>
 
-        <div className="grid gap-3">
+        <div className="portfolio-review-grid grid grid-cols-2 gap-3 sm:gap-4">
           {ratings.length ? ratings.slice(0, 4).map((review) => (
             <article key={review.id} className="portfolio-review-card rounded-2xl border border-white/[0.1] bg-[#160d07] p-5 sm:p-6">
               <div className="flex items-start justify-between gap-4">
@@ -499,7 +499,25 @@ export default function Portfolio() {
         </div>
       </div>
     </section>
-    <footer className="site-footer portfolio-footer content-width"><a href="#top" className="wordmark">SURAJ.WEB</a><nav className="footer-pages" aria-label="Portfolio pages"><a href="/work">Work</a><a href="/services">Services</a><a href="/about">About</a><a href="/start-project">Start Project</a></nav><p>© 2026 Suraj Kirtaniya</p><a href="#top">Back to top <ArrowDown size={15} className="rotate-180"/></a></footer>
+    <footer className="site-footer portfolio-footer">
+      <div className="portfolio-footer-inner content-width">
+        <div className="portfolio-footer-head">
+          <a href="#top" className="wordmark">SURAJ.WEB</a>
+          <p>Independent web developer crafting focused, high-converting digital experiences.</p>
+        </div>
+        <nav className="footer-pages" aria-label="Portfolio pages">
+          <a href="/work">Work</a>
+          <a href="/services">Services</a>
+          <a href="/about">About</a>
+          <a href="/start-project">Start Project</a>
+        </nav>
+        <div className="portfolio-footer-bottom">
+          <p>© 2026 Suraj Kirtaniya</p>
+          <a href="#top">Back to top <ArrowDown size={15} className="rotate-180"/></a>
+        </div>
+        <div className="portfolio-footer-giant" aria-hidden="true">SURAJ.WEB</div>
+      </div>
+    </footer>
 
     <Dialog open={enquiryOpen} onOpenChange={setEnquiryOpen}>
       <DialogContent className="w-[calc(100vw-20px)] max-w-[760px]! max-h-[92svh] overflow-y-auto gap-0 rounded-2xl border-[#68462e] bg-[#100702] p-0 text-[#f6f0e9] sm:rounded-3xl">
