@@ -3564,3 +3564,346 @@ main{
   .portfolio-footer-giant{animation:none!important}
 }
 
+/* SURAJ.WEB v9 — unmistakable unified visual system */
+:root{
+  --v9-orange:#ff7f39;
+  --v9-orange-2:#f45f22;
+  --v9-line:rgba(255,137,70,.34);
+  --v9-line-soft:rgba(255,137,70,.18);
+  --v9-card:
+    radial-gradient(circle at 92% 92%,rgba(255,127,57,.62) 0%,rgba(244,95,34,.34) 14%,rgba(244,95,34,.12) 31%,transparent 56%),
+    radial-gradient(circle at 6% -6%,rgba(255,255,255,.10),rgba(255,255,255,.025) 22%,transparent 39%),
+    linear-gradient(145deg,#111 0%,#060606 46%,#020202 72%,#000 100%);
+  --v9-card-soft:
+    radial-gradient(circle at 95% 98%,rgba(255,127,57,.38) 0%,rgba(244,95,34,.16) 24%,transparent 52%),
+    linear-gradient(145deg,#0b0b0b 0%,#040404 56%,#000 100%);
+}
+
+/* Global: eliminate remaining burgundy/brown panels. */
+body,
+main,
+.about-section,
+.projects-section,
+.services-section,
+.process-section,
+.feedback-section-v9,
+.faq-section-v9,
+.contact-section,
+.site-footer{
+  background:#000!important;
+}
+
+/* Hero card is the exact reference language for every key card. */
+.premium-glow-card,
+.project-card,
+.why-card,
+.process-grid article,
+.portfolio-review-card,
+.portfolio-rating-form,
+.service-row,
+.process-cta-row,
+.faq-list-v9 details,
+.work-index-card,
+.case-study-scope-card,
+.case-study-cta{
+  background:var(--v9-card)!important;
+  border:1px solid var(--v9-line)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.09),
+    inset 0 -1px 0 rgba(255,127,57,.10),
+    0 18px 52px rgba(0,0,0,.56),
+    0 8px 26px rgba(244,95,34,.08)!important;
+}
+
+/* Project cards: stronger and visibly different even when collapsed. */
+.project-card{
+  border-radius:32px!important;
+  padding:8px!important;
+  overflow:hidden!important;
+}
+.project-card:before{
+  display:block!important;
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  pointer-events:none!important;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.05),transparent 27%,transparent 72%,rgba(255,127,57,.13))!important;
+  opacity:1!important;
+}
+.project-card:after{
+  width:260px!important;
+  height:260px!important;
+  right:-125px!important;
+  bottom:-138px!important;
+  background:radial-gradient(circle,rgba(255,127,57,.68),rgba(244,95,34,.20) 40%,transparent 72%)!important;
+}
+.project-case-link{
+  border-radius:24px!important;
+  background:#000!important;
+  border:1px solid rgba(255,255,255,.07)!important;
+}
+.project-visual{
+  border-radius:22px!important;
+  background:#000!important;
+}
+.project-details-toggle{
+  min-height:72px!important;
+  border-radius:0 0 22px 22px!important;
+  background:
+    radial-gradient(circle at 100% 60%,rgba(255,127,57,.12),transparent 36%),
+    linear-gradient(180deg,#080808,#010101)!important;
+}
+.project-details-copy strong{
+  font-size:clamp(22px,2.4vw,31px)!important;
+  color:#fff3eb!important;
+}
+.project-details-chevron{
+  width:42px!important;
+  height:42px!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  background:linear-gradient(180deg,#ff914f,#ed682a)!important;
+}
+.project-details-panel{
+  background:
+    radial-gradient(circle at 100% 0%,rgba(255,127,57,.22),transparent 42%),
+    linear-gradient(180deg,#060606,#000)!important;
+}
+.project-card-summary{color:#e2d4cc!important}
+.project-card-detail{color:#9e8f86!important}
+
+/* Why cards and services now clearly belong to the same visual family. */
+.why-grid{gap:18px!important}
+.why-card{
+  border-radius:30px!important;
+}
+.service-list-v9{
+  display:grid!important;
+  gap:14px!important;
+  margin-top:42px!important;
+}
+.service-row{
+  border-radius:26px!important;
+  border-top:1px solid var(--v9-line-soft)!important;
+  border-bottom:1px solid var(--v9-line-soft)!important;
+  padding:28px 24px!important;
+}
+.service-row h3{color:#fff0e8!important}
+.service-row p{color:#b8aaa1!important}
+.service-row>svg{color:var(--v9-orange)!important}
+
+/* Process cards + CTA become actual premium cards. */
+.process-grid{
+  gap:16px!important;
+}
+.process-grid article{
+  min-height:255px!important;
+  padding:26px!important;
+  border-radius:28px!important;
+}
+.process-cta-row{
+  border-radius:26px!important;
+  padding:22px 24px!important;
+  border-top:1px solid var(--v9-line)!important;
+}
+
+/* Ratings: square iOS-style cards and a matching form. */
+.feedback-section-v9{
+  position:relative;
+}
+.portfolio-review-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:14px!important;
+}
+.portfolio-review-card{
+  aspect-ratio:1 / 1!important;
+  border-radius:34px!important;
+  padding:22px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:space-between!important;
+  background:
+    radial-gradient(circle at 100% 100%,rgba(255,127,57,.48),rgba(244,95,34,.14) 28%,transparent 52%),
+    linear-gradient(145deg,#0b0b0b,#020202 58%,#000)!important;
+}
+.portfolio-review-card>div:first-child{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  gap:14px!important;
+}
+.portfolio-review-card>div:first-child>div:last-child{
+  align-self:flex-start!important;
+}
+.portfolio-review-card>p{
+  margin-top:auto!important;
+  color:#e0d2c9!important;
+}
+.portfolio-rating-form{
+  border-radius:38px!important;
+  background:var(--v9-card-soft)!important;
+  padding:clamp(22px,3.4vw,36px)!important;
+}
+.portfolio-rating-form input,
+.portfolio-rating-form textarea{
+  background:#000!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  border-radius:18px!important;
+}
+
+/* FAQ is no longer a loose list floating on black. */
+.faq-list-v9{
+  border-top:0!important;
+  display:grid!important;
+  gap:12px!important;
+}
+.faq-list-v9 details{
+  border-radius:24px!important;
+  border-bottom:1px solid var(--v9-line-soft)!important;
+  padding:20px 22px!important;
+}
+.faq-list-v9 details summary{
+  color:#f7eee8!important;
+}
+.faq-list-v9 details p{
+  color:#a99a91!important;
+}
+
+/* Mobile sheet: true jet black, not red/burgundy. */
+.mobile-menu{
+  background:
+    radial-gradient(circle at 100% 100%,rgba(255,127,57,.20),transparent 34%),
+    linear-gradient(180deg,#050505 0%,#010101 64%,#000 100%)!important;
+  border-left:1px solid rgba(255,127,57,.28)!important;
+}
+.mobile-menu nav>a{
+  border-bottom:1px solid rgba(255,255,255,.08)!important;
+}
+.mobile-email{color:#ff8f51!important}
+
+/* Contact: reference-like top wash + dark center + orange bottom/right bloom. */
+.contact-card-shell{
+  min-height:560px!important;
+  border-radius:42px!important;
+  border:1px solid rgba(255,137,70,.30)!important;
+  background:
+    radial-gradient(ellipse 100% 60% at 50% -10%,rgba(255,255,255,.16) 0%,rgba(255,255,255,.035) 34%,transparent 62%),
+    radial-gradient(circle at 92% 70%,rgba(255,127,57,.58) 0%,rgba(244,95,34,.28) 17%,rgba(244,95,34,.08) 36%,transparent 59%),
+    linear-gradient(180deg,#0b0b0b 0%,#030303 48%,#000 100%)!important;
+}
+.contact-card-shell:before{
+  opacity:.32!important;
+  background-size:58px 58px!important;
+}
+.contact-main h2{
+  color:#fff4ed!important;
+}
+.contact-main h2 em{
+  color:var(--v9-orange)!important;
+}
+.contact-arrow{
+  background:linear-gradient(180deg,#ff985c,#ef692b)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    0 20px 44px rgba(244,95,34,.28)!important;
+}
+.contact-bottom{
+  border-top:1px solid rgba(255,255,255,.12)!important;
+}
+
+/* Footer: very visible final brand block like the reference. */
+.portfolio-footer{
+  min-height:480px!important;
+  background:
+    radial-gradient(ellipse 92% 38% at 50% 0%,rgba(255,255,255,.08),transparent 60%),
+    radial-gradient(circle at 88% 34%,rgba(255,127,57,.15),transparent 36%),
+    linear-gradient(180deg,#070707 0%,#000 100%)!important;
+}
+.portfolio-footer-inner{
+  min-height:480px!important;
+  padding-bottom:180px!important;
+}
+.portfolio-footer-giant{
+  bottom:-.015em!important;
+  font-size:clamp(130px,22vw,330px)!important;
+  color:rgba(255,127,57,.18)!important;
+  text-shadow:0 0 72px rgba(244,95,34,.06)!important;
+}
+
+/* Work/product index remains fully aligned with the same system. */
+.work-index-card{
+  border-radius:32px!important;
+}
+.work-index-image{
+  border-radius:24px!important;
+}
+
+/* Coarse/mobile: make the changes obvious without crushing content. */
+@media(max-width:760px){
+  .project-card{
+    border-radius:26px!important;
+  }
+  .project-case-link,
+  .project-visual{
+    border-radius:20px!important;
+  }
+  .project-details-toggle{
+    min-height:62px!important;
+    border-radius:0 0 18px 18px!important;
+  }
+  .service-list-v9{gap:10px!important}
+  .service-row{
+    grid-template-columns:34px 1fr 20px!important;
+    gap:10px!important;
+    border-radius:22px!important;
+    padding:18px!important;
+  }
+  .service-row>span{grid-column:1;grid-row:1}
+  .service-row h3{grid-column:2;grid-row:1;font-size:27px!important}
+  .service-row p{grid-column:1 / -1;grid-row:2;font-size:13px!important}
+  .service-row>svg{grid-column:3;grid-row:1}
+  .process-grid article{
+    min-height:205px!important;
+    border-radius:24px!important;
+  }
+  .process-cta-row{
+    border-radius:22px!important;
+    padding:18px!important;
+  }
+  .portfolio-review-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+  .portfolio-review-card{
+    border-radius:26px!important;
+    padding:14px!important;
+  }
+  .portfolio-review-card h3{font-size:13px!important}
+  .portfolio-review-card>p{
+    font-size:10px!important;
+    line-height:1.45!important;
+  }
+  .portfolio-rating-form{
+    border-radius:28px!important;
+  }
+  .faq-list-v9 details{
+    border-radius:20px!important;
+    padding:17px 18px!important;
+  }
+  .contact-card-shell{
+    min-height:500px!important;
+    border-radius:30px!important;
+    padding:30px 24px!important;
+  }
+  .portfolio-footer{
+    min-height:430px!important;
+  }
+  .portfolio-footer-inner{
+    min-height:430px!important;
+    padding-bottom:145px!important;
+  }
+  .portfolio-footer-giant{
+    font-size:clamp(105px,29vw,175px)!important;
+  }
+}
+

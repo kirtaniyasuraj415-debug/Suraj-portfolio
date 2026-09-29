@@ -336,12 +336,12 @@ export default function Portfolio() {
       </div>
     </section>
 
-    <section id="services" className="services-section content-width">
+    <section id="services" className="services-section services-section-v9 content-width">
       <div className="section-heading">
         <SectionLabel>{siteSettings.servicesSectionLabel}</SectionLabel>
         <a href="/services" className="section-page-link"><h2 style={{ whiteSpace: "pre-line" }}>{siteSettings.servicesSectionHeading}</h2><ArrowUpRight size={20}/></a>
       </div>
-      <div className="service-list">
+      <div className="service-list service-list-v9">
         {services.map((service, index)=><div className="service-row" key={service.docId || `${service.title}-${index}`}><span>{String(index + 1).padStart(2, "0")}</span><h3>{service.title}</h3><p>{service.description}</p><ArrowUpRight/></div>)}
       </div>
     </section>
@@ -352,7 +352,7 @@ export default function Portfolio() {
       <div className="process-grid">
         {[{n:"01",title:"Understand",text:"We start with your business, your audience, and what your website needs to achieve."},{n:"02",title:"Design",text:"I shape the layout and visual direction. We refine the details together."},{n:"03",title:"Build & Launch",text:"I build, check the experience across screens, and bring your website online."}].map(p=><article key={p.n}><span>{p.n} <ArrowRight size={18}/></span><h3>{p.title}</h3><p>{p.text}</p></article>)}
       </div>
-      <div className="mt-12 flex items-center justify-between flex-wrap gap-4 pt-8 border-t border-white/[0.08]">
+      <div className="process-cta-row mt-12 flex items-center justify-between flex-wrap gap-4 pt-8 border-t border-white/[0.08]">
         <div>
           <h3 className="text-xl font-medium text-[#f6f0e9]">Have an idea ready to build?</h3>
           <p className="text-xs text-[#a99585] mt-1">Get an estimate and project plan directly from Suraj.</p>
@@ -361,7 +361,7 @@ export default function Portfolio() {
       </div>
     </section>
 
-    <section id="feedback" className="content-width pb-28 sm:pb-36" aria-labelledby="feedback-heading">
+    <section id="feedback" className="feedback-section-v9 content-width pb-28 sm:pb-36" aria-labelledby="feedback-heading">
       <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 items-start">
         <div>
           <SectionLabel>Portfolio Feedback</SectionLabel>
@@ -453,12 +453,12 @@ export default function Portfolio() {
       </form>
     </section>
 
-    <section className="content-width pb-28 sm:pb-36" aria-labelledby="faq-heading">
+    <section className="faq-section-v9 content-width pb-28 sm:pb-36" aria-labelledby="faq-heading">
       <div className="section-heading">
         <SectionLabel>FAQ</SectionLabel>
         <h2 id="faq-heading">A few things clients<br/>usually ask.</h2>
       </div>
-      <div className="mt-10 border-t border-white/[0.12]">
+      <div className="faq-list-v9 mt-10 border-t border-white/[0.12]">
         {[
           ["What kind of websites do you build?", "Business websites, landing pages, portfolios, redesigns, e-commerce experiences, and selected AI or automation workflows."],
           ["Will the website work properly on mobile?", "Yes. Responsive behaviour is considered throughout the build so the experience works across common phone, tablet, and desktop sizes."],
