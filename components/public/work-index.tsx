@@ -17,7 +17,7 @@ export default function WorkIndex() {
         <h1 className="font-['Antonio',sans-serif] text-[18vw] sm:text-8xl lg:text-9xl font-thin leading-[.9] tracking-[-.04em] mt-5 max-w-5xl">
           Case studies & website concepts.
         </h1>
-        <p className="mt-6 max-w-xl text-sm sm:text-base leading-7 text-[#a59286]">
+        <p className="mt-10 sm:mt-12 max-w-xl text-sm sm:text-base leading-7 text-[#a59286]">
           Explore the thinking, visual direction, features and live previews behind each project.
         </p>
 
