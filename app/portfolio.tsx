@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowRight, ArrowUpRight, Code2, Gauge, Menu, MessageCircle, Monitor, Rocket, Smartphone, Sparkles, Star } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight, ChevronDown, Code2, Gauge, Menu, MessageCircle, Monitor, Rocket, Smartphone, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -13,11 +13,11 @@ import { DEFAULT_PORTFOLIO_PROJECTS, type PortfolioProject } from "@/lib/portfol
 import { DEFAULT_SERVICES, DEFAULT_SITE_SETTINGS, type CmsService } from "@/lib/cms";
 
 const navigation = [
-  ["About", "about"],
-  ["Projects", "projects"],
-  ["Services", "services"],
-  ["Process", "process"],
-  ["Contact", "contact"],
+  { label: "About", href: "/about" },
+  { label: "Projects", href: "/work" },
+  { label: "Services", href: "/services" },
+  { label: "Process", href: "#process", id: "process" },
+  { label: "Contact", href: "#contact", id: "contact" },
 ];
 
 const WHATSAPP_MESSAGE = "Hi Suraj, I came across your portfolio and would like to discuss a website/project.";
@@ -56,25 +56,20 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function ProjectVisual({ project }: { project: PortfolioProject }) {
   return (
-    <div className={`project-visual visual-${project.id}`} style={{ backgroundColor: project.color }}>
+    <div className={`project-visual visual-${project.id}`}>
       <div className="project-image-stage">
-        {/* Show the actual supplied project screenshot directly — no browser/device mockup shell. */}
+        {/* The supplied project screenshot is shown cleanly: no labels, buttons or blur over it. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={project.image}
           alt={`${project.title} website preview`}
           loading="lazy"
+          decoding="async"
           width="1200"
           height="750"
           className="project-image"
         />
       </div>
-      <span className="project-visual-shade" aria-hidden="true" />
-      <div className="project-visual-meta" aria-hidden="true">
-        <span>{String(project.slot).padStart(2, "0")}</span>
-        <span>{project.tag}</span>
-      </div>
-      <span className="project-open"><ArrowUpRight size={22} /></span>
     </div>
   );
 }
@@ -83,7 +78,6 @@ export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
   const mobileDestination = useRef<string | null>(null);
   const [active, setActive] = useState("about");
-  const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null);
   const [projects, setProjects] = useState<PortfolioProject[]>(DEFAULT_PORTFOLIO_PROJECTS);
   const [services, setServices] = useState<CmsService[]>(DEFAULT_SERVICES);
   const [siteSettings, setSiteSettings] = useState(DEFAULT_SITE_SETTINGS);
@@ -100,7 +94,7 @@ export default function Portfolio() {
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) if (entry.isIntersecting) setActive(entry.target.id);
     }, { rootMargin: "-15% 0px -65% 0px" });
-    navigation.forEach(([, id]) => { const section = document.getElementById(id); if (section) observer.observe(section); });
+    navigation.forEach((item) => { if (!item.id) return; const section = document.getElementById(item.id); if (section) observer.observe(section); });
     return () => observer.disconnect();
   }, []);
 
@@ -172,15 +166,53 @@ export default function Portfolio() {
   const leftProjects = projects.filter((_, index) => index % 2 === 0);
   const rightProjects = projects.filter((_, index) => index % 2 === 1);
 
-  const card = (project: PortfolioProject) => <article className="project-card" key={project.id}>
-    <Button variant="ghost" className="project-trigger" aria-label={`View ${project.title} concept`} onClick={() => setSelectedProject(project)}><ProjectVisual project={project} /></Button>
-    <div className="project-caption"><h3>{project.title}</h3><ArrowUpRight size={20} /></div>
-    <p>{project.line}</p>
-    <div className="project-tags"><span>{project.tag}</span><span>Concept Project</span></div>
-    <a className="text-link mt-4 w-fit" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-      Live Preview <ArrowUpRight size={15} />
-    </a>
-  </article>;
+  const card = (project: PortfolioProject) => (
+    <article className="project-card" key={project.id}>
+      <a
+        className="project-case-link"
+        href={`/work/${encodeURIComponent(project.id)}`}
+        aria-label={`Open ${project.title} case study`}
+      >
+        <ProjectVisual project={project} />
+      </a>
+
+      <details className="project-details">
+        <summary className="project-details-toggle" aria-label={`Show details for ${project.title}`}>
+          <span className="project-details-toggle-line" aria-hidden="true" />
+          <span className="project-details-chevron" aria-hidden="true">
+            <ChevronDown size={20} />
+          </span>
+        </summary>
+
+        <div className="project-details-panel">
+          <div className="project-details-kicker">
+            <span>{String(project.slot).padStart(2, "0")}</span>
+            <span>{project.tag}</span>
+          </div>
+          <div className="project-caption">
+            <h3>{project.title}</h3>
+            <a href={`/work/${encodeURIComponent(project.id)}`} aria-label={`Open ${project.title} case study`}>
+              <ArrowUpRight size={20} />
+            </a>
+          </div>
+          <p className="project-card-summary">{project.line}</p>
+          <p className="project-card-detail">{project.detail}</p>
+          <div className="project-tags">
+            <span>{project.tag}</span>
+            <span>Concept Project</span>
+          </div>
+          <div className="project-detail-actions">
+            <a className="project-case-study-link" href={`/work/${encodeURIComponent(project.id)}`}>
+              View Case Study <ArrowUpRight size={15} />
+            </a>
+            <a className="project-live-link" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+              Live Preview <ArrowUpRight size={15} />
+            </a>
+          </div>
+        </div>
+      </details>
+    </article>
+  );
 
   return <main id="top">
     <CinematicIntro />
@@ -188,7 +220,7 @@ export default function Portfolio() {
       <div className="hero-atmosphere" aria-hidden="true" />
       <header className="site-header">
         <a href="#top" className="wordmark" aria-label="Suraj Web, back to top">SURAJ.WEB</a>
-        <nav className="desktop-nav" aria-label="Main navigation">{navigation.map(([label, id]) => <a key={id} href={`#${id}`} className={active === id ? "active" : ""}>{label}</a>)}</nav>
+        <nav className="desktop-nav" aria-label="Main navigation">{navigation.map((item) => <a key={item.label} href={item.href} className={item.id && active === item.id ? "active" : ""}>{item.label}</a>)}</nav>
         <div className="header-actions">
           <GetStartedButton onClick={() => setEnquiryOpen(true)}>Get Started</GetStartedButton>
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
@@ -202,7 +234,7 @@ export default function Portfolio() {
                 document.getElementById(id)?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
                 window.history.replaceState(null, "", `#${id}`);
               });
-            }}><SheetTitle className="wordmark">SURAJ.WEB</SheetTitle><SheetDescription>Design. Develop. Make an impression.</SheetDescription><nav aria-label="Mobile navigation">{navigation.map(([label,id]) => <a key={id} href={`#${id}`} onClick={(event) => { event.preventDefault(); mobileDestination.current = id; setMenuOpen(false); }}>{label}<ArrowUpRight size={22}/></a>)}</nav><a className="mobile-email" href={whatsappUrl} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a></SheetContent>
+            }}><SheetTitle className="wordmark">SURAJ.WEB</SheetTitle><SheetDescription>Design. Develop. Make an impression.</SheetDescription><nav aria-label="Mobile navigation">{navigation.map((item) => <a key={item.label} href={item.href} onClick={(event) => { if (!item.id) { setMenuOpen(false); return; } event.preventDefault(); mobileDestination.current = item.id; setMenuOpen(false); }}>{item.label}<ArrowUpRight size={22}/></a>)}</nav><a className="mobile-email" href={whatsappUrl} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a></SheetContent>
           </Sheet>
         </div>
       </header>
@@ -218,7 +250,7 @@ export default function Portfolio() {
         <h2>Websites that turn<br/>visitors into clients.</h2>
         <div className="hero-links">
           <GetStartedButton onClick={() => setEnquiryOpen(true)}>Get Started</GetStartedButton>
-          <a className="text-link" href="#projects">View My Work <ArrowUpRight size={15}/></a>
+          <a className="text-link" href="/work">View My Work <ArrowUpRight size={15}/></a>
         </div>
       </div>
       <aside className="hero-promise premium-glow-card" aria-label="Design, development and launch">
@@ -236,7 +268,8 @@ export default function Portfolio() {
         <h2>Hey there, I’m Suraj Kirtaniya — a web developer with an eye for design and a focus on what works. I turn ideas into distinctive websites that feel effortless to use and help your business take its next step.</h2>
         <div className="section-actions">
           <GetStartedButton onClick={() => setEnquiryOpen(true)}>Get Started</GetStartedButton>
-          <a href="#projects" className="text-link">View My Work <ArrowUpRight size={15}/></a>
+          <a href="/about" className="text-link">About Me <ArrowUpRight size={15}/></a>
+          <a href="/work" className="text-link">View My Work <ArrowUpRight size={15}/></a>
         </div>
       </div>
     </section>
@@ -250,7 +283,7 @@ export default function Portfolio() {
       <div className="project-column offset-column">
         <div className="projects-heading">
           <SectionLabel>{siteSettings.projectSectionLabel}</SectionLabel>
-          <h2 id="projects-heading" style={{ whiteSpace: "pre-line" }}>{siteSettings.projectSectionHeading}</h2>
+          <a href="/work" className="section-page-link"><h2 id="projects-heading" style={{ whiteSpace: "pre-line" }}>{siteSettings.projectSectionHeading}</h2><ArrowUpRight size={20}/></a>
           <p>A selection of independent website concepts.</p>
         </div>
         {rightProjects.map(card)}
@@ -297,7 +330,7 @@ export default function Portfolio() {
     <section id="services" className="services-section content-width">
       <div className="section-heading">
         <SectionLabel>{siteSettings.servicesSectionLabel}</SectionLabel>
-        <h2 style={{ whiteSpace: "pre-line" }}>{siteSettings.servicesSectionHeading}</h2>
+        <a href="/services" className="section-page-link"><h2 style={{ whiteSpace: "pre-line" }}>{siteSettings.servicesSectionHeading}</h2><ArrowUpRight size={20}/></a>
       </div>
       <div className="service-list">
         {services.map((service, index)=><div className="service-row" key={service.docId || `${service.title}-${index}`}><span>{String(index + 1).padStart(2, "0")}</span><h3>{service.title}</h3><p>{service.description}</p><ArrowUpRight/></div>)}
@@ -458,10 +491,6 @@ export default function Portfolio() {
       </div>
     </section>
     <footer className="site-footer content-width"><a href="#top" className="wordmark">SURAJ.WEB</a><nav className="footer-pages" aria-label="Portfolio pages"><a href="/work">Work</a><a href="/services">Services</a><a href="/about">About</a><a href="/start-project">Start Project</a></nav><p>© 2026 Suraj Kirtaniya</p><a href="#top">Back to top <ArrowDown size={15} className="rotate-180"/></a></footer>
-
-    <Dialog open={!!selectedProject} onOpenChange={(open)=>{if(!open)setSelectedProject(null);}}>
-      <DialogContent className="project-dialog">{selectedProject&&<><DialogHeader><SectionLabel>Independent Concept</SectionLabel><DialogTitle>{selectedProject.title}</DialogTitle><DialogDescription>{selectedProject.detail}</DialogDescription></DialogHeader><ProjectVisual project={selectedProject}/><ul>{selectedProject.scope.map(item=><li key={item}><Sparkles size={14}/>{item}</li>)}</ul><div className="flex flex-wrap gap-3 items-center"><Button asChild className="orange-button"><a href={selectedProject.liveUrl} target="_blank" rel="noopener noreferrer">View Live Website <span className="button-arrow"><ArrowUpRight size={16} /></span></a></Button><Button type="button" variant="outline" className="rounded-full border-white/20 text-[#e4d5cb] hover:bg-white/10" onClick={() => { setSelectedProject(null); setEnquiryOpen(true); }}>Start a Project</Button><Button asChild variant="outline" className="rounded-full border-white/20 text-[#e4d5cb] hover:bg-white/10"><a href={`https://wa.me/917810963278?text=${encodeURIComponent(`Hi Suraj, I came across your portfolio and would like to discuss a website like ${selectedProject.brand}.`)}`} target="_blank" rel="noopener noreferrer">WhatsApp</a></Button></div></>}</DialogContent>
-    </Dialog>
 
     <Dialog open={enquiryOpen} onOpenChange={setEnquiryOpen}>
       <DialogContent className="w-[calc(100vw-20px)] max-w-[760px]! max-h-[92svh] overflow-y-auto gap-0 rounded-2xl border-[#68462e] bg-[#100702] p-0 text-[#f6f0e9] sm:rounded-3xl">
