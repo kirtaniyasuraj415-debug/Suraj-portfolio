@@ -13,7 +13,7 @@ export default function WorkIndex() {
         <a href="/" className="inline-flex items-center gap-2 text-xs text-[#aa978b]"><ArrowLeft size={14}/> Portfolio</a>
       </header>
       <section className="mx-auto max-w-7xl px-5 sm:px-8 pt-14 sm:pt-20 pb-24">
-        <p className="text-xs uppercase tracking-[.2em] text-[#f47b38]">Selected Work</p>
+        <p className="text-xs uppercase tracking-[.2em] text-[#f47b38]" style={{ transform: "translateY(-26px)" }}>Selected Work</p>
         <h1 className="font-['Antonio',sans-serif] text-[18vw] sm:text-8xl lg:text-9xl font-thin leading-[.9] tracking-[-.04em] mt-5 max-w-5xl" style={{ transform: "translateY(-24px)" }}>
           Case studies & website concepts.
         </h1>
