@@ -177,7 +177,7 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
         aria-busy={submitting}
         onSubmit={handleSubmit}
         noValidate
-        className="bg-[#160d07] border border-[#4a2e1c] rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 shadow-2xl space-y-6 text-left"
+        className="enquiry-form-shell rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 shadow-2xl space-y-6 text-left"
         aria-label="Project enquiry form"
       >
         {/* Form Title */}
@@ -226,7 +226,7 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
             required
             aria-required="true"
             aria-invalid={!!fieldErrors.name}
-            className={`w-full h-12 px-4 bg-[#0e0501] border rounded-xl text-sm text-[#f6f0e9] placeholder:text-[#6b5a4d] transition-all outline-none focus:border-[#f87b38] focus:ring-1 focus:ring-[#f87b38]/50 ${
+            className={`w-full h-12 px-4 bg-[#020202] border rounded-xl text-sm text-[#f6f0e9] placeholder:text-[#6b5a4d] transition-all outline-none focus:border-[#f87b38] focus:ring-1 focus:ring-[#f87b38]/50 ${
               fieldErrors.name ? "border-red-500" : "border-white/[0.14]"
             }`}
           />
@@ -257,7 +257,7 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
             required
             aria-required="true"
             aria-invalid={!!fieldErrors.phone}
-            className={`w-full h-12 px-4 bg-[#0e0501] border rounded-xl text-sm text-[#f6f0e9] placeholder:text-[#6b5a4d] transition-all outline-none focus:border-[#f87b38] focus:ring-1 focus:ring-[#f87b38]/50 ${
+            className={`w-full h-12 px-4 bg-[#020202] border rounded-xl text-sm text-[#f6f0e9] placeholder:text-[#6b5a4d] transition-all outline-none focus:border-[#f87b38] focus:ring-1 focus:ring-[#f87b38]/50 ${
               fieldErrors.phone ? "border-red-500" : "border-white/[0.14]"
             }`}
           />
@@ -300,7 +300,7 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
             value={formData.businessName}
             onChange={handleChange}
             placeholder="e.g. Sharma Studio, Aura Clinic, etc."
-            className="w-full h-12 px-4 bg-[#0e0501] border border-white/[0.14] rounded-xl text-sm text-[#f6f0e9] placeholder:text-[#6b5a4d] transition-all outline-none focus:border-[#f87b38] focus:ring-1 focus:ring-[#f87b38]/50"
+            className="w-full h-12 px-4 bg-[#020202] border border-white/[0.14] rounded-xl text-sm text-[#f6f0e9] placeholder:text-[#6b5a4d] transition-all outline-none focus:border-[#f87b38] focus:ring-1 focus:ring-[#f87b38]/50"
           />
         </div>
 
@@ -320,13 +320,13 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
                 name="projectType"
                 value={formData.projectType}
                 onChange={handleChange}
-                className="w-full h-12 pl-4 pr-10 bg-[#0e0501] border border-white/[0.14] rounded-xl text-sm text-[#f6f0e9] appearance-none transition-all outline-none focus:border-[#f87b38] focus:ring-1 focus:ring-[#f87b38]/50 cursor-pointer"
+                className="w-full h-12 pl-4 pr-10 bg-[#020202] border border-white/[0.14] rounded-xl text-sm text-[#f6f0e9] appearance-none transition-all outline-none focus:border-[#f87b38] focus:ring-1 focus:ring-[#f87b38]/50 cursor-pointer"
               >
                 {PROJECT_TYPES.map((type) => (
                   <option
                     key={type}
                     value={type}
-                    className="bg-[#180e08] text-[#f6f0e9] py-2"
+                    className="bg-[#050505] text-[#f6f0e9] py-2"
                   >
                     {type}
                   </option>
@@ -353,13 +353,13 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
                 name="budget"
                 value={formData.budget}
                 onChange={handleChange}
-                className="w-full h-12 pl-4 pr-10 bg-[#0e0501] border border-white/[0.14] rounded-xl text-sm text-[#f6f0e9] appearance-none transition-all outline-none focus:border-[#f87b38] focus:ring-1 focus:ring-[#f87b38]/50 cursor-pointer"
+                className="w-full h-12 pl-4 pr-10 bg-[#020202] border border-white/[0.14] rounded-xl text-sm text-[#f6f0e9] appearance-none transition-all outline-none focus:border-[#f87b38] focus:ring-1 focus:ring-[#f87b38]/50 cursor-pointer"
               >
                 {BUDGET_RANGES.map((b) => (
                   <option
                     key={b}
                     value={b}
-                    className="bg-[#180e08] text-[#f6f0e9] py-2"
+                    className="bg-[#050505] text-[#f6f0e9] py-2"
                   >
                     {b}
                   </option>
@@ -390,7 +390,7 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
             value={formData.projectGoal}
             onChange={handleChange}
             placeholder="What is your website about? Any specific features or design references you like?"
-            className="w-full p-4 bg-[#0e0501] border border-white/[0.14] rounded-xl text-sm text-[#f6f0e9] placeholder:text-[#6b5a4d] transition-all outline-none focus:border-[#f87b38] focus:ring-1 focus:ring-[#f87b38]/50 resize-none"
+            className="w-full p-4 bg-[#020202] border border-white/[0.14] rounded-xl text-sm text-[#f6f0e9] placeholder:text-[#6b5a4d] transition-all outline-none focus:border-[#f87b38] focus:ring-1 focus:ring-[#f87b38]/50 resize-none"
           />
         </div>
 
@@ -440,7 +440,7 @@ export default function EnquiryForm({ embedded = false, onSuccess }: EnquiryForm
           aria-labelledby="enquiry-modal-heading"
           aria-describedby="enquiry-modal-description"
         >
-          <div className="bg-[#180e08] border border-[#f87b38]/50 rounded-2xl sm:rounded-3xl p-6 sm:p-9 max-w-lg w-full text-center shadow-[0_0_50px_rgba(248,123,56,0.15)] relative overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="bg-[#050505] border border-[#f87b38]/50 rounded-2xl sm:rounded-3xl p-6 sm:p-9 max-w-lg w-full text-center shadow-[0_0_50px_rgba(248,123,56,0.15)] relative overflow-hidden animate-in zoom-in-95 duration-200">
             {/* Close button */}
             <button
               type="button"
