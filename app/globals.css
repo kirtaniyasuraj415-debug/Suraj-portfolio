@@ -4382,3 +4382,199 @@ textarea:focus-visible{
   }
 }
 
+/* SURAJ.WEB v12 — reference contact, nav-state reset, route polish */
+
+/* Homepage header: no section remains active after leaving Process/Contact. */
+.desktop-nav a.active{
+  background:var(--cream)!important;
+  color:#21130b!important;
+}
+
+/* Rebuilt contact block: reference composition, centered hierarchy, black + orange instead of black + white. */
+.contact-section{
+  background:#000!important;
+  padding:72px 0 40px!important;
+}
+.contact-reference-card{
+  position:relative!important;
+  width:min(92%,1180px)!important;
+  max-width:1180px!important;
+  min-height:500px!important;
+  padding:clamp(42px,7vw,88px)!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:40px!important;
+  background:
+    radial-gradient(ellipse 96% 46% at 50% -7%,rgba(255,255,255,.16) 0%,rgba(255,255,255,.045) 28%,transparent 64%),
+    radial-gradient(circle at 50% 112%,rgba(255,127,57,.56) 0%,rgba(244,95,34,.25) 18%,rgba(244,95,34,.08) 36%,transparent 60%),
+    linear-gradient(180deg,#0b0b0b 0%,#050505 48%,#010101 77%,#000 100%)!important;
+  box-shadow:0 30px 84px rgba(0,0,0,.62),0 16px 50px rgba(244,95,34,.07)!important;
+}
+.contact-reference-card::before,
+.contact-reference-card::after{
+  display:none!important;
+  content:none!important;
+}
+.contact-reference-grid{
+  position:absolute;
+  inset:0;
+  z-index:0!important;
+  pointer-events:none;
+  opacity:.18;
+  background-image:
+    linear-gradient(rgba(255,255,255,.032) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.032) 1px,transparent 1px);
+  background-size:62px 62px;
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.92),rgba(0,0,0,.28));
+}
+.contact-reference-wash{
+  position:absolute;
+  z-index:0!important;
+  pointer-events:none;
+  left:8%;
+  right:8%;
+  top:-20%;
+  height:54%;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(255,255,255,.10),rgba(255,255,255,.025) 42%,transparent 72%);
+  filter:blur(24px);
+}
+.contact-reference-glow{
+  position:absolute;
+  z-index:0!important;
+  pointer-events:none;
+  left:18%;
+  right:18%;
+  bottom:-34%;
+  height:58%;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(255,128,57,.55),rgba(244,95,34,.20) 38%,transparent 72%);
+  filter:blur(24px);
+}
+.contact-reference-content{
+  position:relative!important;
+  z-index:2!important;
+  max-width:780px;
+  min-height:320px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.contact-reference-content .section-label{
+  justify-content:center;
+}
+.contact-reference-heading{
+  margin:28px 0 0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  font:100 clamp(72px,9.4vw,142px)/.91 var(--display)!important;
+  letter-spacing:-.052em!important;
+  color:#fff4ed!important;
+}
+.contact-reference-heading span{
+  display:block!important;
+}
+.contact-reference-heading span + span{
+  margin-top:.08em!important;
+}
+.contact-reference-heading em{
+  font-style:normal!important;
+  color:#ff8240!important;
+}
+.contact-reference-copy{
+  max-width:540px!important;
+  margin:26px auto 0!important;
+  color:#ad9d93!important;
+  font-size:clamp(14px,1.4vw,18px)!important;
+  line-height:1.75!important;
+}
+.contact-reference-actions{
+  margin-top:28px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-wrap:wrap!important;
+  gap:18px!important;
+}
+.contact-reference-actions .orange-button{
+  min-width:156px;
+}
+.contact-reference-actions .contact-email{
+  color:#e6d8cf!important;
+  font-size:14px!important;
+}
+
+/* Old floating contact artwork/button cannot leak through after the markup rebuild. */
+.contact-art,
+.contact-main,
+.contact-bottom,
+.contact-arrow{
+  display:none!important;
+}
+
+/* Dedicated route surfaces follow the final jet-black system. */
+.work-index-page,
+.case-study-page{
+  background:#000!important;
+}
+.work-index-header,
+.case-study-header{
+  background:rgba(0,0,0,.88)!important;
+  border:0!important;
+}
+
+/* Remove residual stroke language from case-study cards after adding content. */
+.case-study-preview,
+.case-study-scope-card,
+.case-study-cta{
+  border:0!important;
+}
+
+@media(max-width:760px){
+  .contact-section{
+    padding:52px 0 28px!important;
+  }
+  .contact-reference-card{
+    width:92%!important;
+    min-height:430px!important;
+    padding:30px 22px 34px!important;
+    border-radius:30px!important;
+  }
+  .contact-reference-grid{
+    background-size:46px 46px;
+    opacity:.14;
+  }
+  .contact-reference-content{
+    min-height:350px;
+  }
+  .contact-reference-heading{
+    margin-top:22px!important;
+    font-size:clamp(60px,16.5vw,88px)!important;
+    line-height:.94!important;
+    letter-spacing:-.045em!important;
+  }
+  .contact-reference-heading span + span{
+    margin-top:.12em!important;
+  }
+  .contact-reference-copy{
+    max-width:300px!important;
+    margin-top:22px!important;
+    font-size:14px!important;
+    line-height:1.65!important;
+  }
+  .contact-reference-actions{
+    margin-top:24px!important;
+    gap:14px!important;
+  }
+  .contact-reference-actions .orange-button{
+    min-width:0;
+  }
+  .contact-reference-actions .contact-email{
+    font-size:12px!important;
+  }
+}
+

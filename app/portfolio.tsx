@@ -77,7 +77,7 @@ function ProjectVisual({ project }: { project: PortfolioProject }) {
 export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
   const mobileDestination = useRef<string | null>(null);
-  const [active, setActive] = useState("about");
+  const [active, setActive] = useState("");
   const [projects, setProjects] = useState<PortfolioProject[]>(DEFAULT_PORTFOLIO_PROJECTS);
   const [services, setServices] = useState<CmsService[]>(DEFAULT_SERVICES);
   const [siteSettings, setSiteSettings] = useState(DEFAULT_SITE_SETTINGS);
@@ -91,11 +91,33 @@ export default function Portfolio() {
   const [ratingStatus, setRatingStatus] = useState<string | null>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) if (entry.isIntersecting) setActive(entry.target.id);
-    }, { rootMargin: "-15% 0px -65% 0px" });
-    navigation.forEach((item) => { if (!item.id) return; const section = document.getElementById(item.id); if (section) observer.observe(section); });
-    return () => observer.disconnect();
+    const trackedIds = navigation.flatMap((item) => item.id ? [item.id] : []);
+
+    const updateActiveSection = () => {
+      const activationLine = Math.min(180, Math.max(96, window.innerHeight * 0.2));
+      let nextActive = "";
+
+      for (const id of trackedIds) {
+        const section = document.getElementById(id);
+        if (!section) continue;
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= activationLine && rect.bottom > activationLine) {
+          nextActive = id;
+          break;
+        }
+      }
+
+      setActive((current) => current === nextActive ? current : nextActive);
+    };
+
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    window.addEventListener("resize", updateActiveSection);
+
+    return () => {
+      window.removeEventListener("scroll", updateActiveSection);
+      window.removeEventListener("resize", updateActiveSection);
+    };
   }, []);
 
   useEffect(() => {
@@ -477,24 +499,25 @@ export default function Portfolio() {
     </section>
 
     <section id="contact" className="contact-section">
-      <div className="content-width contact-card-shell">
-        <div className="contact-art" aria-hidden="true">
-          <span className="contact-art-line contact-art-line-one" />
-          <span className="contact-art-line contact-art-line-two" />
-          <span className="contact-art-beam" />
-          <span className="contact-art-glow" />
-          <span className="contact-art-flare" />
-        </div>
-        <SectionLabel>Let’s Make It Happen</SectionLabel>
-        <div className="contact-main">
-          <h2>Have a project<br/>in <em>mind?</em></h2>
-          <button type="button" className="contact-arrow" aria-label="Open project enquiry form" onClick={() => setEnquiryOpen(true)}><ArrowUpRight/></button>
-        </div>
-        <div className="contact-bottom">
-          <p>Tell me what you’re thinking.<br/>Let’s build something that feels like you.</p>
-          <div className="flex items-center gap-4 flex-wrap">
+      <div className="content-width contact-card-shell contact-reference-card">
+        <div className="contact-reference-grid" aria-hidden="true" />
+        <div className="contact-reference-wash" aria-hidden="true" />
+        <div className="contact-reference-glow" aria-hidden="true" />
+
+        <div className="contact-reference-content">
+          <SectionLabel>Let’s Make It Happen</SectionLabel>
+          <h2 className="contact-reference-heading">
+            <span>Have a project</span>
+            <span>in <em>mind?</em></span>
+          </h2>
+          <p className="contact-reference-copy">
+            Tell me what you’re thinking. Let’s build something that feels like you.
+          </p>
+          <div className="contact-reference-actions">
             <GetStartedButton onClick={() => setEnquiryOpen(true)}>Get Started</GetStartedButton>
-            <a className="contact-email" href={whatsappUrl} target="_blank" rel="noopener noreferrer">Chat on WhatsApp<ArrowUpRight size={20}/></a>
+            <a className="contact-email" href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+              Chat on WhatsApp <ArrowUpRight size={18}/>
+            </a>
           </div>
         </div>
       </div>

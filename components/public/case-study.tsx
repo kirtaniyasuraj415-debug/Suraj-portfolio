@@ -43,19 +43,38 @@ export default function CaseStudy({ slug }: { slug: string }) {
           <img src={project.imageUrl} alt={project.title} className="w-full h-auto block"/>
         </div>
 
-        <div className="grid lg:grid-cols-[.65fr_1.35fr] gap-8 lg:gap-16 mt-14 sm:mt-20 border-t border-white/10 pt-10">
+        <div className="grid lg:grid-cols-[.65fr_1.35fr] gap-8 lg:gap-16 mt-14 sm:mt-20 pt-10">
           <div>
             <p className="text-xs uppercase tracking-[.16em] text-[#76665d]">Project scope</p>
             <p className="font-['Antonio',sans-serif] text-4xl font-thin mt-3">{project.brand || project.title}</p>
           </div>
           <div className="grid sm:grid-cols-2 gap-3">
             {(project.scope || []).map((item, index) => (
-              <div key={item} className="case-study-scope-card suraj-master-card rounded-2xl border border-white/10 bg-[#120805] p-5">
+              <div key={item} className="case-study-scope-card suraj-master-card rounded-2xl bg-[#120805] p-5">
                 <span className="text-[10px] text-[#f47b38]">{String(index + 1).padStart(2,"0")}</span>
                 <p className="mt-6 text-sm text-[#c8b8ad]">{item}</p>
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-5 mt-16">
+          <section className="rounded-[28px] bg-[radial-gradient(circle_at_90%_100%,rgba(244,123,56,.22),transparent_48%),linear-gradient(145deg,#0c0c0c,#020202_70%,#000)] p-6 sm:p-8">
+            <p className="text-xs uppercase tracking-[.16em] text-[#f47b38]">Direction</p>
+            <h2 className="font-['Antonio',sans-serif] text-4xl sm:text-5xl font-thin mt-4">Built around the work, not decoration.</h2>
+            <p className="text-sm leading-7 text-[#a9968a] mt-5">{project.detail || project.description}</p>
+          </section>
+          <section className="rounded-[28px] bg-[radial-gradient(circle_at_92%_100%,rgba(244,123,56,.16),transparent_50%),linear-gradient(145deg,#090909,#010101_72%,#000)] p-6 sm:p-8">
+            <p className="text-xs uppercase tracking-[.16em] text-[#f47b38]">What the experience prioritises</p>
+            <div className="mt-6 grid gap-5">
+              {(project.scope || []).slice(0,3).map((item,index)=>(
+                <div key={item} className="grid grid-cols-[28px_1fr] gap-3 items-start">
+                  <span className="text-xs text-[#f47b38]">{String(index+1).padStart(2,"0")}</span>
+                  <p className="text-sm leading-7 text-[#c8b8ad]">{item}</p>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
 
         <div className="case-study-cta suraj-master-card mt-16 rounded-[26px] border border-[#f47b38]/20 bg-[radial-gradient(circle_at_90%_10%,rgba(244,123,56,.12),transparent_38%),#120805] p-6 sm:p-10 flex flex-wrap items-center justify-between gap-5">

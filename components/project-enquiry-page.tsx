@@ -16,9 +16,9 @@ const WHATSAPP_DIRECT_URL = `https://wa.me/917810963278?text=${encodeURIComponen
 
 export default function ProjectEnquiryPage() {
   return (
-    <div className="min-h-screen bg-[#100702] text-[#f6f0e9] selection:bg-[#ffab74] selection:text-[#140a04] flex flex-col">
+    <div className="min-h-screen bg-black text-[#f6f0e9] selection:bg-[#ffab74] selection:text-[#140a04] flex flex-col">
       {/* Header */}
-      <header className="site-header border-b border-white/[0.08]">
+      <header className="site-header">
         <Link href="/" className="wordmark" aria-label="Suraj Web homepage">
           SURAJ.WEB
         </Link>
@@ -36,7 +36,7 @@ export default function ProjectEnquiryPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start max-w-6xl mx-auto">
           {/* LEFT COLUMN: Brief Context & WhatsApp CTA */}
           <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.1] text-xs text-[#d8c9bd]">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.05] text-xs text-[#d8c9bd]">
               <Clock size={13} className="text-[#f87b38]" />
               <span>Project Enquiry • Quick 1-minute form</span>
             </div>
@@ -56,9 +56,9 @@ export default function ProjectEnquiryPage() {
             </p>
 
             {/* Benefit Points */}
-            <div className="space-y-4 pt-4 border-t border-white/[0.08]">
+            <div className="space-y-4 pt-4">
               <div className="flex items-start gap-3.5">
-                <div className="w-8 h-8 rounded-full bg-[#2c1c14] text-[#f87b38] flex items-center justify-center shrink-0 border border-white/[0.08]">
+                <div className="w-8 h-8 rounded-full bg-[#2c1c14] text-[#f87b38] flex items-center justify-center shrink-0">
                   <Sparkles size={16} />
                 </div>
                 <div>
@@ -70,7 +70,7 @@ export default function ProjectEnquiryPage() {
               </div>
 
               <div className="flex items-start gap-3.5">
-                <div className="w-8 h-8 rounded-full bg-[#2c1c14] text-[#f87b38] flex items-center justify-center shrink-0 border border-white/[0.08]">
+                <div className="w-8 h-8 rounded-full bg-[#2c1c14] text-[#f87b38] flex items-center justify-center shrink-0">
                   <MessageSquare size={16} />
                 </div>
                 <div>
@@ -83,7 +83,7 @@ export default function ProjectEnquiryPage() {
             </div>
 
             {/* Direct WhatsApp Box */}
-            <div className="p-4 rounded-2xl bg-[#180e08] border border-white/[0.1] space-y-2">
+            <div className="p-4 rounded-2xl bg-[radial-gradient(circle_at_100%_100%,rgba(244,123,56,.20),transparent_52%),linear-gradient(145deg,#0c0c0c,#020202_72%,#000)] space-y-2">
               <p className="text-xs text-[#d8c9bd] font-medium">Prefer a fast direct chat?</p>
               <a
                 href={WHATSAPP_DIRECT_URL}
@@ -104,7 +104,7 @@ export default function ProjectEnquiryPage() {
       </main>
 
       {/* Footer */}
-      <footer className="site-footer content-width border-t border-white/[0.08] mt-16">
+      <footer className="site-footer content-width mt-16">
         <Link href="/" className="wordmark">
           SURAJ.WEB
         </Link>
