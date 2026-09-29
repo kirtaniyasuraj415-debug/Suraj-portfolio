@@ -23,3 +23,9 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Notify IndexNow
+        continue-on-error: true
+        env:
+          SITE_URL: https://suraj-portfolio-phi-six.vercel.app
+        run: node scripts/submit-indexnow.mjs
