@@ -11,6 +11,7 @@ import ScrollMotion from "@/components/scroll-motion";
 import CinematicIntro from "@/components/cinematic-intro";
 import { DEFAULT_PORTFOLIO_PROJECTS, type PortfolioProject } from "@/lib/portfolio-projects";
 import { DEFAULT_SERVICES, DEFAULT_SITE_SETTINGS, type CmsService } from "@/lib/cms";
+import { servicePathForTitle } from "@/lib/service-pages";
 
 const navigation = [
   { label: "About", href: "/about" },
@@ -364,7 +365,7 @@ export default function Portfolio() {
         <a href="/services" className="section-page-link"><h2 style={{ whiteSpace: "pre-line" }}>{siteSettings.servicesSectionHeading}</h2><ArrowUpRight size={20}/></a>
       </div>
       <div className="service-list service-list-v9">
-        {services.map((service, index)=><div className="service-row" key={service.docId || `${service.title}-${index}`}><span>{String(index + 1).padStart(2, "0")}</span><h3>{service.title}</h3><p>{service.description}</p><ArrowUpRight/></div>)}
+        {services.map((service, index)=><div className="service-row" key={service.docId || `${service.title}-${index}`}><span>{String(index + 1).padStart(2, "0")}</span><h3><a href={servicePathForTitle(service.title)}>{service.title}</a></h3><p>{service.description}</p><a href={servicePathForTitle(service.title)} aria-label={`Learn more about ${service.title}`}><ArrowUpRight/></a></div>)}
       </div>
     </section>
 
