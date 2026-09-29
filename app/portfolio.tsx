@@ -182,8 +182,11 @@ export default function Portfolio() {
             <strong>{project.title}</strong>
             <small>{project.tag}</small>
           </span>
-          <span className="project-details-chevron" aria-hidden="true">
-            <ChevronDown size={18} />
+          <span className="project-details-action" aria-hidden="true">
+            <span className="project-details-action-label">Details</span>
+            <span className="project-details-chevron">
+              <ChevronDown size={18} />
+            </span>
           </span>
         </summary>
 
