@@ -70,10 +70,10 @@ export default function ServicesIndex() {
               ["Agree the direction", "We align on scope, visual direction, content and the practical delivery plan."],
               ["Build & launch", "The site is built, checked across screens and prepared for the final deployment."],
             ].map(([title,copy]) => (
-              <div key={title}>
+              <div key={title} className="services-engagement-item">
                 <Check size={18} className="text-[#f47b38]"/>
-                <h3 className="font-['Antonio',sans-serif] text-3xl font-thin mt-4">{title}</h3>
-                <p className="text-sm leading-7 text-[#99877c] mt-3">{copy}</p>
+                <h3 className="services-engagement-title font-['Antonio',sans-serif] text-3xl font-thin">{title}</h3>
+                <p className="services-engagement-copy text-sm leading-7 text-[#99877c]">{copy}</p>
               </div>
             ))}
           </div>
