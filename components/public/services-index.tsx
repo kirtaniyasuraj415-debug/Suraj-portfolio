@@ -2,6 +2,7 @@
 
 import { ArrowLeft, ArrowUpRight, Check, Gauge, MessageCircle, Smartphone, Sparkles } from "lucide-react";
 import { usePublicServices } from "@/lib/use-public-cms";
+import { servicePathForTitle } from "@/lib/service-pages";
 
 const included = [
   { icon: Smartphone, title: "Responsive by default", copy: "Phone, tablet and desktop are considered throughout the build." },
@@ -32,9 +33,11 @@ export default function ServicesIndex() {
           {services.map((service,index)=>(
             <article key={service.docId || service.title} className="grid sm:grid-cols-[70px_1fr_1.3fr_auto] gap-4 sm:gap-6 items-center py-8">
               <span className="text-[10px] text-[#74635a]">{String(index+1).padStart(2,"0")}</span>
-              <h2 className="font-['Antonio',sans-serif] text-3xl sm:text-4xl">{service.title}</h2>
+              <h2 className="font-['Antonio',sans-serif] text-3xl sm:text-4xl">
+                <a href={servicePathForTitle(service.title)} className="hover:text-[#f47b38] transition-colors">{service.title}</a>
+              </h2>
               <p className="text-sm leading-6 text-[#a28f84]">{service.description}</p>
-              <ArrowUpRight size={18} className="text-[#f47b38]"/>
+              <a href={servicePathForTitle(service.title)} aria-label={`Learn more about ${service.title}`} className="text-[#f47b38]"><ArrowUpRight size={18}/></a>
             </article>
           ))}
         </div>
