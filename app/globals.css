@@ -2539,3 +2539,221 @@ html.lightweight-motion .hero-atmosphere{
     padding:14px 11px 13px!important;
   }
 }
+
+
+/* Jet-black visual test — requested 2026-09-29. Keeps warm orange as the brand accent. */
+:root{
+  --background:#000000!important;
+  --card:#080808!important;
+  --popover:#080808!important;
+  --secondary:#111111!important;
+  --muted:#0d0d0d!important;
+  --accent:#141414!important;
+}
+html,
+body,
+main{
+  background:#000000!important;
+}
+.hero{
+  background:#000000!important;
+}
+.hero-atmosphere{
+  background:
+    radial-gradient(ellipse 55% 34% at 14% 31%,rgba(244,122,56,.28) 0%,rgba(213,82,25,.12) 34%,transparent 70%),
+    radial-gradient(ellipse 40% 28% at 91% 29%,rgba(180,55,15,.13),transparent 76%),
+    linear-gradient(180deg,#000 0%,#050201 40%,#000 82%)!important;
+}
+.hero-bottom-shade{
+  background:linear-gradient(transparent,#000 83%)!important;
+}
+.skills-section,
+.about-section,
+.projects-section,
+.services-section,
+.process-section,
+.feedback-section,
+.faq-section,
+.contact-section,
+.site-footer{
+  background-color:#000!important;
+}
+
+/* Project cards v6 — integrated open state, stronger hierarchy, less nested-card feel. */
+.project-card{
+  border-color:rgba(244,123,56,.24)!important;
+  background:
+    radial-gradient(circle at 86% 112%,rgba(244,123,56,.10),transparent 34%),
+    linear-gradient(180deg,#0b0b0b 0%,#070707 60%,#050505 100%)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.035),
+    0 18px 44px rgba(0,0,0,.48)!important;
+}
+.project-card:hover{
+  border-color:rgba(244,123,56,.38)!important;
+  background:
+    radial-gradient(circle at 86% 112%,rgba(244,123,56,.14),transparent 36%),
+    linear-gradient(180deg,#0d0d0d 0%,#080808 60%,#050505 100%)!important;
+}
+.project-case-link,
+.project-visual{
+  background:#050505!important;
+  border-color:rgba(255,255,255,.055)!important;
+}
+.project-details-toggle{
+  border-top-color:rgba(255,255,255,.055)!important;
+  background:
+    linear-gradient(90deg,rgba(244,123,56,.035),transparent 34%),
+    #080808!important;
+}
+.project-details-copy strong{
+  color:#f5eee8!important;
+}
+.project-details-copy small{
+  color:#917e72!important;
+}
+.project-details-action-label{
+  color:#a98e7e!important;
+}
+.project-details-chevron{
+  border-color:rgba(244,123,56,.42)!important;
+  background:
+    radial-gradient(circle at 30% 22%,rgba(255,255,255,.20),transparent 42%),
+    linear-gradient(180deg,#f7894c 0%,#d85f28 100%)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    0 7px 18px rgba(216,95,40,.28)!important;
+}
+.project-details[open]{
+  border-color:rgba(244,123,56,.34)!important;
+}
+.project-details[open] .project-details-toggle{
+  background:
+    linear-gradient(90deg,rgba(244,123,56,.075),transparent 46%),
+    #080808!important;
+}
+.project-details-panel{
+  position:relative;
+  padding:18px 15px 16px!important;
+  border-top:1px solid rgba(244,123,56,.16)!important;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(244,123,56,.075),transparent 34%),
+    linear-gradient(180deg,#070707 0%,#050505 100%)!important;
+}
+.project-details-panel:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:18px;
+  bottom:18px;
+  width:2px;
+  border-radius:99px;
+  background:linear-gradient(180deg,#f58a4d,rgba(244,123,56,.08));
+  box-shadow:0 0 16px rgba(244,123,56,.18);
+}
+.project-details-kicker{
+  padding-left:5px!important;
+  color:#85746a!important;
+}
+.project-caption{
+  margin-top:12px!important;
+  align-items:center!important;
+}
+.project-caption>div{
+  min-width:0;
+}
+.project-overview-label{
+  display:block;
+  margin-bottom:5px;
+  color:#f18346;
+  font-size:8px;
+  line-height:1;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+}
+.project-caption h3{
+  font-size:clamp(27px,3vw,41px)!important;
+  line-height:.98!important;
+  color:#f3e9e2!important;
+}
+.project-caption>a{
+  width:40px!important;
+  height:40px!important;
+  border-color:rgba(244,123,56,.22)!important;
+  background:rgba(244,123,56,.075)!important;
+  color:#f18a50!important;
+}
+.project-caption>a:hover{
+  background:#f47b38!important;
+  color:#fff!important;
+}
+.project-card-summary{
+  margin-top:14px!important;
+  color:#c9b9af!important;
+  font-size:12.5px!important;
+  line-height:1.62!important;
+}
+.project-card-detail{
+  margin-top:8px!important;
+  color:#8f8178!important;
+  font-size:11.5px!important;
+  line-height:1.7!important;
+}
+.project-tags{
+  margin-top:14px!important;
+}
+.project-tags span{
+  padding:6px 9px!important;
+  border-color:rgba(255,255,255,.075)!important;
+  background:#0d0d0d!important;
+  color:#a6968c!important;
+}
+.project-detail-actions{
+  margin-top:16px!important;
+  padding-top:14px!important;
+  border-top-color:rgba(255,255,255,.065)!important;
+}
+.project-case-study-link,
+.project-live-link{
+  min-height:38px!important;
+  padding-inline:13px!important;
+}
+.project-case-study-link{
+  background:linear-gradient(180deg,#f68a4c,#d96029)!important;
+  box-shadow:0 8px 18px rgba(217,96,41,.20)!important;
+}
+.project-live-link{
+  border-color:rgba(255,255,255,.10)!important;
+  background:#0b0b0b!important;
+  color:#d1c0b6!important;
+}
+
+@media(max-width:760px){
+  .project-details-panel{
+    padding:15px 12px 14px!important;
+  }
+  .project-details-panel:before{
+    top:15px;
+    bottom:15px;
+  }
+  .project-caption h3{
+    font-size:27px!important;
+  }
+  .project-card-summary{
+    font-size:12px!important;
+  }
+  .project-card-detail{
+    font-size:11px!important;
+  }
+  .project-detail-actions{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:8px!important;
+  }
+  .project-case-study-link,
+  .project-live-link{
+    justify-content:center!important;
+    padding-inline:8px!important;
+    font-size:10px!important;
+  }
+}
