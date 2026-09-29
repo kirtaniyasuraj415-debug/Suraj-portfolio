@@ -4687,3 +4687,100 @@ textarea:focus-visible{
     opacity:.36!important;
   }
 }
+
+
+/* SURAJ.WEB v14 — true-black Why cards and corrected title/description spacing */
+
+/* Match Why Work With Me cards to the darker Services/Rating card language.
+   Remove the lighter animated wash that was making the black read brown. */
+.why-card{
+  background:
+    radial-gradient(circle at 92% 100%,rgba(244,123,56,.22) 0%,rgba(244,123,56,.075) 27%,transparent 52%),
+    linear-gradient(145deg,#070707 0%,#020202 66%,#000 100%)!important;
+  border:0!important;
+  box-shadow:0 20px 50px rgba(0,0,0,.60),0 10px 26px rgba(244,95,34,.04)!important;
+}
+.why-card>.why-card-live-bg,
+.why-card>.why-card-live-bg:before,
+.why-card>.why-card-live-bg:after{
+  display:none!important;
+}
+.why-card:after{
+  opacity:.06!important;
+  background:linear-gradient(120deg,rgba(255,255,255,.025),transparent 34%,transparent 76%,rgba(255,127,57,.035))!important;
+}
+.why-card-icon{
+  background:rgba(255,127,57,.055)!important;
+  color:#ff8643!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.why-card-title{
+  color:#f5eee9!important;
+}
+.why-card-copy{
+  color:#988a82!important;
+}
+
+/* Services card typography: separate headline and supporting copy clearly. */
+.services-included-card{
+  background:
+    radial-gradient(circle at 92% 100%,rgba(244,123,56,.22) 0%,rgba(244,123,56,.075) 27%,transparent 52%),
+    linear-gradient(145deg,#070707 0%,#020202 66%,#000 100%)!important;
+}
+.services-included-title{
+  margin-top:30px!important;
+  line-height:1.06!important;
+}
+.services-included-copy{
+  margin-top:20px!important;
+  line-height:1.72!important;
+  color:#968980!important;
+}
+
+/* Work index cards: give title and project description proper breathing room. */
+.work-index-card{
+  background:
+    radial-gradient(circle at 96% 100%,rgba(244,123,56,.27) 0%,rgba(244,123,56,.09) 28%,transparent 53%),
+    linear-gradient(145deg,#070707 0%,#020202 66%,#000 100%)!important;
+}
+.work-index-card-copy h2{
+  margin-top:10px!important;
+  line-height:1.08!important;
+  text-wrap:balance;
+}
+.work-index-card-copy>p{
+  margin-top:20px!important;
+  line-height:1.7!important;
+  color:#9d8e85!important;
+  max-width:48ch;
+}
+
+/* Slightly increase copy area so the extra spacing does not feel cramped. */
+.work-index-card-copy{
+  padding-top:20px!important;
+  padding-bottom:22px!important;
+}
+
+@media(max-width:760px){
+  .why-card{
+    background:
+      radial-gradient(circle at 92% 100%,rgba(244,123,56,.20) 0%,rgba(244,123,56,.065) 28%,transparent 53%),
+      linear-gradient(145deg,#060606 0%,#020202 66%,#000 100%)!important;
+  }
+  .services-included-title{
+    margin-top:24px!important;
+    line-height:1.08!important;
+  }
+  .services-included-copy{
+    margin-top:16px!important;
+    line-height:1.68!important;
+  }
+  .work-index-card-copy h2{
+    line-height:1.08!important;
+  }
+  .work-index-card-copy>p{
+    margin-top:16px!important;
+    line-height:1.65!important;
+  }
+}
