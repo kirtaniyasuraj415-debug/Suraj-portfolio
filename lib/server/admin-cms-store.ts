@@ -20,8 +20,8 @@ const STORAGE_SCOPE = { type: "chat", chat_id: ADMIN_CHAT_ID };
 
 export const OWNER_EMAIL = "surajkirtaniya5@gmail.com";
 export const INITIAL_OWNER_PASSWORD = {
-  salt: "5168f9be3fbf3e69adea21d0e510c232",
-  hash: "dd5603f29905acb1ae21a852467970e63d04e8818012a6bd2bf63ffc04c1157f",
+  salt: "6fb1f6b00b624aab2167647ba27009cf",
+  hash: "939257990259c74316e921f29944a2b316e684f3173afd832c274ec9b280c85c",
 };
 
 export type PasswordRecord = {
