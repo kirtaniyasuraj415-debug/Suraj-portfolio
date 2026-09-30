@@ -34,6 +34,10 @@ export default function CaseStudy({ slug }: { slug: string }) {
     );
   }
 
+  const galleryImages = (project.gallery || [])
+    .map((item) => item.imageUrl)
+    .filter(Boolean);
+
   return (
     <main className="case-study-page min-h-screen bg-[#000000] text-[#f4e9e1]">
       <header className="case-study-header mx-auto max-w-7xl px-5 sm:px-8 py-6 flex items-center justify-between border-b border-white/10">
@@ -56,6 +60,25 @@ export default function CaseStudy({ slug }: { slug: string }) {
         <div className="case-study-preview mt-12 sm:mt-16 overflow-hidden rounded-[24px] border border-white/10 bg-[#130905]">
           <img src={project.imageUrl} alt={project.title} className="w-full h-auto block"/>
         </div>
+
+        {galleryImages.length > 0 && (
+          <section className="mt-8 sm:mt-10">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[.16em] text-[#f47b38]">Project gallery</p>
+                <h2 className="font-['Antonio',sans-serif] text-4xl sm:text-5xl font-thin mt-2">More from the experience.</h2>
+              </div>
+              <span className="text-[10px] uppercase tracking-[.14em] text-[#6f6058]">{galleryImages.length} images</span>
+            </div>
+            <div className="mt-6 grid sm:grid-cols-2 gap-4">
+              {galleryImages.map((src, index) => (
+                <figure key={`${src}-${index}`} className={`overflow-hidden rounded-[22px] bg-[#050505] ${galleryImages.length % 2 === 1 && index === 0 ? "sm:col-span-2" : ""}`}>
+                  <img src={src} alt={`${project.title} project view ${index + 1}`} loading="lazy" className="block h-auto w-full"/>
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
 
         <div className="grid lg:grid-cols-[.65fr_1.35fr] gap-8 lg:gap-16 mt-14 sm:mt-20 pt-10">
           <div>
