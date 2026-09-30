@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { DEFAULT_PORTFOLIO_PROJECTS } from "@/lib/portfolio-projects";
 import { SERVICE_PAGES } from "@/lib/service-pages";
 import { absoluteUrl } from "@/lib/seo";
-import { getAdminCmsState } from "@/lib/server/admin-cms-store";
+import { getAdminCmsState, projectForPublic } from "@/lib/server/admin-cms-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -25,27 +25,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.85,
   }));
 
-  let projectSlugs = DEFAULT_PORTFOLIO_PROJECTS.map((project) => project.id);
+  let projectEntries = DEFAULT_PORTFOLIO_PROJECTS.map((project) => ({
+    slug: project.id,
+    images: [project.image, ...(project.galleryImages || [])].map((image) => absoluteUrl(image)),
+  }));
   let projectUpdatedAt = now;
 
   try {
     const state = await getAdminCmsState();
-    const liveSlugs = state.projects
+    const liveProjects = state.projects
       .filter((project) => project.visible !== false && project.slug)
       .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0))
-      .map((project) => project.slug);
+      .map(projectForPublic)
+      .map((project) => ({
+        slug: project.id,
+        images: [project.image, ...(project.galleryImages || [])].map((image) => absoluteUrl(image)),
+      }));
 
-    if (liveSlugs.length) projectSlugs = liveSlugs;
+    if (liveProjects.length) projectEntries = liveProjects;
     if (state.updatedAt) projectUpdatedAt = new Date(state.updatedAt);
   } catch {
     // Search engines still receive a complete fallback sitemap if the CMS store is temporarily unavailable.
   }
 
-  const projectPages: MetadataRoute.Sitemap = projectSlugs.map((slug) => ({
+  const projectPages: MetadataRoute.Sitemap = projectEntries.map(({ slug, images }) => ({
     url: absoluteUrl(`/work/${slug}`),
     lastModified: projectUpdatedAt,
     changeFrequency: "monthly",
     priority: 0.75,
+    images,
   }));
 
   return [...staticPages, ...servicePages, ...projectPages];
