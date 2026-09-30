@@ -27,5 +27,5 @@ jobs:
       - name: Notify IndexNow
         continue-on-error: true
         env:
-          SITE_URL: https://suraj-portfolio-phi-six.vercel.app
+          SITE_URL: https://surajkirtaniya.qd.je
         run: node scripts/submit-indexnow.mjs
