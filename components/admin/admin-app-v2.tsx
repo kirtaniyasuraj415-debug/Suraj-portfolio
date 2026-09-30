@@ -71,6 +71,7 @@ const EMPTY_PROJECT: CmsProject = {
   category: "",
   detail: "",
   imageUrl: "",
+  gallery: [],
   color: "#21110a",
   backword: "",
   scope: [],
@@ -171,6 +172,15 @@ function imageForProject(project: CmsProject) {
     return `/api/cms-image/${encodeURIComponent(String(project.docId || project.slug))}`;
   }
   return project.imageUrl || "";
+}
+
+function galleryImageForProject(project: CmsProject, index: number) {
+  const item = project.gallery?.[index];
+  if (!item) return "";
+  if (item.imageFileId && (project.docId || project.slug)) {
+    return `/api/cms-gallery/${encodeURIComponent(String(project.docId || project.slug))}/${index}`;
+  }
+  return item.imageUrl || "";
 }
 
 export default function AdminAppV2() {
@@ -323,7 +333,7 @@ export default function AdminAppV2() {
     return String(data.imageFileId);
   };
 
-  const saveProject = async (project: CmsProject, imageFile?: File | null) => {
+  const saveProject = async (project: CmsProject, imageFile?: File | null, galleryFiles: File[] = []) => {
     setBusy(true);
     setNotice(null);
     try {
@@ -334,7 +344,15 @@ export default function AdminAppV2() {
         next.imageFileId = await uploadImage(imageFile);
         next.imageUrl = "";
       }
-      if (!next.imageFileId && !next.imageUrl) throw new Error("Add a project image.");
+      if (!next.imageFileId && !next.imageUrl) throw new Error("Add a main thumbnail image.");
+
+      next.gallery = [...(next.gallery || [])].slice(0, 12);
+      const room = Math.max(0, 12 - next.gallery.length);
+      for (const file of galleryFiles.slice(0, room)) {
+        const imageFileId = await uploadImage(file);
+        next.gallery.push({ imageUrl: "", imageFileId });
+      }
+
       await cmsAction("saveProject", { project: next });
       setSelectedProject(null);
       setNotice("Project saved successfully.");
@@ -652,7 +670,7 @@ export default function AdminAppV2() {
                 <p className="text-[10px] uppercase tracking-[.16em] text-[#f47b38]">CMS ready</p>
                 <h2 className="font-['Antonio',sans-serif] text-3xl mt-2">Everything important is editable here.</h2>
                 <p className="text-sm leading-6 text-[#927f73] mt-3 max-w-2xl">
-                  Add unlimited portfolio projects, upload screenshots from your phone gallery, change live links and case-study copy, manage services, moderate reviews, track enquiries, and control admin access.
+                  Add unlimited portfolio projects, set a main thumbnail, upload multiple case-study screenshots from your phone gallery, change live links and case-study copy, manage services, moderate reviews, track enquiries, and control admin access.
                 </p>
               </div>
             </div>
@@ -873,12 +891,17 @@ function ProjectEditor({
   project: CmsProject;
   busy: boolean;
   onChange: (project: CmsProject) => void;
-  onSave: (project: CmsProject, imageFile?: File | null) => Promise<void>;
+  onSave: (project: CmsProject, imageFile?: File | null, galleryFiles?: File[]) => Promise<void>;
   onDelete: (project: CmsProject) => Promise<void>;
   onDuplicate: (project: CmsProject) => Promise<void>;
 }) {
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState(imageForProject(project));
+  const galleryPreviews = useMemo(
+    () => galleryFiles.map((file) => URL.createObjectURL(file)),
+    [galleryFiles]
+  );
 
   useEffect(() => {
     if (!imageFile) {
@@ -889,6 +912,10 @@ function ProjectEditor({
     setPreview(url);
     return () => URL.revokeObjectURL(url);
   }, [imageFile, project]);
+
+  useEffect(() => {
+    return () => galleryPreviews.forEach((url) => URL.revokeObjectURL(url));
+  }, [galleryPreviews]);
 
   return (
     <div>
@@ -909,10 +936,62 @@ function ProjectEditor({
             <div className="aspect-[16/10] overflow-hidden">
               {preview ? <img src={preview} alt="" className="h-full w-full object-cover"/> : <div className="h-full grid place-items-center text-[#7f6b60]"><ImagePlus size={30}/></div>}
             </div>
-            <div className="flex items-center justify-center gap-2 border-t border-white/8 py-3 text-xs text-[#d6b29e]"><Upload size={14}/> Upload from gallery</div>
+            <div className="flex items-center justify-center gap-2 border-t border-white/8 py-3 text-xs text-[#d6b29e]"><Upload size={14}/> Main thumbnail image</div>
             <input type="file" accept="image/*" className="sr-only" onChange={(event)=>setImageFile(event.target.files?.[0] || null)}/>
           </label>
-          <div className="mt-3"><Field label="Or direct image URL" type="url" value={project.imageFileId ? "" : project.imageUrl} onChange={(value)=>onChange({...project,imageUrl:value,imageFileId:undefined})} placeholder="https://..."/></div>
+          <div className="mt-3"><Field label="Or direct main image URL" type="url" value={project.imageFileId ? "" : project.imageUrl} onChange={(value)=>onChange({...project,imageUrl:value,imageFileId:undefined})} placeholder="https://..."/></div>
+
+          <div className="mt-5 rounded-2xl border border-white/10 bg-black/15 p-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-[10px] uppercase tracking-[.14em] text-[#f47b38]">Case study gallery</p>
+                <p className="mt-1 text-[10px] leading-5 text-[#806f64]">Add up to 12 extra images. The main image above stays the thumbnail.</p>
+              </div>
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#f47b38]/30 bg-[#f47b38]/[.06] px-3 py-2 text-xs text-[#e7c1aa]">
+                <ImagePlus size={14}/> Add images
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  className="sr-only"
+                  onChange={(event) => {
+                    const picked = Array.from(event.target.files || []);
+                    const remaining = Math.max(0, 12 - (project.gallery?.length || 0) - galleryFiles.length);
+                    if (remaining > 0) setGalleryFiles((current) => [...current, ...picked.slice(0, remaining)]);
+                    event.currentTarget.value = "";
+                  }}
+                />
+              </label>
+            </div>
+
+            <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {(project.gallery || []).map((item, index) => {
+                const src = galleryImageForProject(project, index);
+                return (
+                  <div key={`${item.imageFileId || item.imageUrl || "gallery"}-${index}`} className="relative overflow-hidden rounded-xl bg-black/35 aspect-[4/3]">
+                    {src ? <img src={src} alt="" className="h-full w-full object-cover"/> : <div className="h-full grid place-items-center text-[#756258]"><ImagePlus size={18}/></div>}
+                    <button type="button" onClick={() => onChange({ ...project, gallery: (project.gallery || []).filter((_, itemIndex) => itemIndex !== index) })} className="absolute right-1.5 top-1.5 grid h-7 w-7 place-items-center rounded-full bg-black/75 text-[#f3d9ca]" aria-label="Remove gallery image">
+                      <Trash2 size={13}/>
+                    </button>
+                  </div>
+                );
+              })}
+              {galleryPreviews.map((src, index) => (
+                <div key={src} className="relative overflow-hidden rounded-xl bg-black/35 aspect-[4/3]">
+                  <img src={src} alt="" className="h-full w-full object-cover"/>
+                  <span className="absolute left-1.5 top-1.5 rounded-full bg-[#f47b38] px-2 py-1 text-[8px] uppercase tracking-[.1em] text-white">New</span>
+                  <button type="button" onClick={() => setGalleryFiles((current) => current.filter((_, itemIndex) => itemIndex !== index))} className="absolute right-1.5 top-1.5 grid h-7 w-7 place-items-center rounded-full bg-black/75 text-[#f3d9ca]" aria-label="Remove new gallery image">
+                    <Trash2 size={13}/>
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {(project.gallery?.length || 0) + galleryFiles.length === 0 && (
+              <p className="mt-3 rounded-xl border border-dashed border-white/8 px-3 py-5 text-center text-[10px] text-[#6f5f56]">No extra case-study images yet.</p>
+            )}
+          </div>
+
           <div className="mt-3 grid grid-cols-2 gap-3">
             <Field label="Order" type="number" value={project.order} onChange={(value)=>onChange({...project,order:Number(value)})}/>
             <Field label="Card color" type="color" value={project.color} onChange={(value)=>onChange({...project,color:value})}/>
@@ -938,7 +1017,7 @@ function ProjectEditor({
         </div>
       </div>
 
-      <button disabled={busy} onClick={() => void onSave(project,imageFile)} className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#f47b38] px-6 py-3 text-sm font-medium text-white disabled:opacity-50">
+      <button disabled={busy} onClick={() => void onSave(project,imageFile,galleryFiles)} className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#f47b38] px-6 py-3 text-sm font-medium text-white disabled:opacity-50">
         {busy?<Loader2 size={16} className="animate-spin"/>:<Check size={16}/>} Save project
       </button>
     </div>
