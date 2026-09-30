@@ -58,7 +58,7 @@ export default async function ProjectCaseStudyPage({ params }: { params: Promise
               description: project.line || project.detail,
               genre: project.tag,
               creator: { "@id": absoluteUrl("/#suraj-kirtaniya") },
-              image: absoluteUrl(project.image),
+              image: [absoluteUrl(project.image), ...(project.galleryImages || []).map((image) => absoluteUrl(image))],
             },
             {
               "@type": "BreadcrumbList",
