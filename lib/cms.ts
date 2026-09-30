@@ -1,5 +1,10 @@
 import type { PortfolioProject } from "@/lib/portfolio-projects";
 
+export type CmsProjectImage = {
+  imageUrl: string;
+  imageFileId?: string;
+};
+
 export type CmsProject = {
   docId?: string;
   slug: string;
@@ -11,6 +16,7 @@ export type CmsProject = {
   imageUrl: string;
   imageFileId?: string;
   imagePath?: string;
+  gallery?: CmsProjectImage[];
   color: string;
   backword: string;
   scope: string[];
@@ -88,6 +94,7 @@ export function cmsProjectToPortfolio(project: CmsProject, index: number): Portf
     tag: project.category,
     detail: project.detail,
     image: project.imageUrl,
+    galleryImages: (project.gallery || []).map((item) => item.imageUrl).filter(Boolean),
     color: project.color || "#21110a",
     backword: project.backword || project.title.split(" ")[0] || "Project",
     scope: project.scope || [],
