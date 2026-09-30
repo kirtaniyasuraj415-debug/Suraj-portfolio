@@ -1,4 +1,4 @@
-const SITE_URL = (process.env.SITE_URL || "https://suraj-portfolio-phi-six.vercel.app").replace(/\/$/, "");
+const SITE_URL = (process.env.SITE_URL || "https://surajkirtaniya.qd.je").replace(/\/$/, "");
 const INDEXNOW_KEY = "bdc4b682ccb84e4c81619115412809a0";
 const KEY_LOCATION = `${SITE_URL}/${INDEXNOW_KEY}.txt`;
 const SITEMAP_URL = `${SITE_URL}/sitemap.xml`;
