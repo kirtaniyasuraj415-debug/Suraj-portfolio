@@ -7,6 +7,7 @@ export type PortfolioProject = {
   tag: string;
   detail: string;
   image: string;
+  galleryImages: string[];
   color: string;
   backword: string;
   scope: string[];
@@ -23,10 +24,11 @@ export const DEFAULT_PORTFOLIO_PROJECTS: PortfolioProject[] = [
     tag: "Interior Design",
     detail: "A premium interior design studio concept built around immersive spaces, refined typography, and a clear route to project enquiries.",
     image: "/images/projects/cee-bee.webp",
+    galleryImages: [],
     color: "#2a1d16",
     backword: "Spaces.",
     scope: ["Luxury visual direction", "Responsive project showcase", "Project enquiry experience"],
-    liveUrl: "https://suraj-portfolio-phi-six.vercel.app/ceebee/index.html",
+    liveUrl: "/ceebee/index.html",
   },
   {
     slot: 2,
@@ -37,6 +39,7 @@ export const DEFAULT_PORTFOLIO_PROJECTS: PortfolioProject[] = [
     tag: "Designing",
     detail: "This website is made to represent their proper work and their hard work by making sure that the whole process and their work is showcased which makes their entire work even better.",
     image: "/api/cms-image/legacy-wedding",
+    galleryImages: [],
     color: "#211c1a",
     backword: "Interiors.",
     scope: ["Editorial story telling", "Interior designing and showcase", "Availability enquiry flow"],
@@ -51,6 +54,7 @@ export const DEFAULT_PORTFOLIO_PROJECTS: PortfolioProject[] = [
     tag: "Sweets & Gifting",
     detail: "A premium sweets and gifting storefront concept that presents signature products, celebration collections, and clear ordering actions.",
     image: "/images/projects/parmanand.webp",
+    galleryImages: [],
     color: "#4b1712",
     backword: "Tradition.",
     scope: ["Premium product presentation", "Festive gifting collections", "Mobile-first ordering journey"],
@@ -65,6 +69,7 @@ export const DEFAULT_PORTFOLIO_PROJECTS: PortfolioProject[] = [
     tag: "Wedding Photography",
     detail: "A cinematic wedding portfolio concept for RC Weddings Films with strong visual hierarchy, selected collections, and a focused booking journey.",
     image: "/images/projects/rc-weddings.webp",
+    galleryImages: [],
     color: "#24100d",
     backword: "Cinematic.",
     scope: ["Cinematic art direction", "Wedding portfolio collections", "Shoot booking journey"],
