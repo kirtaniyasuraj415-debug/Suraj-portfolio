@@ -119,6 +119,7 @@ function legacyProjects(source: PortfolioProject[] = DEFAULT_PORTFOLIO_PROJECTS)
     category: project.tag,
     detail: project.detail,
     imageUrl: project.image,
+    gallery: (project.galleryImages || []).map((imageUrl) => ({ imageUrl })),
     color: project.color,
     backword: project.backword,
     scope: project.scope,
@@ -161,6 +162,15 @@ function normalizeProject(input: Partial<CmsProject>, index = 0): CmsProject {
     detail: clean(input.detail, 900),
     imageUrl: clean(input.imageUrl, 1200),
     imageFileId: clean(input.imageFileId, 300) || undefined,
+    gallery: Array.isArray(input.gallery)
+      ? input.gallery
+          .map((item) => ({
+            imageUrl: clean(item?.imageUrl, 1200),
+            imageFileId: clean(item?.imageFileId, 300) || undefined,
+          }))
+          .filter((item) => item.imageUrl || item.imageFileId)
+          .slice(0, 12)
+      : [],
     color: /^#[0-9a-f]{6}$/i.test(String(input.color || "")) ? String(input.color) : "#21110a",
     backword: clean(input.backword, 80),
     scope: Array.isArray(input.scope)
@@ -574,6 +584,13 @@ export function projectForPublic(project: CmsProject, index: number): PortfolioP
     image: project.imageFileId
       ? `/api/cms-image/${encodeURIComponent(String(project.docId || project.slug))}`
       : project.imageUrl,
+    galleryImages: (project.gallery || [])
+      .map((item, galleryIndex) =>
+        item.imageFileId
+          ? `/api/cms-gallery/${encodeURIComponent(String(project.docId || project.slug))}/${galleryIndex}`
+          : item.imageUrl
+      )
+      .filter(Boolean),
     color: project.color,
     backword: project.backword,
     scope: project.scope,
