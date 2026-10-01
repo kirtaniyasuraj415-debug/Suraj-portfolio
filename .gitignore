@@ -48,3 +48,6 @@ next-env.d.ts
 # Incremental TypeScript build output
 *.tsbuildinfo
 !/.env.example
+
+# Cloudflare OpenNext build output
+/.open-next/
