@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import JsonLd from "@/components/seo/json-ld";
 import {
+  BRAND_KEYWORDS,
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
   PERSON_JSON_LD,
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: DEFAULT_TITLE, template: "%s | SURAJ.WEB" },
   description: DEFAULT_DESCRIPTION,
+  keywords: BRAND_KEYWORDS,
   applicationName: SITE_NAME,
   authors: [{ name: "Suraj Kirtaniya", url: "/about" }],
   creator: "Suraj Kirtaniya",
@@ -65,6 +67,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <head>
         <link rel="preload" href="/fonts/antonio-light.ttf" as="font" type="font/ttf" crossOrigin="anonymous"/>
         <link rel="preload" href="/fonts/dm-sans-regular.ttf" as="font" type="font/ttf" crossOrigin="anonymous"/>
+        <link rel="me" href="https://github.com/kirtaniyasuraj415-debug"/>
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="SURAJ.WEB AI summary"/>
+        <link rel="alternate" type="text/plain" href="/llms-full.txt" title="SURAJ.WEB AI reference"/>
       </head>
       <body>
         <JsonLd data={[WEBSITE_JSON_LD, PERSON_JSON_LD]} />
